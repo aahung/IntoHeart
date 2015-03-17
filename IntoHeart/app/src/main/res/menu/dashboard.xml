@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item android:id="@+id/menu_normal" android:title="@string/menu_normal"
+        app:showAsAction="withText|always" />
+    <item android:id="@+id/menu_exercise" android:title="@string/menu_exercise"
+        app:showAsAction="withText|always" />
+
+</menu>
