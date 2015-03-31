@@ -77,7 +77,7 @@ public class LoginFragment extends Fragment {
     @InjectView(R.id.password)
     EditText passwordEdit;
 
-    @OnClick(R.id.login)
+    @OnClick(R.id.log_in_button)
     public void login(View view) {
         String email = emailEdit.getText().toString(),
         password = passwordEdit.getText().toString();
