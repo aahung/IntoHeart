@@ -57,7 +57,11 @@ public class Connector {
             public void success(JsonElement jsonElement, Response response) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 boolean success = jsonObject.get("success").getAsInt() == 1;
-                callback.call(new Outcome(success, jsonObject.get("message").getAsString()));
+                String message = null;
+                try {
+                    jsonObject.get("message").getAsString();
+                } catch (Exception ex) {}
+                callback.call(new Outcome(success, message));
             }
 
             @Override

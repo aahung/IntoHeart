@@ -208,7 +208,9 @@
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="1">
+                android:weightSum="1"
+                android:id="@+id/login_block"
+                android:visibility="visible">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -235,6 +237,29 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="5dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_marginTop="30dp"
+                android:id="@+id/logout_block"
+                android:visibility="gone">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LOG OUT"
+                    android:id="@+id/logout_button"
+                    android:shadowColor="#00000000"
+                    android:background="#3f74dc"
+                    android:textColor="#ffffff"
+                    android:layout_weight="0.62"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp" />
 
             </LinearLayout>
 
