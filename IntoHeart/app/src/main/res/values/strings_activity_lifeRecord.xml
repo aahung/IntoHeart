@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alcohol">alcohol</string>
+    <string name="overwork">overwork</string>
+    <string name="stay_up_late">stay up late</string>
+    <string name="eating_disorder">eating disorder</string>
+    <string name="smoking">smoking</string>
+
+</resources>
