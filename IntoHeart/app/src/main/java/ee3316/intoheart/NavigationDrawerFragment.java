@@ -341,18 +341,17 @@ public class NavigationDrawerFragment extends Fragment {
             String device = ms.get(i);
 
            switch(device){
-               case "  Dashboard": viewHolder.icon.setImageResource(R.drawable.home);
+               case "Dashboard": viewHolder.icon.setImageResource(R.drawable.home);
                    break;
-               case "  Analysis": viewHolder.icon.setImageResource(R.drawable.analysis);
+               case "Analysis": viewHolder.icon.setImageResource(R.drawable.analysis);
                    break;
-               case "  Sensors": viewHolder.icon.setImageResource(R.drawable.sensor);
+               case "Sensors": viewHolder.icon.setImageResource(R.drawable.sensor);
                    break;
-
-               case "  Ranking": viewHolder.icon.setImageResource(R.drawable.ranking);
+               case "Ranking": viewHolder.icon.setImageResource(R.drawable.ranking);
                    break;
-               case "  My Info": viewHolder.icon.setImageResource(R.drawable.user);
+               case "My Info": viewHolder.icon.setImageResource(R.drawable.user);
                    break;
-               case "  Lifestyle": viewHolder.icon.setImageResource(R.drawable.menu);
+               case "Lifestyle": viewHolder.icon.setImageResource(R.drawable.lifestyle);
                    break;
            }
 

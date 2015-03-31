@@ -42,14 +42,12 @@ public class MainActivity extends ActionBarActivity
 
     public MainActivity() {
         sectionTitles = new ArrayList<>();
-        sectionTitles.add("  Dashboard");
-        sectionTitles.add("  Analysis");
-
-        sectionTitles.add("  Sensors");
-
-        sectionTitles.add("  Ranking");
-        sectionTitles.add("  My Info");
-        sectionTitles.add("  Lifestyle");
+        sectionTitles.add("Dashboard");
+        sectionTitles.add("Analysis");
+        sectionTitles.add("Sensors");
+        sectionTitles.add("Ranking");
+        sectionTitles.add("My Info");
+        sectionTitles.add("Lifestyle");
 
 
         sensorConnectionManager = new SensorConnectionManager(this);
@@ -119,7 +117,7 @@ public class MainActivity extends ActionBarActivity
             case 1:
                 fragment = AnalysisFragment.newInstance(position + 1);
                 break;
-          
+
             case 2:
                 fragment = SensorsFragment.newInstance(position + 1);
                 break;
