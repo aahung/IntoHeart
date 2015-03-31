@@ -1,16 +1,16 @@
 package ee3316.intoheart;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -98,12 +102,15 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
         MainActivity activity = (MainActivity)getActivity();
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                activity.sectionTitles
-                ));
+        NavigationDrawerListAdapter navigationDrawerListAdapter = new NavigationDrawerListAdapter();
+        navigationDrawerListAdapter.setMS(activity.sectionTitles);
+        mDrawerListView.setAdapter(navigationDrawerListAdapter);
+//        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+//                getActionBar().getThemedContext(),
+//                R.layout.listitem_navigationdrawer,
+//                android.R.id.text1,
+//                activity.sectionTitles
+//                ));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
@@ -271,5 +278,93 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    public class NavigationDrawerListAdapter extends BaseAdapter {
+        private ArrayList<String> ms;
+
+        private LayoutInflater mInflator;
+
+        public NavigationDrawerListAdapter() {
+            super();
+            ms = new ArrayList<>();
+
+            mInflator = getActivity().getLayoutInflater();
+        }
+
+        public void setMS(List<String> m) {
+            for (String _m : m) {
+                ms.add(_m);
+            }
+        }
+
+
+
+
+        public void clear() {
+            ms.clear();
+        }
+
+        @Override
+        public int getCount() {
+            return ms.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return ms.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder viewHolder;
+            // General ListView optimization code.
+            if (view == null) {
+                view = mInflator.inflate(R.layout.listitem_navigationdrawer, null);
+                viewHolder = new ViewHolder();
+                viewHolder.icon=(ImageView) view.findViewById(R.id.section_icon);
+                viewHolder.title = (TextView) view.findViewById(R.id.section_title);
+
+
+
+                view.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) view.getTag();
+            }
+
+            String device = ms.get(i);
+
+           switch(device){
+               case "Dashboard": viewHolder.icon.setImageResource(R.drawable.home);
+                   break;
+               case "Analysis": viewHolder.icon.setImageResource(R.drawable.analysis);
+                   break;
+               case "Sensors": viewHolder.icon.setImageResource(R.drawable.sensor);
+                   break;
+               case "Ranking": viewHolder.icon.setImageResource(R.drawable.ranking);
+                   break;
+               case "My Info": viewHolder.icon.setImageResource(R.drawable.user);
+                   break;
+               case "Lifestyle": viewHolder.icon.setImageResource(R.drawable.lifestyle);
+                   break;
+           }
+
+
+            viewHolder.title.setText(device);
+
+
+            return view;
+        }
+    }
+
+    static class ViewHolder {
+        ImageView icon;
+        TextView title;
     }
 }

@@ -1,30 +1,16 @@
 package ee3316.intoheart;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.os.IBinder;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +37,7 @@ public class MainActivity extends ActionBarActivity
 
     public List<String> sectionTitles;
 
+
     public SensorConnectionManager sensorConnectionManager;
 
     public MainActivity() {
@@ -61,6 +48,7 @@ public class MainActivity extends ActionBarActivity
         sectionTitles.add("Ranking");
         sectionTitles.add("My Info");
         sectionTitles.add("Lifestyle");
+
 
         sensorConnectionManager = new SensorConnectionManager(this);
     }
@@ -129,9 +117,11 @@ public class MainActivity extends ActionBarActivity
             case 1:
                 fragment = AnalysisFragment.newInstance(position + 1);
                 break;
+
             case 2:
                 fragment = SensorsFragment.newInstance(position + 1);
                 break;
+
             case 3:
                 fragment = RankingFragment.newInstance(position + 1);
                 break;
@@ -141,6 +131,7 @@ public class MainActivity extends ActionBarActivity
             case 5:
                 fragment = LifestyleFragment.newInstance(position + 1);
                 break;
+
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
