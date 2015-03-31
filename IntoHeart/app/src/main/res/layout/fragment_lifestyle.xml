@@ -2,21 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/life_record1"
+    android:background="@drawable/lr_background"
     android:weightSum="1">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.35">
+        android:layout_weight="0.69"
+        android:weightSum="1">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.71"></LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.47">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Record your life."
+                android:id="@+id/life_record_text"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="75dp"
+                android:textSize="30sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="335dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:weightSum="1">
 
         <LinearLayout
@@ -27,7 +51,7 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/imageButton3"
+                android:id="@+id/alcohol"
                 android:background="#00000000"
                 android:src="@drawable/alcohol"
                 android:layout_gravity="center_horizontal" />
@@ -47,7 +71,7 @@
                 <ImageButton
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/imageButton4"
+                    android:id="@+id/smoking"
                     android:src="@drawable/smoking"
                     android:background="#00000000" />
             </LinearLayout>
@@ -60,7 +84,7 @@
                 <ImageButton
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/imageButton5"
+                    android:id="@+id/overwork"
                     android:src="@drawable/overwork1"
                     android:background="#00000000" />
             </LinearLayout>
@@ -85,7 +109,7 @@
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/imageButton6"
+                    android:id="@+id/stay_up_late"
                     android:src="@drawable/stay_up_late1"
                     android:background="#00000000" />
 
@@ -99,22 +123,12 @@
                 <ImageButton
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/imageButton7"
+                    android:id="@+id/eating_disorder"
                     android:src="@drawable/eating_disorder1"
                     android:background="#00000000" />
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"></LinearLayout>
-
         </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"></LinearLayout>
 
     </LinearLayout>
 

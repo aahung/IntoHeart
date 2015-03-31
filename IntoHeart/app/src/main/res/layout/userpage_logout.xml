@@ -13,12 +13,12 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="74dp"></LinearLayout>
+            android:layout_height="160dp"></LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="fill_parent">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -206,35 +206,23 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="1">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CREAT AN ACCOUNT"
-                    android:id="@+id/button"
-                    android:textColor="#3f74dc"
-                    android:shadowColor="#00000000"
-                    android:background="#20ffffff"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp" />
+                android:weightSum="1"
+                android:layout_marginTop="30dp" >
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="LOG IN"
+                    android:text="LOG OUT"
                     android:id="@+id/button2"
                     android:shadowColor="#00000000"
                     android:background="#3f74dc"
                     android:textColor="#ffffff"
+                    android:layout_weight="0.62"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="5dp" />
+                    android:layout_marginBottom="5dp" />
 
             </LinearLayout>
 

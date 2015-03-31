@@ -2,8 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ranking"
+    android:background="@drawable/background_star"
     android:touchscreenBlocksFocus="false">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="104dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Your Score:"
+            android:id="@+id/textView7"
+            android:textColor="#ffffff"
+            android:textSize="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="80"
+            android:id="@+id/textView15"
+            android:layout_marginTop="30dp"
+            android:textColor="#ffffff"
+            android:textSize="40dp"
+            android:layout_marginLeft="30dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="See your detail scores"
+        android:id="@+id/see_detail"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:background="#30ffffff"
+        android:shadowColor="#00000000" />
+
+    <ListView
+        android:id="@+id/sensor_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#10ffffff"></ListView>
 
 </LinearLayout>
     <!--<?xml version="1.0" encoding="utf-8"?>-->
