@@ -134,9 +134,8 @@ public class MainActivity extends ActionBarActivity
                 fragment = SensorsFragment.newInstance(position + 1);
                 break;
             case 3:
-                final Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                return;
+                fragment = LoginFragment.newInstance(position + 1);
+                break;
             case 4:
                 fragment = RankingFragment.newInstance(position + 1);
                 break;
