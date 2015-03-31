@@ -59,7 +59,7 @@
                             android:inputType="textPersonName"
                             android:text="John"
                             android:ems="10"
-                            android:id="@+id/user_name"
+                            android:id="@+id/name_edit"
                             android:layout_weight="1" />
                     </LinearLayout>
                 </LinearLayout>
@@ -93,7 +93,7 @@
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/editText2"
+                            android:id="@+id/age_edit"
                             android:layout_weight="1" />
                     </LinearLayout>
                 </LinearLayout>
@@ -128,7 +128,7 @@
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/editText3"
+                            android:id="@+id/height_edit"
                             android:layout_weight="1" />
                     </LinearLayout>
                 </LinearLayout>
@@ -162,7 +162,7 @@
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/editText4"
+                            android:id="@+id/weight_edit"
                             android:layout_weight="1" />
                     </LinearLayout>
                 </LinearLayout>
@@ -197,7 +197,7 @@
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/editText5"
+                            android:id="@+id/emergency_edit"
                             android:layout_weight="1" />
                     </LinearLayout>
                 </LinearLayout>
@@ -214,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CREAT AN ACCOUNT"
-                    android:id="@+id/button"
+                    android:id="@+id/register_button"
                     android:textColor="#3f74dc"
                     android:shadowColor="#00000000"
                     android:background="#20ffffff"
@@ -227,7 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="LOG IN"
-                    android:id="@+id/button2"
+                    android:id="@+id/login_button"
                     android:shadowColor="#00000000"
                     android:background="#3f74dc"
                     android:textColor="#ffffff"
