@@ -1,11 +1,14 @@
 package ee3316.intoheart;
 
 import android.app.Activity;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import butterknife.OnClick;
 
 /**
  * Created by aahung on 3/7/15.
@@ -41,6 +44,7 @@ public class LifestyleFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
+
 
     @Override
     public void onPause() {
