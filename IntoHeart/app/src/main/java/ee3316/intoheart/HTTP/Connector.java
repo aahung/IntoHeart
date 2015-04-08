@@ -51,6 +51,12 @@ public class Connector {
         request("users/signup", parameters, callback);
     }
 
+    public void search(String email, final JCallback<Outcome> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("email", email);
+        request("users/search", parameters, callback);
+    }
+
     public void request(String url, Map<String, String> parameters, final JCallback<Outcome> callback) {
         api.makePostRequest(url, parameters, new Callback<JsonElement>() {
             @Override

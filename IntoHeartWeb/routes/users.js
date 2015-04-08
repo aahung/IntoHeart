@@ -61,6 +61,21 @@ router.post('/signup', function(req, res, next) {
     }
 });
 
+router.post('/search', function(req, res, next) {
+    var email = req.body.email;
+    var result = {};
+    User.findOne({"email": email}, function(err, user) {
+        if (user) {
+            result['success'] = 1;
+            result['message'] = user.name;
+        } else {
+            result['success'] = 0;
+            result['message'] = "Cannot find user with email " + email;
+        }
+        res.end(JSON.stringify(result));
+    });
+});
+
 router.post('/request', function(req, res, next) {
     var email = req.body.email;
     var password = req.body.password;

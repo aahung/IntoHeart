@@ -45,5 +45,7 @@ public class SimpleAlertController {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 }
 
