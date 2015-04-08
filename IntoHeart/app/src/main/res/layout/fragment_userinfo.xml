@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent" android:layout_height="fill_parent"
     android:gravity="center_horizontal"
-    android:background="@drawable/background_star"
-    android:orientation="vertical">
+    android:background="@drawable/bg_green"
+    android:orientation="vertical"
+    android:id="@+id/">
 
     <LinearLayout
         android:orientation="vertical"
@@ -24,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="#10ffffff"
+                android:background="#20ffffff"
                 android:layout_margin="10dp">
 
                 <LinearLayout
@@ -60,7 +61,8 @@
                             android:text="John"
                             android:ems="10"
                             android:id="@+id/name_edit"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:textColor="#ffffff" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -94,7 +96,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/age_edit"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:textColor="#ffffff" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -113,7 +116,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Height"
+                            android:text="Height(cm)"
                             android:id="@+id/textView4"
                             android:layout_marginTop="10dp"
                             android:layout_marginLeft="10dp"
@@ -129,7 +132,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/height_edit"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:textColor="#ffffff" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -147,7 +151,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Weight"
+                            android:text="Weight(kg)"
                             android:id="@+id/textView5"
                             android:layout_marginTop="10dp"
                             android:layout_marginLeft="10dp"
@@ -159,11 +163,20 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent" >
 
-                        <EditText
+                        <NumberPicker
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/weight_edit"
-                            android:layout_weight="1" />
+                            android:id="@+id/numberPicker" />
+
+                        <NumberPicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/numberPicker2" />
+
+                        <NumberPicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/numberPicker3" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -198,7 +211,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/emergency_edit"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:textColor="#ffffff" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -217,13 +231,14 @@
                     android:layout_height="wrap_content"
                     android:text="CREAT AN ACCOUNT"
                     android:id="@+id/register_button"
-                    android:textColor="#3f74dc"
+                    android:textColor="#ffffff"
                     android:shadowColor="#00000000"
                     android:background="#20ffffff"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp" />
+                    android:layout_marginBottom="5dp"
+                    android:textSize="10dp" />
 
                 <Button
                     android:layout_width="match_parent"
@@ -231,7 +246,7 @@
                     android:text="LOG IN"
                     android:id="@+id/login_button"
                     android:shadowColor="#00000000"
-                    android:background="#3f74dc"
+                    android:background="#b6cb24"
                     android:textColor="#ffffff"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"

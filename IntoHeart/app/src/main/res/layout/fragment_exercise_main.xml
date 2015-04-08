@@ -28,8 +28,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView"
-                    android:src="@drawable/small_heart"
-                    android:layout_marginTop="70dp"
+                    android:src="@drawable/sports_person1"
+                    android:layout_marginTop="40dp"
                     android:layout_marginLeft="80dp" />
             </LinearLayout>
 
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Instant Heart Rate"
+                android:text="Exercise Mode"
                 android:id="@+id/textView"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
@@ -130,15 +130,15 @@
             android:background="#40ffffff">
 
             <com.jjoe64.graphview.GraphView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/graph" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/graph" />
 
-            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"-->
     <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
@@ -150,20 +150,20 @@
 
 
     <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-        <!--android:text="HR"-->
-        <!--android:id="@+id/instantHRTextView"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:layout_weight="0.15"-->
-        <!--android:textSize="40dp"-->
-        <!--android:textAlignment="center"-->
-        <!--android:layout_marginTop="50dp" />-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+    <!--android:text="HR"-->
+    <!--android:id="@+id/instantHRTextView"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:layout_weight="0.15"-->
+    <!--android:textSize="40dp"-->
+    <!--android:textAlignment="center"-->
+    <!--android:layout_marginTop="50dp" />-->
 
     <!--<com.jjoe64.graphview.GraphView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="200dip"-->
-        <!--android:id="@+id/graph" />-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="200dip"-->
+    <!--android:id="@+id/graph" />-->
 
-<!--</LinearLayout>-->
+    <!--</LinearLayout>-->
