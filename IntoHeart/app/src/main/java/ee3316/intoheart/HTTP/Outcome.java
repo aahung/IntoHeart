@@ -5,7 +5,7 @@ package ee3316.intoheart.HTTP;
  */
 public class Outcome {
     public boolean success;
-    private Object object;
+    public Object object;
 
     public Outcome(boolean success, Object object) {
         this.success = success;

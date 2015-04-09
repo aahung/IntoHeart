@@ -3,7 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_green"
-    android:touchscreenBlocksFocus="false">
+    android:touchscreenBlocksFocus="false"
+    android:padding="16dp">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -61,7 +62,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/ranking_list"
+        android:id="@+id/ranking_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#10ffffff"

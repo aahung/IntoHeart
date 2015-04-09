@@ -44,13 +44,9 @@
             android:label="@string/title_activity_raw_data" >
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
+            android:name=".AddFriendActivity"
+            android:label="Add Friends"
             android:windowSoftInputMode="adjustResize|stateVisible" >
-        </activity>
-        <activity
-            android:name=".RankingActivity"
-            android:label="@string/title_activity_ranking" >
         </activity>
     </application>
 

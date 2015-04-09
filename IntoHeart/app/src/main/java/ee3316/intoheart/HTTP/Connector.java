@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -57,17 +58,52 @@ public class Connector {
         request("users/search", parameters, callback);
     }
 
+    public void sendRequest(String email, String password, String tEmail, final JCallback<Outcome> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("email", email);
+        parameters.put("password", password);
+        parameters.put("t_email", tEmail);
+        request("users/request", parameters, callback);
+    }
+
+    public void rank(String email, String password, final JCallback<Outcome> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("email", email);
+        parameters.put("password", password);
+        api.makePostRequest("users/rank", parameters, new Callback<JsonElement>() {
+            @Override
+            public void success(JsonElement jsonElement, Response response) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                boolean success = jsonObject.get("success").getAsInt() == 1;
+                Object object = "Network error";
+                try {
+                    object = jsonObject.get("friends").getAsJsonArray();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                callback.call(new Outcome(success, object));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                callback.call(new Outcome(false, null));
+            }
+        });
+    }
+
     public void request(String url, Map<String, String> parameters, final JCallback<Outcome> callback) {
         api.makePostRequest(url, parameters, new Callback<JsonElement>() {
             @Override
             public void success(JsonElement jsonElement, Response response) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 boolean success = jsonObject.get("success").getAsInt() == 1;
-                String message = null;
+                Object object = "Network error";
                 try {
-                    jsonObject.get("message").getAsString();
-                } catch (Exception ex) {}
-                callback.call(new Outcome(success, message));
+                    object = jsonObject.get("message");
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                callback.call(new Outcome(success, object));
             }
 
             @Override

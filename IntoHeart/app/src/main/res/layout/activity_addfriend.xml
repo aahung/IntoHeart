@@ -3,7 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_star"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:padding="16dp">
 
 
     <LinearLayout
@@ -35,15 +36,15 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#10ffffff">
+            android:background="#aaffffff">
 
             <SearchView
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:iconifiedByDefault="false"
-                android:inputType="textFilter"
+                android:inputType="textEmailAddress"
                 android:searchIcon="@drawable/search_icon"/>
                 <!--android:baselineColor="#ffffff"-->
 
@@ -51,5 +52,54 @@
 
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/result_block"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.85"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/face_placeholder"
+                android:layout_marginRight="16dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Aahung"
+                    android:textSize="30dp"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:id="@+id/user_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="aahung@live.com"
+                    android:textSize="20dp"
+                    android:textColor="#ffffff"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        <ImageView
+            android:id="@+id/add_new_friends"
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:src="@drawable/add_new" />
+        </LinearLayout>
 
 </LinearLayout>
