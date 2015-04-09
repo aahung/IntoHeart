@@ -18,6 +18,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -26,6 +29,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -120,11 +125,15 @@ public class RankingFragment extends Fragment {
             public void call(Outcome outcome) {
                 if (outcome.success) {
                     RankingListAdapter rankingListAdapter = new RankingListAdapter();
-                    JSONArray array = (JSONArray) outcome.object;
-
-                    for (Object ele : array) {
-
+                    JsonArray array = (JsonArray) outcome.object;
+                    for (JsonElement ele : array) {
+                        JsonObject obj = ele.getAsJsonObject();
+                        String name = obj.get("name").getAsString();
+                        String email = obj.get("email").getAsString();
+                        Integer score = obj.get("score").getAsInt();
+                        rankingListAdapter.addData(new String[]{name, email, score.toString()});
                     }
+                    rankingListAdapter.sort();
                     listView.setAdapter(rankingListAdapter);
                 } else {
                     SimpleAlertController.showSimpleMessage("Sorry",
@@ -164,6 +173,15 @@ public class RankingFragment extends Fragment {
             datas.clear();
         }
 
+        public void sort() {
+            Collections.sort(datas, new Comparator<String[]>() {
+                @Override
+                public int compare(String[] lhs, String[] rhs) {
+                    return Integer.valueOf(lhs[2]) - Integer.valueOf(lhs[3]);
+                }
+            });
+        }
+
         @Override
         public int getCount() {
             return datas.size();
@@ -186,7 +204,9 @@ public class RankingFragment extends Fragment {
             if (view == null) {
                 view = mInflator.inflate(R.layout.listitem_ranking, null);
                 viewHolder = new ViewHolder();
+                viewHolder.ranking = (TextView) view.findViewById(R.id.rankingText);
                 viewHolder.name = (TextView) view.findViewById(R.id.nameText);
+                viewHolder.email = (TextView) view.findViewById(R.id.emailText);
                 viewHolder.score = (TextView) view.findViewById(R.id.scoreText);
                 view.setTag(viewHolder);
             } else {
@@ -194,14 +214,18 @@ public class RankingFragment extends Fragment {
             }
 
             String[] data = datas.get(i);
+            viewHolder.ranking.setText(String.valueOf(i + 1));
             viewHolder.name.setText(data[0]);
-            viewHolder.score.setText(data[1]);
+            viewHolder.email.setText(data[1]);
+            viewHolder.score.setText(data[2]);
 
             return view;
         }
 
         public class ViewHolder {
+            TextView ranking;
             TextView name;
+            TextView email;
             TextView score;
         }
     }
