@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -77,9 +78,16 @@ public class UserinfoFragment extends Fragment {
             if (userStore.getHeight() != null)
                 heightEdit.setText(userStore.getHeight().toString());
             heightEdit.addTextChangedListener(onchangeListener);
-            if (userStore.getWeight() != null)
-                weightEdit.setText(userStore.getWeight().toString());
-            weightEdit.addTextChangedListener(onchangeListener);
+            weightPicker.setMaxValue(9);weightPicker.setMinValue(0);
+            weightPicker2.setMaxValue(9);weightPicker2.setMinValue(0);
+            weightPicker3.setMaxValue(9);weightPicker3.setMinValue(0);
+            if (userStore.getWeight() != null) {
+                int weight = userStore.getWeight().intValue();
+                weightPicker.setValue(weight / 100);
+                weightPicker2.setValue(weight % 100 / 10);
+                weightPicker3.setValue(weight % 10);
+            }
+            weightPicker.setOnValueChangedListener(onValueChangeListener);
             emergencyEdit.setText(userStore.emergencyTel);
             emergencyEdit.addTextChangedListener(onchangeListener);
         }
@@ -93,6 +101,15 @@ public class UserinfoFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
+
+    public NumberPicker.OnValueChangeListener onValueChangeListener = new NumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            int weight = weightPicker.getValue() * 100 + weightPicker2.getValue() * 10 + weightPicker3.getValue();
+            userStore.weight = Integer.valueOf(weight);
+            userStore.save();
+        }
+    };
 
     public TextWatcher onchangeListener = new TextWatcher() {
         @Override
@@ -115,9 +132,6 @@ public class UserinfoFragment extends Fragment {
             try {
                 userStore.height = Integer.valueOf(heightEdit.getText().toString());
             } catch (Exception ex) {}
-            try {
-                userStore.weight = Integer.valueOf(weightEdit.getText().toString());
-            } catch (Exception ex) {}
             userStore.save();
         }
     };
@@ -125,7 +139,12 @@ public class UserinfoFragment extends Fragment {
     @InjectView(R.id.name_edit) EditText nameEdit;
     @InjectView(R.id.age_edit) EditText ageEdit;
     @InjectView(R.id.height_edit) EditText heightEdit;
-    @InjectView(R.id.weight_edit) EditText weightEdit;
+    @InjectView(R.id.weightPicker)
+    NumberPicker weightPicker;
+    @InjectView(R.id.weightPicker2)
+    NumberPicker weightPicker2;
+    @InjectView(R.id.weightPicker3)
+    NumberPicker weightPicker3;
     @InjectView(R.id.emergency_edit) EditText emergencyEdit;
 
     @OnClick(R.id.login_button)
