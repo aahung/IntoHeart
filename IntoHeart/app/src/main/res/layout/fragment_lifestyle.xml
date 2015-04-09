@@ -65,8 +65,9 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="195dp"
-                android:layout_height="79dp">
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="80dp">
 
                 <ImageButton
                     android:layout_width="fill_parent"
@@ -78,8 +79,9 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="83dp">
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="80dp">
 
                 <ImageButton
                     android:layout_width="fill_parent"
@@ -96,14 +98,17 @@
             android:layout_width="match_parent"
             android:layout_height="97dp">
 
+            <!-- Placeholder -->
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="44dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.20"
                 android:layout_height="fill_parent"></LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="169dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
                 android:layout_height="fill_parent">
 
                 <ImageButton
@@ -117,7 +122,8 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="79dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
                 android:layout_height="fill_parent">
 
                 <ImageButton
@@ -127,6 +133,13 @@
                     android:src="@drawable/eating_disorder1"
                     android:background="#00000000" />
             </LinearLayout>
+
+            <!-- Placeholder -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="fill_parent"></LinearLayout>
 
         </LinearLayout>
 
