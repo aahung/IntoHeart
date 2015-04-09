@@ -88,6 +88,8 @@ public class UserinfoFragment extends Fragment {
                 weightPicker3.setValue(weight % 10);
             }
             weightPicker.setOnValueChangedListener(onValueChangeListener);
+            weightPicker2.setOnValueChangedListener(onValueChangeListener);
+            weightPicker3.setOnValueChangedListener(onValueChangeListener);
             emergencyEdit.setText(userStore.emergencyTel);
             emergencyEdit.addTextChangedListener(onchangeListener);
         }
