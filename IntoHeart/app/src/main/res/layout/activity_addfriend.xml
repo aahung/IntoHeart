@@ -44,8 +44,9 @@
                 android:layout_weight="1"
                 android:iconifiedByDefault="false"
                 android:inputType="textFilter"
-                android:searchIcon="@drawable/search_icon"
-                android:baselineColor="#ffffff"/>
+                android:searchIcon="@drawable/search_icon"/>
+                <!--android:baselineColor="#ffffff"-->
+
         </LinearLayout>
 
 
