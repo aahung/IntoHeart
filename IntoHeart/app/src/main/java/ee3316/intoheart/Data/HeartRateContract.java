@@ -29,29 +29,29 @@ public class HeartRateContract {
 
     private static final String SQL_CREATE_ENTRIES_DAY =
             "CREATE TABLE day (" +
-                    "timestamp TEXT PRIMARY KEY, " +
-                    "hr INTEGER, " +
+                    "timestamp INTEGER PRIMARY KEY, " +
+                    "hr REAL, " +
                     "max INTEGER, " +
                     "min INTEGER, " +
-                    "sd INTEGER" +
+                    "sd REAL" +
                     " )";
 
     private static final String SQL_CREATE_ENTRIES_WEEK =
             "CREATE TABLE week (" +
-                    "timestamp TEXT PRIMARY KEY, " +
-                    "hr INTEGER, " +
+                    "timestamp INTEGER PRIMARY KEY, " +
+                    "hr REAL, " +
                     "max INTEGER, " +
                     "min INTEGER, " +
-                    "sd INTEGER" +
+                    "sd REAL" +
                     " )";
 
     private static final String SQL_CREATE_ENTRIES_MONTH =
             "CREATE TABLE month (" +
-                    "timestamp TEXT PRIMARY KEY, " +
-                    "hr INTEGER, " +
+                    "timestamp INTEGER PRIMARY KEY, " +
+                    "hr REAL, " +
                     "max INTEGER, " +
                     "min INTEGER, " +
-                    "sd INTEGER" +
+                    "sd REAL" +
                     " )";
 
     private static final String SQL_DELETE_ENTRIES_DAY =
@@ -63,7 +63,7 @@ public class HeartRateContract {
 
     public class HRReaderDbHelper extends SQLiteOpenHelper {
         // If you change the database schema, you must increment the database version.
-        public static final int DATABASE_VERSION = 3;
+        public static final int DATABASE_VERSION = 5;
         public static final String DATABASE_NAME = "HRReader.db";
 
         public HRReaderDbHelper(Context context) {
@@ -89,7 +89,7 @@ public class HeartRateContract {
 
     private HRReaderDbHelper mDbHelper;
 
-    public void insertHR(String table, long unixTime, int hr, int max, int min, int sd) {
+    public void insertHR(String table, long unixTime, double hr, int max, int min, double sd) {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -126,34 +126,5 @@ public class HeartRateContract {
             data.add(new Long[]{cursor.getLong(0), cursor.getLong(1)});
         }
         return data;
-    }
-
-    public AnalysisResult getAnalysisResult() {
-        List<Long[]> hrs = getHRs();
-        long sum = 0;
-        long sum2 = 0;
-        int min = 1000;
-        int max = -1;
-        for (Long[] hr : hrs) {
-            sum += hr[1];
-            sum2 += hr[1] * hr[1];
-            if (min > hr[1]) min = hr[1].intValue();
-            if (max < hr[1]) max = hr[1].intValue();
-        }
-        double ave = (sum * 1.0 / hrs.size());
-        double ave2 = (sum2 * 1.0 / hrs.size());
-        AnalysisResult analysisResult = new AnalysisResult();
-        analysisResult.average = ave;
-        analysisResult.std_dev = Math.sqrt(ave2 - ave * ave);
-        analysisResult.max = max;
-        analysisResult.min = min;
-        return analysisResult;
-    }
-
-    public class AnalysisResult {
-        public double average;
-        public double std_dev;
-        public int max;
-        public int min;
     }
 }

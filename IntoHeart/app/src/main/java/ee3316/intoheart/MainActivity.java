@@ -18,6 +18,7 @@ import java.util.List;
 import ee3316.intoheart.BLE.BluetoothLeService;
 import ee3316.intoheart.BLE.SensorConnectionManager;
 import ee3316.intoheart.Data.HeartRateContract;
+import ee3316.intoheart.Data.HeartRateStoreController;
 
 
 public class MainActivity extends ActionBarActivity
@@ -29,10 +30,7 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    public HeartRateContract heartRateContract = new HeartRateContract(this);
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+    public HeartRateStoreController heartRateStoreController = new HeartRateStoreController(this);
     private CharSequence mTitle;
 
     public List<String> sectionTitles;

@@ -25,7 +25,6 @@ public class AnalysisFragment extends Fragment {
 
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    HeartRateContract.AnalysisResult analysisResult;
 
     public static AnalysisFragment newInstance(int sectionNumber) {
         AnalysisFragment fragment = new AnalysisFragment();
@@ -70,11 +69,11 @@ public class AnalysisFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        analysisResult = (new HeartRateContract(getActivity())).getAnalysisResult();
-        ((TextView)getActivity().findViewById(R.id.textAve)).setText("Recently HR average: " + round(analysisResult.average, 2));
-        ((TextView)getActivity().findViewById(R.id.textStdDev)).setText("Standard Deviation: " + round(analysisResult.std_dev, 2));
-        ((TextView)getActivity().findViewById(R.id.textMax)).setText("Max: " + analysisResult.max);
-        ((TextView)getActivity().findViewById(R.id.textMin)).setText("Min: " + analysisResult.min);
+//        analysisResult = (new HeartRateContract(getActivity())).getAnalysisResult();
+//        ((TextView)getActivity().findViewById(R.id.textAve)).setText("Recently HR average: " + round(analysisResult.average, 2));
+//        ((TextView)getActivity().findViewById(R.id.textStdDev)).setText("Standard Deviation: " + round(analysisResult.std_dev, 2));
+//        ((TextView)getActivity().findViewById(R.id.textMax)).setText("Max: " + analysisResult.max);
+//        ((TextView)getActivity().findViewById(R.id.textMin)).setText("Min: " + analysisResult.min);
     }
 
     @Override

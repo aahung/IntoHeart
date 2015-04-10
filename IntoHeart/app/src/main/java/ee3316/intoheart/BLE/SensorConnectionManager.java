@@ -144,9 +144,7 @@ public class SensorConnectionManager {
                     }
                 }
                 int hr = Integer.valueOf(data);
-                ((MainActivity) activity).heartRateContract.insertHR("day",
-                        System.currentTimeMillis() / 1000L,
-                        hr, hr, hr, 0);
+                ((MainActivity) activity).heartRateStoreController.addHR(hr);
             }
         }
     };
