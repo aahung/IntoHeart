@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="slowdiseaseurls_array">
+        <item>"http://en.wikipedia.org/wiki/Sinus_bradycardia"</item>
+        <item>"http://en.wikipedia.org/wiki/Sick_sinus_syndrome"</item>
+        <item>"http://en.wikipedia.org/wiki/Junctional_rhythm"</item>
+        <item>"http://en.wikipedia.org/wiki/Atrioventricular_block"</item>
+    </string-array>
+    <string-array name="slowdiseasename_array">
+        <item>What is bradycardia</item>
+        <item>Sinus bradycardia</item>
+        <item>Sick sinus syndrome</item>
+        <item>Junctional rhythm</item>
+        <item>Atrioventricular block</item>
+    </string-array>
+
+    <string-array name="fastdiseaseurls_array">
+        <item>"http://en.wikipedia.org/wiki/Tachycardia"</item>
+        <item>"http://en.wikipedia.org/wiki/Sinus_tachycardia"</item>
+        <item>"http://en.wikipedia.org/wiki/Atrial_fibrillation"</item>
+        <item>"http://en.wikipedia.org/wiki/Atrial_flutter"</item>
+        <item>"http://en.wikipedia.org/wiki/AV_nodal_reentrant_tachycardia"</item>
+        <item>"http://en.wikipedia.org/wiki/Atrial_tachycardia"</item>
+        <item>"http://en.wikipedia.org/wiki/Multifocal_atrial_tachycardia"</item>
+        <item>"http://en.wikipedia.org/wiki/Junctional_tachycardia"</item>
+        <item>"http://en.wikipedia.org/wiki/Ventricular_tachycardia"</item>
+    </string-array>
+    <string-array name="fastdiseasename_array">
+        <item>What is tachycardia</item>
+        <item>Sinus tachycardia</item>
+        <item>Atrial fibrillation</item>
+        <item>Atrial flutter</item>
+        <item>AV nodal reentrant tachycardia</item>
+        <item>Atrial tachycardia</item>
+        <item>Multifocal atrial tachycardia</item>
+        <item>Junctional tachycardia</item>
+        <item>Ventricular tachycardia</item>
+    </string-array>
+
+</resources>
