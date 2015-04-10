@@ -1,6 +1,7 @@
 package ee3316.intoheart;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
@@ -16,6 +19,8 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ee3316.intoheart.Data.HeartRateContract;
 
 /**
@@ -37,13 +42,37 @@ public class AnalysisFragment extends Fragment {
     public AnalysisFragment() {
 
     }
-
+    @InjectView(R.id.disease_fast_block)
+    LinearLayout disease_fast_block;
+    @InjectView(R.id.disease_slow_block)
+    LinearLayout disease_slow_block;
+    @InjectView(R.id.healthy_block)
+    LinearLayout healthy_block;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         setHasOptionsMenu(true);
+        ButterKnife.inject(this,rootView);
+        Button btn_slow=(Button)rootView.findViewById(R.id.view_detail_slow_button);
+        btn_slow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(getActivity().getApplicationContext(),SlowDiseaseMainActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        Button btn_fast=(Button)rootView.findViewById(R.id.view_detail_fast_button);
+        btn_fast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2=new Intent();
+                intent2.setClass(getActivity().getApplicationContext(),FastDiseaseMainActivity.class);
+                getActivity().startActivity(intent2);
+            }
+        });
         return rootView;
     }
 

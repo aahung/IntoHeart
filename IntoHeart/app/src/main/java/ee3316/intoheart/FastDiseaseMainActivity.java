@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import butterknife.ButterKnife;
@@ -16,7 +17,7 @@ import butterknife.InjectView;
 
 public class FastDiseaseMainActivity extends Activity {
     private Button buttonFast;
-    private Button button_return;
+    private ImageButton button_return;
     private FragmentManager manager;
 
     private FragmentTransaction transaction;
@@ -41,7 +42,7 @@ public class FastDiseaseMainActivity extends Activity {
                 transaction.commit();
             }
         });
-        button_return = (Button) findViewById(R.id.fast_return_button);
+        button_return = (ImageButton) findViewById(R.id.fast_return_button);
 
         button_return.setOnClickListener(new View.OnClickListener(){
             @Override
