@@ -34,7 +34,8 @@ public class RawDataActivity extends ListActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         for (Long[] d : ds) {
             Date time = new Date(d[0]);
-            adapter.addData(simpleDateFormat.format(time), d[1].intValue());
+            adapter.addData(simpleDateFormat.format(time), String.format("ave: %s, [%s, %s], dev: %s",
+                    d[1], d[3], d[2], d[4]));
         }
         setListAdapter(adapter);
     }
@@ -72,7 +73,7 @@ public class RawDataActivity extends ListActivity {
             mInflator = getLayoutInflater();
         }
 
-        public void addData (String time, int hr) {
+        public void addData (String time, String hr) {
             datas.add(new String[]{time, String.valueOf(hr)});
         }
 

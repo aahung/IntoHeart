@@ -114,16 +114,17 @@ public class HeartRateContract {
         long unixTime = System.currentTimeMillis();
         Cursor cursor =
                 db.query("day", // a. table
-                        new String[]{"timestamp", "hr"}, // b. column names
+                        new String[]{"timestamp", "hr", "max", "min", "sd"}, // b. column names
                         " " + "timestamp" + " > ?", // c. selections
-                        new String[]{String.valueOf(unixTime - 1000000)}, // d. selections args
+                        new String[]{"0"}, // d. selections args
                         null, // e. group by
                         null, // f. having
                         "timestamp" + " DESC", // g. order by
                         null); // h. limit
         List<Long[]> data = new ArrayList<>();
         while (cursor.moveToNext()) {
-            data.add(new Long[]{cursor.getLong(0), cursor.getLong(1)});
+            data.add(new Long[]{cursor.getLong(0), cursor.getLong(1), cursor.getLong(2), cursor.getLong(3),
+            cursor.getLong(4)});
         }
         return data;
     }

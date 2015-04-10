@@ -40,6 +40,8 @@ public class HeartRateStoreController {
                 heartRateContract.insertHR("day",
                         unixTime - unixTime % MSEC_PER_10_MINS,
                         analysisResult.average, analysisResult.max, analysisResult.min, analysisResult.std_dev);
+                stagingHRs.clear();
+                addHR(hr);
             }
         }
     }
