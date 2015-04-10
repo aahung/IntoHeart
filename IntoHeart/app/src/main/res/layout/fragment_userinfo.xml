@@ -12,11 +12,6 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"></LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
@@ -225,32 +220,38 @@
                 android:id="@+id/login_block"
                 android:visibility="visible">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CREAT AN ACCOUNT"
-                    android:id="@+id/register_button"
-                    android:textColor="#ffffff"
-                    android:shadowColor="#00000000"
-                    android:background="#20ffffff"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="10dp" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent">
 
-                <Button
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CREAT AN ACCOUNT"
+                        android:id="@+id/register_button"
+                        android:textColor="#ffffff"
+                        android:shadowColor="#00000000"
+                        android:background="#20ffffff"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="LOG IN"
-                    android:id="@+id/login_button"
-                    android:shadowColor="#00000000"
-                    android:background="#b6cb24"
-                    android:textColor="#ffffff"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="5dp" />
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="LOG IN"
+                        android:id="@+id/login_button"
+                        android:shadowColor="#00000000"
+                        android:background="#b6cb24"
+                        android:textColor="#ffffff"
+                        android:layout_marginRight="10dp" />
+                </LinearLayout>
 
             </LinearLayout>
             <LinearLayout
@@ -260,7 +261,8 @@
                 android:weightSum="1"
                 android:layout_marginTop="30dp"
                 android:id="@+id/logout_block"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal">
 
                 <Button
                     android:layout_width="match_parent"
@@ -268,12 +270,13 @@
                     android:text="LOG OUT"
                     android:id="@+id/logout_button"
                     android:shadowColor="#00000000"
-                    android:background="#3f74dc"
+                    android:background="#b6bc24"
                     android:textColor="#ffffff"
                     android:layout_weight="0.62"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp" />
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="10dp" />
 
             </LinearLayout>
 
