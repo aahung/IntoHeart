@@ -30,27 +30,27 @@ public class HeartRateContract {
     private static final String SQL_CREATE_ENTRIES_DAY =
             "CREATE TABLE day (" +
                     "timestamp TEXT PRIMARY KEY, " +
-                    "hr INTEGER" +
-                    "max INTEGER" +
-                    "min INTEGER" +
+                    "hr INTEGER, " +
+                    "max INTEGER, " +
+                    "min INTEGER, " +
                     "sd INTEGER" +
                     " )";
 
     private static final String SQL_CREATE_ENTRIES_WEEK =
             "CREATE TABLE week (" +
                     "timestamp TEXT PRIMARY KEY, " +
-                    "hr INTEGER" +
-                    "max INTEGER" +
-                    "min INTEGER" +
+                    "hr INTEGER, " +
+                    "max INTEGER, " +
+                    "min INTEGER, " +
                     "sd INTEGER" +
                     " )";
 
     private static final String SQL_CREATE_ENTRIES_MONTH =
             "CREATE TABLE month (" +
                     "timestamp TEXT PRIMARY KEY, " +
-                    "hr INTEGER" +
-                    "max INTEGER" +
-                    "min INTEGER" +
+                    "hr INTEGER, " +
+                    "max INTEGER, " +
+                    "min INTEGER, " +
                     "sd INTEGER" +
                     " )";
 
@@ -63,7 +63,7 @@ public class HeartRateContract {
 
     public class HRReaderDbHelper extends SQLiteOpenHelper {
         // If you change the database schema, you must increment the database version.
-        public static final int DATABASE_VERSION = 2;
+        public static final int DATABASE_VERSION = 3;
         public static final String DATABASE_NAME = "HRReader.db";
 
         public HRReaderDbHelper(Context context) {
