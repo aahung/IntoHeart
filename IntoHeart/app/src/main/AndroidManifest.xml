@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".IHApplication"
         android:allowBackup="true"
         android:icon="@drawable/intoheart_icon2"
         android:label="@string/app_name"

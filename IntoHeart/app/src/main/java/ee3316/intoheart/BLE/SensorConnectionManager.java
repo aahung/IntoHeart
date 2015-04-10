@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ee3316.intoheart.DashboardFragment;
+import ee3316.intoheart.IHApplication;
 import ee3316.intoheart.MainActivity;
 import ee3316.intoheart.R;
 import ee3316.intoheart.SensorsFragment;
@@ -130,12 +131,14 @@ public class SensorConnectionManager {
                 }
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
+                ((IHApplication) activity.getApplication()).instantHeartRateStore.setHR(data);
                 FragmentManager fragmentManager = ((MainActivity)activity).getSupportFragmentManager();
+
                 List<Fragment> fragments = fragmentManager.getFragments();
                 for (Fragment fragment : fragments) {
                     try {
                         DashboardFragment dashboardFragment = (DashboardFragment) fragment;
-                        dashboardFragment.setHR(data);
+                        dashboardFragment.update(data);
                     } catch (Exception ex) {
 
                     }

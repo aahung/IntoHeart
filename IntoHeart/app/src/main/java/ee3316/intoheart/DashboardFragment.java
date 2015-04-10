@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ee3316.intoheart.Data.InstantHeartRateStore;
+
 /**
  * Created by aahung on 3/7/15.
  */
@@ -30,10 +32,6 @@ public class DashboardFragment extends Fragment {
     LineGraphSeries<DataPoint> series;
 
     GraphView graph;
-    final static int n = 50;
-    final static int MAX_HR = 130;
-    final static int MIN_HR = 10;
-    DataPoint[] hrs = new DataPoint[n];
 
     boolean exercising = false;
 
@@ -52,15 +50,15 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    public void setHR(String hr) {
+    private InstantHeartRateStore getInstantHeartRateStore() {
+        return ((IHApplication) getActivity().getApplication()).instantHeartRateStore;
+    }
+
+
+    public void update(String hr) {
         TextView instantHRTextView = (TextView) getActivity().findViewById(R.id.instantHRTextView);
         instantHRTextView.setText(hr + " bpm");
-        long unixTime = System.currentTimeMillis();
-        for (int i = 0; i < n - 1; ++i) {
-            hrs[i] = new DataPoint(i, hrs[i + 1].getY());
-        }
-        hrs[n - 1] = new DataPoint(n - 1, Integer.valueOf(hr));
-        series.resetData(hrs);
+        series.resetData(getInstantHeartRateStore().hrs);
     }
 
     @Override
@@ -68,6 +66,7 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         setHasOptionsMenu(true);
+        series = new LineGraphSeries<DataPoint>(getInstantHeartRateStore().hrs);
         return rootView;
     }
 
@@ -115,10 +114,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i = 0; i < n; ++i) {
-            hrs[i] = new DataPoint(i, (MAX_HR + MIN_HR) / 2);
-        }
-        series = new LineGraphSeries<DataPoint>(hrs);
+
+
     }
 
     @Override
@@ -130,10 +127,10 @@ public class DashboardFragment extends Fragment {
         graph.setTitle("");
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(n - 1);
+        graph.getViewport().setMaxX(getInstantHeartRateStore().n - 1);
         graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(MIN_HR);
-        graph.getViewport().setMaxY(MAX_HR);
+        graph.getViewport().setMinY(getInstantHeartRateStore().MIN_HR);
+        graph.getViewport().setMaxY(getInstantHeartRateStore().MAX_HR);
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
