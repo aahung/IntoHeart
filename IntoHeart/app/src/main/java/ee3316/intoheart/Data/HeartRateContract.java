@@ -25,37 +25,61 @@ public class HeartRateContract {
     }
 
     public static abstract class HREntry implements BaseColumns {
-        public static final String TABLE_NAME = "hr";
-        public static final String COLUMN_NAME_ENTRY_ID = "timestamp";
-        public static final String COLUMN_NAME_VALUE = "heart_rate";
     }
 
-    private static final String TEXT_TYPE = " TEXT";
-    private static final String INT_TYPE = " INTEGER";
-    private static final String COMMA_SEP = ",";
-    private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + HREntry.TABLE_NAME + " (" +
-                    HREntry.COLUMN_NAME_ENTRY_ID + INT_TYPE + " PRIMARY KEY" + COMMA_SEP +
-                    HREntry.COLUMN_NAME_VALUE + INT_TYPE + " )";
+    private static final String SQL_CREATE_ENTRIES_DAY =
+            "CREATE TABLE day (" +
+                    "timestamp TEXT PRIMARY KEY, " +
+                    "hr INTEGER" +
+                    "max INTEGER" +
+                    "min INTEGER" +
+                    "sd INTEGER" +
+                    " )";
 
-    private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + HREntry.TABLE_NAME;
+    private static final String SQL_CREATE_ENTRIES_WEEK =
+            "CREATE TABLE week (" +
+                    "timestamp TEXT PRIMARY KEY, " +
+                    "hr INTEGER" +
+                    "max INTEGER" +
+                    "min INTEGER" +
+                    "sd INTEGER" +
+                    " )";
+
+    private static final String SQL_CREATE_ENTRIES_MONTH =
+            "CREATE TABLE month (" +
+                    "timestamp TEXT PRIMARY KEY, " +
+                    "hr INTEGER" +
+                    "max INTEGER" +
+                    "min INTEGER" +
+                    "sd INTEGER" +
+                    " )";
+
+    private static final String SQL_DELETE_ENTRIES_DAY =
+            "DROP TABLE IF EXISTS day";
+    private static final String SQL_DELETE_ENTRIES_WEEK =
+            "DROP TABLE IF EXISTS week";
+    private static final String SQL_DELETE_ENTRIES_MONTH =
+            "DROP TABLE IF EXISTS month";
 
     public class HRReaderDbHelper extends SQLiteOpenHelper {
         // If you change the database schema, you must increment the database version.
-        public static final int DATABASE_VERSION = 1;
+        public static final int DATABASE_VERSION = 2;
         public static final String DATABASE_NAME = "HRReader.db";
 
         public HRReaderDbHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(SQL_CREATE_ENTRIES);
+            db.execSQL(SQL_CREATE_ENTRIES_DAY);
+            db.execSQL(SQL_CREATE_ENTRIES_WEEK);
+            db.execSQL(SQL_CREATE_ENTRIES_MONTH);
         }
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // This database is only a cache for online data, so its upgrade policy is
             // to simply to discard the data and start over
-            db.execSQL(SQL_DELETE_ENTRIES);
+            db.execSQL(SQL_DELETE_ENTRIES_DAY);
+            db.execSQL(SQL_DELETE_ENTRIES_WEEK);
+            db.execSQL(SQL_DELETE_ENTRIES_MONTH);
             onCreate(db);
         }
         public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -65,21 +89,22 @@ public class HeartRateContract {
 
     private HRReaderDbHelper mDbHelper;
 
-    public void insertHR(String hrStr) {
-        int hr = Integer.valueOf(hrStr);
+    public void insertHR(String table, long unixTime, int hr, int max, int min, int sd) {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        long unixTime = System.currentTimeMillis();
-        values.put(HREntry.COLUMN_NAME_ENTRY_ID, unixTime);
-        values.put(HREntry.COLUMN_NAME_VALUE, hr);
+        values.put("timestamp", unixTime);
+        values.put("hr", hr);
+        values.put("max", max);
+        values.put("min", min);
+        values.put("sd", sd);
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
         newRowId = db.insert(
-                HREntry.TABLE_NAME,
+                table,
                 null,
                 values);
     }
@@ -88,13 +113,13 @@ public class HeartRateContract {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         long unixTime = System.currentTimeMillis();
         Cursor cursor =
-                db.query(HREntry.TABLE_NAME, // a. table
-                        new String[]{HREntry.COLUMN_NAME_ENTRY_ID, HREntry.COLUMN_NAME_VALUE}, // b. column names
-                        " " + HREntry.COLUMN_NAME_ENTRY_ID + " > ?", // c. selections
+                db.query("day", // a. table
+                        new String[]{"timestamp", "hr"}, // b. column names
+                        " " + "timestamp" + " > ?", // c. selections
                         new String[]{String.valueOf(unixTime - 1000000)}, // d. selections args
                         null, // e. group by
                         null, // f. having
-                        HREntry.COLUMN_NAME_ENTRY_ID + " DESC", // g. order by
+                        "timestamp" + " DESC", // g. order by
                         null); // h. limit
         List<Long[]> data = new ArrayList<>();
         while (cursor.moveToNext()) {
