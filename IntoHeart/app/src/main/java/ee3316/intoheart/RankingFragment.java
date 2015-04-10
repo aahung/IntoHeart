@@ -13,26 +13,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.StaticLabelsFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -76,6 +69,7 @@ public class RankingFragment extends Fragment {
         ButterKnife.inject(this, rootView);
         userStore = new UserStore(getActivity());
         getRank();
+        getRequest();
         return rootView;
     }
 
@@ -96,10 +90,15 @@ public class RankingFragment extends Fragment {
         super.onDestroy();
     }
 
+    MenuItem inboxMenuItem;
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         getActivity().getMenuInflater().inflate(R.menu.menu_ranking, menu);
+        inboxMenuItem = menu.findItem(R.id.action_inbox);
+        if (requestListAdapter != null)
+            inboxMenuItem.setTitle(String.format("Inbox (%s)", requestListAdapter.datas.size()));
     }
 
     @Override
@@ -108,8 +107,17 @@ public class RankingFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         switch (item.getItemId()) {
-            case R.id.action_add:
-
+            case R.id.action_inbox:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.alertdialog_requests, null);
+                final ListView requestListView = ((ListView)dialogView.findViewById(R.id.list_view));
+                requestListView.setAdapter(requestListAdapter);
+                builder.setView(dialogView)
+                        .setTitle("Inbox")
+                        .setNeutralButton("Ok", null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 break;
         }
 
@@ -118,6 +126,31 @@ public class RankingFragment extends Fragment {
 
     @InjectView(R.id.ranking_list_view)
     ListView listView;
+
+    RequestListAdapter requestListAdapter;
+
+    public void getRequest() {
+        connector.friendRequests(userStore.email, userStore.password, new JCallback<Outcome>() {
+            @Override
+            public void call(Outcome outcome) {
+                if (outcome.success) {
+                    requestListAdapter = new RequestListAdapter();
+                    JsonArray array = (JsonArray) outcome.object;
+                    for (JsonElement ele : array) {
+                        JsonObject obj = ele.getAsJsonObject();
+                        String name = obj.get("name").getAsString();
+                        String email = obj.get("email").getAsString();
+                        requestListAdapter.addData(new String[]{name, email});
+                        requestListAdapter.notifyDataSetChanged();
+                    }
+                    inboxMenuItem.setTitle(String.format("Inbox (%s)", requestListAdapter.datas.size()));
+                } else {
+                    SimpleAlertController.showSimpleMessage("Sorry",
+                            outcome.getString(), getActivity());
+                }
+            }
+        });
+    }
 
     public void getRank() {
         connector.rank(userStore.email, userStore.password, new JCallback<Outcome>() {
@@ -135,6 +168,7 @@ public class RankingFragment extends Fragment {
                     }
                     rankingListAdapter.sort();
                     listView.setAdapter(rankingListAdapter);
+                    rankingListAdapter.notifyDataSetChanged();
                 } else {
                     SimpleAlertController.showSimpleMessage("Sorry",
                             outcome.getString(), getActivity());
@@ -177,7 +211,7 @@ public class RankingFragment extends Fragment {
             Collections.sort(datas, new Comparator<String[]>() {
                 @Override
                 public int compare(String[] lhs, String[] rhs) {
-                    return Integer.valueOf(lhs[2]) - Integer.valueOf(lhs[3]);
+                    return Integer.valueOf(rhs[2]) - Integer.valueOf(lhs[2]);
                 }
             });
         }
@@ -227,6 +261,87 @@ public class RankingFragment extends Fragment {
             TextView name;
             TextView email;
             TextView score;
+        }
+    }
+
+
+    public class RequestListAdapter extends BaseAdapter {
+        private List<String[]> datas;
+        private LayoutInflater mInflator;
+
+        public RequestListAdapter() {
+            super();
+            datas = new ArrayList<>();
+            mInflator = getActivity().getLayoutInflater();
+        }
+
+        public void addData (String[] data) {
+            datas.add(data);
+        }
+
+        public String[] getData(int position) {
+            return datas.get(position);
+        }
+
+        public void clear() {
+            datas.clear();
+        }
+
+        @Override
+        public int getCount() {
+            return datas.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return datas.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder viewHolder;
+            view = mInflator.inflate(R.layout.listitem_request, null);
+            viewHolder = new ViewHolder();
+            viewHolder.name = (TextView) view.findViewById(R.id.nameText);
+            viewHolder.email = (TextView) view.findViewById(R.id.emailText);
+            viewHolder.agree = (Button) view.findViewById(R.id.add_new_friends);
+
+
+            String[] data = datas.get(i);
+            viewHolder.name.setText(data[0]);
+            viewHolder.email.setText(data[1]);
+            viewHolder.agree.setTag(data);
+            viewHolder.agree.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String[] theData = (String[]) v.getTag();
+                    connector.responseRequest(userStore.email, userStore.password, theData[1], new JCallback<Outcome>() {
+                        @Override
+                        public void call(Outcome outcome) {
+                            if (outcome.success) {
+                                getRank();
+                                getRequest();
+                            } else {
+                                SimpleAlertController.showSimpleMessage("Sorry",
+                                        outcome.getString(), getActivity());
+                            }
+                        }
+                    });
+                }
+            });
+
+            return view;
+        }
+
+        public class ViewHolder {
+            TextView name;
+            TextView email;
+            Button agree;
         }
     }
 }

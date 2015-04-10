@@ -66,6 +66,14 @@ public class Connector {
         request("users/request", parameters, callback);
     }
 
+    public void responseRequest(String email, String password, String tEmail, final JCallback<Outcome> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("email", email);
+        parameters.put("password", password);
+        parameters.put("t_email", tEmail);
+        request("users/response", parameters, callback);
+    }
+
     public void rank(String email, String password, final JCallback<Outcome> callback) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("email", email);
@@ -91,6 +99,31 @@ public class Connector {
         });
     }
 
+    public void friendRequests(String email, String password, final JCallback<Outcome> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("email", email);
+        parameters.put("password", password);
+        api.makePostRequest("users/get_request", parameters, new Callback<JsonElement>() {
+            @Override
+            public void success(JsonElement jsonElement, Response response) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                boolean success = jsonObject.get("success").getAsInt() == 1;
+                Object object = "Network error";
+                try {
+                    object = jsonObject.get("from").getAsJsonArray();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                callback.call(new Outcome(success, object));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                callback.call(new Outcome(false, null));
+            }
+        });
+    }
+
     public void request(String url, Map<String, String> parameters, final JCallback<Outcome> callback) {
         api.makePostRequest(url, parameters, new Callback<JsonElement>() {
             @Override
@@ -99,7 +132,7 @@ public class Connector {
                 boolean success = jsonObject.get("success").getAsInt() == 1;
                 Object object = "Network error";
                 try {
-                    object = jsonObject.get("message");
+                    object = jsonObject.get("message").getAsString();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
