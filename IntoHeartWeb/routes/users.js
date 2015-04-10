@@ -88,6 +88,15 @@ router.post('/request', function(req, res, next) {
             res.end(JSON.stringify(result));
             return;
         }
+        for (var i = 0; i < u.friends.length; ++i) {
+            var friend = u.friends[i];
+            if (friend.email == target_email) {
+                result["success"] = 0;
+                result["message"] = "you already has friend: " + friend.name;
+                res.end(JSON.stringify(result));
+                return;
+            }
+        }
         User.findOne({"email": email}, function(err, user) {
             User.findOne({"email": target_email}, function(err, t_user) {
                 if (!t_user) {
@@ -149,57 +158,55 @@ router.post('/response', function(req, res, next) {
     var password = req.body.password;
     var target_email = req.body.t_email;
     var result = {};
-    auth(email, password, function(success, message, u) {
+    auth(email, password, function(success, message, user) {
         if (!success) {
             result["success"] = 0;
             result["message"] = message;
             res.end(JSON.stringify(result));
             return;
         }
-        User.findOne({"email": email}, function(err, user) {
-            User.findOne({"email": target_email}, function(err, t_user) {
-                if (!t_user) {
+        User.findOne({"email": target_email}, function(err, t_user) {
+            if (!t_user) {
+                result["success"] = 0;
+                result["message"] = "cannot find user with email: " + target_email;
+                res.end(JSON.stringify(result));
+                return;
+            }
+            var isFriend = false;
+            for (var i = 0; i < user.friends.length; ++i) {
+                if (t_user.email == user.friends[i].email) isFriend = true;
+            }
+            if (isFriend) {
+                result["success"] = 0;
+                result["message"] = "you already has friend: " + t_user.name;
+                res.end(JSON.stringify(result));
+                return;
+            }
+            User.update({"email": email}, {
+                $pull: {"requests_received": t_user},
+                $push: {"friends": t_user}
+            }, function(err, numberAffected, rawResponse) {
+                if (numberAffected == 1) {
+                    User.update({"email": target_email}, {
+                        $pull: {"requests_sent": user},
+                        $push: {"friends": user}
+                    }, function(err, numberAffected, rawResponse) {
+                        if (numberAffected == 1) {
+                            result["success"] = 1;
+                            result["message"] = t_user.name;
+                            res.end(JSON.stringify(result));
+                        } else {
+                            result["success"] = 0;
+                            result["message"] = "failed to confirm";
+                            res.end(JSON.stringify(result));
+                        }
+                    })
+                } else {
                     result["success"] = 0;
-                    result["message"] = "cannot find user with email: " + target_email;
+                    result["message"] = "failed to confirm";
                     res.end(JSON.stringify(result));
-                    return;
                 }
-                var isFriend = false;
-                for (var i = 0; i < user.friends.length; ++i) {
-                    if (t_user.email == user.friends[i].email) isFriend = true;
-                }
-                if (isFriend) {
-                    result["success"] = 0;
-                    result["message"] = "you already has friend: " + t_user.name;
-                    res.end(JSON.stringify(result));
-                    return;
-                }
-                User.update({"email": email}, {
-                    $pull: {"requests_sent": t_user},
-                    $push: {"friends": t_user}
-                }, function(err, numberAffected, rawResponse) {
-                    if (numberAffected == 1) {
-                        User.update({"email": target_email}, {
-                            $pull: {"requests_received": user},
-                            $push: {"friends": user}
-                        }, function(err, numberAffected, rawResponse) {
-                            if (numberAffected == 1) {
-                                result["success"] = 1;
-                                result["message"] = t_user.name;
-                                res.end(JSON.stringify(result));
-                            } else {
-                                result["success"] = 0;
-                                result["message"] = "failed to confirm";
-                                res.end(JSON.stringify(result));
-                            }
-                        })
-                    } else {
-                        result["success"] = 0;
-                        result["message"] = "failed to confirm";
-                        res.end(JSON.stringify(result));
-                    }
-                })
-            });
+            })
         });
     });
 });
@@ -225,6 +232,12 @@ router.post('/rank', function(req, res, next) {
                 "average": friend.average
             });
         }
+        result.friends.push({
+            "name": u.name,
+            "email": u.email,
+            "score": u.score,
+            "average": u.average
+        });
         res.end(JSON.stringify(result));
     });
 });
@@ -242,11 +255,20 @@ router.post('/get_request', function(req, res, next) {
         }
         var result = {"success": 1, "from": []};
         for (var i = 0; i < u.requests_received.length; ++i) {
-            var friend = u.requests_received[i];
-            result.from.push({
-                "name": friend.name,
-                "email": friend.email
-            });
+            var from = u.requests_received[i];
+            var isFriend = false;
+            for (var j = 0; j < u.friends.length; ++j) {
+                var friend = u.friends[j];
+                if (friend.email == from.email) {
+                    isFriend = true;
+                    break;
+                }
+            }
+            if (!isFriend)
+                result.from.push({
+                    "name": from.name,
+                    "email": from.email
+                });
         }
         res.end(JSON.stringify(result));
     });
