@@ -28,7 +28,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
-                        android:id="@+id/_return_button"
+                        android:id="@+id/fast_return_button"
                         android:src="@drawable/return_button"
                         android:background="#30ffffff"
                         android:layout_weight="1"
@@ -41,7 +41,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Show diseases"
-                        android:id="@+id/slow_disease_button"
+                        android:id="@+id/fast_disease_button"
                         android:background="#30ffffff"
                         android:layout_margin="10dp"
                         android:shadowColor="#00000000"
