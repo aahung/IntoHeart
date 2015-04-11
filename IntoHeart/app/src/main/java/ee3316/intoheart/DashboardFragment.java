@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.OnClick;
 import ee3316.intoheart.Data.InstantHeartRateStore;
 
 /**
@@ -144,5 +145,25 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @OnClick(R.id.instant_hr_button)
+    public void showInstantView(View view) {
+        
+    }
+
+    @OnClick(R.id.day_hr_button)
+    public void showDayView(View view) {
+
+    }
+
+    @OnClick(R.id.week_hr_button)
+    public void showWeekView(View view) {
+
+    }
+
+    @OnClick(R.id.month_hr_button)
+    public void showMonthView(View view) {
+
     }
 }
