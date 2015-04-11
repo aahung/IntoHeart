@@ -46,7 +46,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/alcohol_block">
 
             <ImageButton
                 android:layout_width="match_parent"
@@ -67,7 +68,8 @@
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="80dp">
+                android:layout_height="80dp"
+                android:id="@+id/smoking_block">
 
                 <ImageButton
                     android:layout_width="fill_parent"
@@ -81,7 +83,8 @@
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="80dp">
+                android:layout_height="80dp"
+                android:id="@+id/overwork_block">
 
                 <ImageButton
                     android:layout_width="fill_parent"
@@ -109,7 +112,8 @@
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.3"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:id="@+id/stay_up_late_block">
 
                 <ImageButton
                     android:layout_width="match_parent"
@@ -124,7 +128,8 @@
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.3"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:id="@+id/eating_disorder_block">
 
                 <ImageButton
                     android:layout_width="fill_parent"

@@ -51,6 +51,16 @@
             android:label="Add Friends"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+        <activity
+            android:name=".SlowDiseaseMainActivity"
+            android:label="@string/title_activity_slow_main">
+
+        </activity>
+        <activity
+            android:name=".FastDiseaseMainActivity"
+            android:label="@string/title_activity_fast_main"
+             >
+        </activity>
     </application>
 
 </manifest>
