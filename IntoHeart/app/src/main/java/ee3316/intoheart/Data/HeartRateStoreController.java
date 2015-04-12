@@ -4,8 +4,13 @@ import android.app.Activity;
 
 import com.jjoe64.graphview.series.DataPoint;
 
+import junit.framework.Test;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import ee3316.intoheart.HTTP.JCallback;
 
 /**
  * Created by aahung on 4/10/15.
@@ -50,19 +55,19 @@ public class HeartRateStoreController {
         return new DataPoint[]{};
     }
 
-    public AnalysisResult getAnalysisResult() {
+    private static AnalysisResult analyse(List<Integer> hrs) {
         long sum = 0;
         long sum2 = 0;
         int min = 1000;
         int max = -1;
-        for (int hr : stagingHRs) {
+        for (int hr : hrs) {
             sum += hr;
             sum2 += hr * hr;
             if (min > hr) min = hr;
             if (max < hr) max = hr;
         }
-        double ave = (sum * 1.0 / stagingHRs.size());
-        double ave2 = (sum2 * 1.0 / stagingHRs.size());
+        double ave = (sum * 1.0 / hrs.size());
+        double ave2 = (sum2 * 1.0 / hrs.size());
         AnalysisResult analysisResult = new AnalysisResult();
         analysisResult.average = ave;
         analysisResult.std_dev = Math.sqrt(ave2 - ave * ave);
@@ -71,10 +76,47 @@ public class HeartRateStoreController {
         return analysisResult;
     }
 
-    public class AnalysisResult {
+    public AnalysisResult getAnalysisResult() {
+        return analyse(stagingHRs);
+    }
+
+    public static class AnalysisResult {
         public double average;
         public double std_dev;
         public int max;
         public int min;
+    }
+
+    public void generateTestGaussian(int average, double sd, JCallback<Integer> callback) {
+        TestDataGenerator testDataGenerator = new TestDataGenerator();
+        testDataGenerator.generatorNormalHeartRates(average, sd, callback);
+    }
+
+    public class TestDataGenerator {
+
+        Random randomGenerator = null;
+
+        public TestDataGenerator() {
+            randomGenerator = new Random();
+        }
+
+        public void generatorNormalHeartRates(int average, double sd, JCallback<Integer> callback) {
+            long unixTime = System.currentTimeMillis();
+            long current10MinsUnixTime = unixTime - unixTime % MSEC_PER_10_MINS;
+            int J = 70 * 24 * 6;
+            for (int j = 0; j < J; ++j) {
+                List<Integer> hrs = new ArrayList<>();
+                for (int i = 0; i < 60 * 10; ++i) {
+                    int hr = average + (int)(sd * randomGenerator.nextGaussian());
+                    hrs.add(hr);
+                }
+                AnalysisResult analysisResult = analyse(hrs);
+                heartRateContract.insertHR("day",
+                        current10MinsUnixTime,
+                        analysisResult.average, analysisResult.max, analysisResult.min, analysisResult.std_dev);
+                current10MinsUnixTime -= MSEC_PER_10_MINS;
+                callback.call(100 * j / J);
+            }
+        }
     }
 }

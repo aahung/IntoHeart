@@ -5,4 +5,9 @@
         android:title="@string/pref_title_raw_data"
         ></Preference>
 
+    <Preference
+        android:key="test_gaussian_75_5"
+        android:title="Generate test data gaussian with average 75 sd 5"
+        ></Preference>
+
 </PreferenceScreen>

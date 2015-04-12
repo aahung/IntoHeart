@@ -10,6 +10,8 @@ import ee3316.intoheart.Data.InstantHeartRateStore;
 public class IHApplication extends Application {
     public InstantHeartRateStore instantHeartRateStore;
 
+    public MainActivity mainActivity;
+
     public IHApplication() {
         super();
         instantHeartRateStore = new InstantHeartRateStore();

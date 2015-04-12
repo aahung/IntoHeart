@@ -49,6 +49,8 @@ public class MainActivity extends ActionBarActivity
 
 
         sensorConnectionManager = new SensorConnectionManager(this);
+
+
     }
 
     @Override
@@ -83,6 +85,8 @@ public class MainActivity extends ActionBarActivity
                 = sensorConnectionManager.mBluetoothLeService.
                 connect(sensorConnectionManager.mDeviceAddress);
         }
+
+        ((IHApplication) getApplication()).mainActivity = this;
     }
 
     @Override

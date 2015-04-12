@@ -1,6 +1,7 @@
 package ee3316.intoheart;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import java.util.Date;
 import java.util.List;
 
 import ee3316.intoheart.Data.HeartRateContract;
+import ee3316.intoheart.Data.HeartRateStoreController;
+import ee3316.intoheart.HTTP.JCallback;
 
 
 public class RawDataActivity extends ListActivity {
@@ -28,15 +31,29 @@ public class RawDataActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raw_data);
 
-        HeartRateContract heartRateContract = new HeartRateContract(this);
-        RawDataListAdapter adapter = new RawDataListAdapter();
-        List<Long[]> ds = heartRateContract.getHRs();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-        for (Long[] d : ds) {
-            Date time = new Date(d[0]);
-            adapter.addData(simpleDateFormat.format(time), String.format("ave: %s, [%s, %s], dev: %s",
-                    d[1], d[3], d[2], d[4]));
-        }
+        final ProgressDialog progressDialog = ProgressDialog.show(RawDataActivity.this, null, "Reading from database.");
+        final HeartRateContract heartRateContract = new HeartRateContract(this);
+        final RawDataListAdapter adapter = new RawDataListAdapter();
+        Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                List<Long[]> ds = heartRateContract.getHRs();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                for (Long[] d : ds) {
+                    Date time = new Date(d[0]);
+                    adapter.addData(simpleDateFormat.format(time), String.format("ave: %s, [%s, %s], dev: %s",
+                            d[1], d[3], d[2], d[4]));
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        };
+        mThread.start();
         setListAdapter(adapter);
     }
 

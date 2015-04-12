@@ -1,6 +1,7 @@
 package ee3316.intoheart;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -22,6 +23,9 @@ import android.text.TextUtils;
 
 import java.util.List;
 
+import ee3316.intoheart.Data.HeartRateStoreController;
+import ee3316.intoheart.HTTP.JCallback;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -42,13 +46,35 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         String key = preference.getKey();
         if (key.equals("raw_data")) {
             final Intent intent = new Intent(this, RawDataActivity.class);
             startActivity(intent);
+            return true;
+        } else if (key.equals("test_gaussian_75_5")) {
+            final SettingsActivity settingsActivity = this;
+            final ProgressDialog progressDialog = ProgressDialog.show(SettingsActivity.this, null, "0%");
+            Thread mThread = new Thread() {
+                @Override
+                public void run() {
+                    HeartRateStoreController heartRateStoreController = new HeartRateStoreController(settingsActivity);
+                    heartRateStoreController.generateTestGaussian(75, 5.0, new JCallback<Integer>() {
+                        @Override
+                        public void call(final Integer integer) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressDialog.setMessage(String.format("%d%%", integer));
+                                }
+                            });
+                        }
+                    });
+                    progressDialog.dismiss();
+                }
+            };
+            mThread.start();
             return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -88,7 +114,7 @@ public class SettingsActivity extends PreferenceActivity {
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("display_name"));
+        // bindPreferenceSummaryToValue(findPreference("display_name"));
     }
 
     /**
