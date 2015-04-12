@@ -33,6 +33,9 @@
         </activity>
 
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MarkingActivity"></activity>
+
+        <uses-permission  android:name="android.permission.CALL_PHONE" />
 
         <service
             android:name=".BLE.BluetoothLeService"
