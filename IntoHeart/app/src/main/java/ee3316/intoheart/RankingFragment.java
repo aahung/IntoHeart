@@ -66,7 +66,18 @@ public class RankingFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_ranking, container, false);
         setHasOptionsMenu(true);
         connector = new Connector();
-        ButterKnife.inject(this, rootView);
+
+        ButterKnife.inject(this,rootView);
+        Button btn=(Button)rootView.findViewById(R.id.see_detail);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(getActivity().getApplicationContext(),MarkingActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
         userStore = new UserStore(getActivity());
         getRank();
         getRequest();
