@@ -15,6 +15,11 @@ public class UserStore {
     private final String PREFS_NAME_EMERGENCY_TEL = "user_emergency_tel";
     private final String PREFS_NAME_EMAIL = "user_email";
     private final String PREFS_NAME_PASSWORD = "user_password";
+    private final String PREFS_NAME_RATE_SMOKE = "user_smoke_rate";
+    private final String PREFS_NAME_RATE_DRINK = "user_drink_rate";
+    private final String PREFS_NAME_RATE_OVERWORK = "user_ow_rate";
+    private final String PREFS_NAME_RATE_DISORDER = "user_dis_rate";
+    private final String PREFS_NAME_RATE_STAY_UP = "user_stay_rate";
 
     SharedPreferences settings;
 
@@ -22,6 +27,7 @@ public class UserStore {
     public String name, email, password;
     public int age, height, weight;
     public String emergencyTel;
+    public float[] lifestyles = new float[5];
 
     public UserStore(Context context) {
         this.context = context;
@@ -37,6 +43,11 @@ public class UserStore {
         age = settings.getInt(PREFS_NAME_AGE, -1);
         height = settings.getInt(PREFS_NAME_HEIGHT, -1);
         weight = settings.getInt(PREFS_NAME_WEIGHT, -1);
+        lifestyles[0] = settings.getFloat(PREFS_NAME_RATE_SMOKE, 0);
+        lifestyles[1] = settings.getFloat(PREFS_NAME_RATE_DRINK, 0);
+        lifestyles[2] = settings.getFloat(PREFS_NAME_RATE_OVERWORK, 0);
+        lifestyles[3] = settings.getFloat(PREFS_NAME_RATE_DISORDER, 0);
+        lifestyles[4] = settings.getFloat(PREFS_NAME_RATE_STAY_UP, 0);
     }
 
     public void save() {
@@ -48,6 +59,11 @@ public class UserStore {
         editor.putString(PREFS_NAME_EMERGENCY_TEL, emergencyTel);
         editor.putString(PREFS_NAME_EMAIL, email);
         editor.putString(PREFS_NAME_PASSWORD, password);
+        editor.putFloat(PREFS_NAME_RATE_SMOKE, lifestyles[0]);
+        editor.putFloat(PREFS_NAME_RATE_DRINK, lifestyles[1]);
+        editor.putFloat(PREFS_NAME_RATE_OVERWORK, lifestyles[2]);
+        editor.putFloat(PREFS_NAME_RATE_DISORDER, lifestyles[3]);
+        editor.putFloat(PREFS_NAME_RATE_STAY_UP, lifestyles[4]);
         editor.commit();
     }
 
