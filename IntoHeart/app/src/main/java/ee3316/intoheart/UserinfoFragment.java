@@ -190,11 +190,11 @@ public class UserinfoFragment extends Fragment {
                     userStore.email = email;
                     userStore.password = password;
                     userStore.save();
-                    SimpleAlertController.showSimpleMessage("Cool",
+                    SimpleAlertController.showSimpleMessage("Log in successfully!",
                             String.format("Welcome back, %s", outcome.getString()), getActivity());
                     setVisibility();
                 } else {
-                    SimpleAlertController.showSimpleMessageWithHandler("Sorry",
+                    SimpleAlertController.showSimpleMessageWithHandler("Failed to log in.Please try again.",
                             outcome.getString(), getActivity(), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -244,12 +244,12 @@ public class UserinfoFragment extends Fragment {
                     userStore.email = email;
                     userStore.password = password;
                     userStore.save();
-                    SimpleAlertController.showSimpleMessage("Cool",
+                    SimpleAlertController.showSimpleMessage("Register successfully!",
                             String.format("Welcome %s", name), getActivity());
                     setVisibility();
                 } else {
-                    SimpleAlertController.showSimpleMessage("Cool",
-                            "Failed to register", getActivity());
+                    SimpleAlertController.showSimpleMessage("Failed to register",
+                            "Please try again.", getActivity());
                 }
             }
         });

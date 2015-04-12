@@ -24,8 +24,8 @@
     </array>
     <string name="title_activity_raw_data">RawDataActivity</string>
     <string name="title_activity_ranking">RankingActivity</string>
-    <string name="title_activity_slow_main">SlowDiseaseMainActivity</string>
-    <string name="title_activity_fast_main">FastDiseaseMainActivity</string>
+    <string name="title_activity_disease_detail">SlowDiseaseMainActivity</string>
+    <string name="title_activity_disease_list">FastDiseaseMainActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="R">R</string>
