@@ -1,12 +1,15 @@
 package ee3316.intoheart;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import ee3316.intoheart.Data.HeartRateStoreController;
 import ee3316.intoheart.Data.InstantHeartRateStore;
 
@@ -74,6 +78,7 @@ public class DashboardFragment extends Fragment {
         setHasOptionsMenu(true);
         series = new LineGraphSeries<DataPoint>(getInstantHeartRateStore().hrs);
         ButterKnife.inject(this, rootView);
+        graph.setOnTouchListener(new OnSwipeTouchListener(getActivity()));
         return rootView;
     }
 
@@ -128,6 +133,7 @@ public class DashboardFragment extends Fragment {
     private int currentChart = HeartRateStoreController.CHART.INSTANT;
     private String currentTitle = "";
     private DataPoint[] currentDataSet; // only for non-instant usage
+    int currentOffset;
 
 
     @InjectView(R.id.graph) GraphView graph;
@@ -183,7 +189,8 @@ public class DashboardFragment extends Fragment {
     @OnClick(R.id.day_hr_button)
     public void showDayView(View view) {
         currentChart = HeartRateStoreController.CHART.DAY;
-        currentDataSet = getHeartRateStoreController().getDayDataSet(HeartRateStoreController.CHART.DAY, 0);
+        currentOffset = 0;
+        currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
         reconstructChart();
         series.resetData(currentDataSet);
     }
@@ -198,5 +205,67 @@ public class DashboardFragment extends Fragment {
     public void showMonthView(View view) {
         currentChart = HeartRateStoreController.CHART.MONTH;
         reconstructChart();
+    }
+
+    public class OnSwipeTouchListener implements View.OnTouchListener {
+
+        private final GestureDetector gestureDetector;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
+
+        public OnSwipeTouchListener (Context ctx){
+            gestureDetector = new GestureDetector(ctx, new GestureListener());
+        }
+
+        private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+            private static final int SWIPE_THRESHOLD = 100;
+            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                boolean result = false;
+                try {
+                    float diffY = e2.getY() - e1.getY();
+                    float diffX = e2.getX() - e1.getX();
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            onSwipeRight();
+                        } else {
+                            onSwipeLeft();
+                        }
+                    }
+                    result = true;
+
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+                return result;
+            }
+        }
+
+        public void onSwipeLeft() {
+            currentOffset++;
+            if (currentOffset > 0) currentOffset = 0;
+            currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
+            reconstructChart();
+            series.resetData(currentDataSet);
+        }
+
+        public void onSwipeRight() {
+            currentOffset--;
+            currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
+            reconstructChart();
+            series.resetData(currentDataSet);
+        }
     }
 }

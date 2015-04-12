@@ -66,14 +66,14 @@ public class HeartRateStoreController {
             end = System.currentTimeMillis();
             end = end - end % MSEC_PER_10_MINS;
             start = end - MSEC_PER_DAY;
-            end -= offset * MSEC_PER_DAY;
-            start -= offset * MSEC_PER_DAY;
+            end += offset * MSEC_PER_DAY;
+            start += offset * MSEC_PER_DAY;
         } else {
             end = System.currentTimeMillis();
             end = end - end % MSEC_PER_10_MINS;
             start = end - MSEC_PER_DAY;
-            end -= offset * MSEC_PER_DAY;
-            start -= offset * MSEC_PER_DAY;
+            end += offset * MSEC_PER_DAY;
+            start += offset * MSEC_PER_DAY;
         }
         List<Long[]> ds = heartRateContract.getHRs(start, end);
         DataPoint[] dps = new DataPoint[ds.size()];
