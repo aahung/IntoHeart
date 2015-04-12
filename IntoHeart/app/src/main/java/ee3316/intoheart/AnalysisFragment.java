@@ -60,7 +60,8 @@ public class AnalysisFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
-                intent.setClass(getActivity().getApplicationContext(),SlowDiseaseMainActivity.class);
+                intent.setClass(getActivity().getApplicationContext(),DiseaseListActivity.class);
+                intent.putExtra("kind", DiseaseListActivity.DISEASE_KIND.SLOW);
                 getActivity().startActivity(intent);
             }
         });
@@ -68,9 +69,30 @@ public class AnalysisFragment extends Fragment {
         btn_fast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2=new Intent();
-                intent2.setClass(getActivity().getApplicationContext(),FastDiseaseMainActivity.class);
-                getActivity().startActivity(intent2);
+                Intent intent = new Intent();
+                intent.setClass(getActivity().getApplicationContext(),DiseaseListActivity.class);
+                intent.putExtra("kind", DiseaseListActivity.DISEASE_KIND.FAST);
+                getActivity().startActivity(intent);
+            }
+        });
+        Button btn_slow2=(Button)rootView.findViewById(R.id.view_detail_slow_button2);
+        btn_slow2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(getActivity().getApplicationContext(),DiseaseListActivity.class);
+                intent.putExtra("kind", DiseaseListActivity.DISEASE_KIND.SLOW);
+                getActivity().startActivity(intent);
+            }
+        });
+        Button btn_fast2=(Button)rootView.findViewById(R.id.view_detail_fast_button2);
+        btn_fast2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity().getApplicationContext(),DiseaseListActivity.class);
+                intent.putExtra("kind", DiseaseListActivity.DISEASE_KIND.FAST);
+                getActivity().startActivity(intent);
             }
         });
         return rootView;

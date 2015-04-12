@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="slowdiseaseurls_array">
+        <item>"http://en.wikipedia.org/wiki/Bradycardia"</item>
         <item>"http://en.wikipedia.org/wiki/Sinus_bradycardia"</item>
         <item>"http://en.wikipedia.org/wiki/Sick_sinus_syndrome"</item>
         <item>"http://en.wikipedia.org/wiki/Junctional_rhythm"</item>

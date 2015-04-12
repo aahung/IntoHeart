@@ -55,13 +55,13 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name=".SlowDiseaseMainActivity"
-            android:label="@string/title_activity_slow_main">
+            android:name=".DiseaseDetailActivity"
+            android:label="@string/title_activity_disease_detail">
 
         </activity>
         <activity
-            android:name=".FastDiseaseMainActivity"
-            android:label="@string/title_activity_fast_main"
+            android:name=".DiseaseListActivity"
+            android:label="@string/title_activity_disease_list"
              >
         </activity>
     </application>

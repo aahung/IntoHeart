@@ -51,6 +51,49 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
+        android:id="@+id/healthy_block"
+        android:background="#20ffffff">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Your heart is in good condition!"
+            android:id="@+id/textView12"
+            android:textColor="#ffffff"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="View tachycardia details"
+            android:id="@+id/view_detail_fast_button2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:background="#b6bc24"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="View bradycardia details"
+            android:id="@+id/view_detail_slow_button2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:background="#b6bc24"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/disease_slow_block"
         android:background="#20ffffff">
 
@@ -106,28 +149,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textColor="#ffffff" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/healthy_block"
-        android:background="#20ffffff">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Your heart is in good condition!"
-            android:id="@+id/textView12"
-            android:textColor="#ffffff"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp" />
-
-
     </LinearLayout>
 
 
