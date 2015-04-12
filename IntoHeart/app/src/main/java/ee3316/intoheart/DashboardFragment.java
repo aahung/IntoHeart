@@ -1,7 +1,6 @@
 package ee3316.intoheart;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,7 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
+import ee3316.intoheart.Data.HeartRateStoreController;
 import ee3316.intoheart.Data.InstantHeartRateStore;
 
 /**
@@ -31,8 +33,6 @@ import ee3316.intoheart.Data.InstantHeartRateStore;
 public class DashboardFragment extends Fragment {
 
     LineGraphSeries<DataPoint> series;
-
-    GraphView graph;
 
     boolean exercising = false;
 
@@ -55,11 +55,16 @@ public class DashboardFragment extends Fragment {
         return ((IHApplication) getActivity().getApplication()).instantHeartRateStore;
     }
 
+    private HeartRateStoreController getHeartRateStoreController() {
+        return ((MainActivity) getActivity()).heartRateStoreController;
+    }
+
 
     public void update(String hr) {
         TextView instantHRTextView = (TextView) getActivity().findViewById(R.id.instantHRTextView);
         instantHRTextView.setText(hr + " bpm");
-        series.resetData(getInstantHeartRateStore().hrs);
+        if (currentChart == HeartRateStoreController.CHART.INSTANT)
+            series.resetData(getInstantHeartRateStore().hrs);
     }
 
     @Override
@@ -68,6 +73,7 @@ public class DashboardFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         setHasOptionsMenu(true);
         series = new LineGraphSeries<DataPoint>(getInstantHeartRateStore().hrs);
+        ButterKnife.inject(this, rootView);
         return rootView;
     }
 
@@ -119,22 +125,42 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        graph = (GraphView) getActivity().findViewById(R.id.graph);
+    private int currentChart = HeartRateStoreController.CHART.INSTANT;
+    private String currentTitle = "";
+    private DataPoint[] currentDataSet; // only for non-instant usage
+
+
+    @InjectView(R.id.graph) GraphView graph;
+    private void reconstructChart() {
         graph.removeAllSeries();
         graph.addSeries(series);
-        graph.setTitle("");
+        graph.setTitle(currentTitle);
         graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(getInstantHeartRateStore().n - 1);
+        if (currentChart == HeartRateStoreController.CHART.INSTANT) {
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(getInstantHeartRateStore().n - 1);
+        } else {
+            graph.getViewport().setMinX(currentDataSet[0].getX());
+            graph.getViewport().setMaxX(currentDataSet[currentDataSet.length - 1].getX());
+        }
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(getInstantHeartRateStore().MIN_HR);
         graph.getViewport().setMaxY(getInstantHeartRateStore().MAX_HR);
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""});
+        if (currentChart == HeartRateStoreController.CHART.INSTANT) {
+            staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""});
+        } else {
+            staticLabelsFormatter.setHorizontalLabels(new String[]{
+                    String.format("%d hours ago", (int)((System.currentTimeMillis() - currentDataSet[0].getX()) / 60 / 1000 / 60)),
+                    String.format("%d hours ago", (int)((System.currentTimeMillis() - currentDataSet[currentDataSet.length - 1].getX()) / 60 / 1000 / 60))});
+        }
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reconstructChart();
     }
 
     @Override
@@ -149,21 +175,28 @@ public class DashboardFragment extends Fragment {
 
     @OnClick(R.id.instant_hr_button)
     public void showInstantView(View view) {
-        
+        currentChart = HeartRateStoreController.CHART.INSTANT;
+        currentTitle = "";
+        reconstructChart();
     }
 
     @OnClick(R.id.day_hr_button)
     public void showDayView(View view) {
-
+        currentChart = HeartRateStoreController.CHART.DAY;
+        currentDataSet = getHeartRateStoreController().getDayDataSet(HeartRateStoreController.CHART.DAY, 0);
+        reconstructChart();
+        series.resetData(currentDataSet);
     }
 
     @OnClick(R.id.week_hr_button)
     public void showWeekView(View view) {
-
+        currentChart = HeartRateStoreController.CHART.WEEK;
+        reconstructChart();
     }
 
     @OnClick(R.id.month_hr_button)
     public void showMonthView(View view) {
-
+        currentChart = HeartRateStoreController.CHART.MONTH;
+        reconstructChart();
     }
 }

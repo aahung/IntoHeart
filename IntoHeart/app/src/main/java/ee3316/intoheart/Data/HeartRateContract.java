@@ -128,4 +128,24 @@ public class HeartRateContract {
         }
         return data;
     }
+
+    public List<Long[]> getHRs(long start, long end) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        long unixTime = System.currentTimeMillis();
+        Cursor cursor =
+                db.query("day", // a. table
+                        new String[]{"timestamp", "hr", "max", "min", "sd"}, // b. column names
+                        " " + "timestamp" + " >= ? and timestamp <= ?", // c. selections
+                        new String[]{String.valueOf(start), String.valueOf(end)}, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        "timestamp" + " ASC", // g. order by
+                        null); // h. limit
+        List<Long[]> data = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            data.add(new Long[]{cursor.getLong(0), cursor.getLong(1), cursor.getLong(2), cursor.getLong(3),
+                    cursor.getLong(4)});
+        }
+        return data;
+    }
 }

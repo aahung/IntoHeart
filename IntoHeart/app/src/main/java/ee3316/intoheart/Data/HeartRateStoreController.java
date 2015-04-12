@@ -7,6 +7,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import junit.framework.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +30,8 @@ public class HeartRateStoreController {
     private List<Integer> stagingHRs = new ArrayList<>();
     private long lastUnixTime = 0;
 
-    private long MSEC_PER_10_MINS = 600000;
+    private final long MSEC_PER_10_MINS = 600000;
+    private final long MSEC_PER_DAY = 86400000;
 
     // save the hr and add timestamp
     public void addHR(int hr) {
@@ -51,8 +53,35 @@ public class HeartRateStoreController {
         }
     }
 
-    public DataPoint[] getDayDataSet() {
-        return new DataPoint[]{};
+    public static class CHART {
+        public static int INSTANT = 0;
+        public static int DAY = 1;
+        public static int WEEK = 2;
+        public static int MONTH = 3;
+    }
+
+    public DataPoint[] getDayDataSet(int chart, int offset) {
+        long start, end;
+        if (chart == CHART.DAY) {
+            end = System.currentTimeMillis();
+            end = end - end % MSEC_PER_10_MINS;
+            start = end - MSEC_PER_DAY;
+            end -= offset * MSEC_PER_DAY;
+            start -= offset * MSEC_PER_DAY;
+        } else {
+            end = System.currentTimeMillis();
+            end = end - end % MSEC_PER_10_MINS;
+            start = end - MSEC_PER_DAY;
+            end -= offset * MSEC_PER_DAY;
+            start -= offset * MSEC_PER_DAY;
+        }
+        List<Long[]> ds = heartRateContract.getHRs(start, end);
+        DataPoint[] dps = new DataPoint[ds.size()];
+        int count = 0;
+        for (Long[] d : ds) {//new Date(d[0])
+            dps[count++] = new DataPoint(d[0], d[1]);
+        }
+        return dps;
     }
 
     private static AnalysisResult analyse(List<Integer> hrs) {
