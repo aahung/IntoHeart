@@ -18,8 +18,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/name_edit"
-            android:textColor="#ffffff" />
+            android:id="@+id/name_edit" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -36,8 +35,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/email_edit"
-            android:textColor="#ffffff" />
+            android:id="@+id/email_edit" />
         </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -55,7 +53,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/password_edit"
-            android:textColor="#ffffff" />
+            android:id="@+id/password_edit" />
     </LinearLayout>
 </LinearLayout>
