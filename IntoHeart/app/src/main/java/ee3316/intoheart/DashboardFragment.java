@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -54,7 +56,20 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment() {
 
     }
+    @InjectView(R.id.normal_mode_block)
+    RelativeLayout normal_mode_block;
+    @InjectView(R.id.exercise_mode_block)
+    RelativeLayout exercise_mode_block;
 
+    private void setVisibility() {
+        if (exercising) {
+            normal_mode_block.setVisibility(View.GONE);
+            exercise_mode_block.setVisibility(View.VISIBLE);
+        } else {
+            normal_mode_block.setVisibility(View.VISIBLE);
+            exercise_mode_block.setVisibility(View.GONE);
+        }
+    }
     private InstantHeartRateStore getInstantHeartRateStore() {
         return ((IHApplication) getActivity().getApplication()).instantHeartRateStore;
     }
@@ -89,9 +104,13 @@ public class DashboardFragment extends Fragment {
         if (exercising) {
             menu.findItem(R.id.menu_exercise).setVisible(false);
             menu.findItem(R.id.menu_normal).setVisible(true);
+            normal_mode_block.setVisibility(View.GONE);
+            exercise_mode_block.setVisibility(View.VISIBLE);
         } else {
             menu.findItem(R.id.menu_normal).setVisible(false);
             menu.findItem(R.id.menu_exercise).setVisible(true);
+            normal_mode_block.setVisibility(View.VISIBLE);
+            exercise_mode_block.setVisibility(View.GONE);
         }
     }
 
