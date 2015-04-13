@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +36,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import ee3316.intoheart.Data.HeartRateStoreController;
 import ee3316.intoheart.Data.InstantHeartRateStore;
+import ee3316.intoheart.Data.UserStore;
 import ee3316.intoheart.HTTP.JCallback;
 
 /**
@@ -359,23 +361,6 @@ public class DashboardFragment extends Fragment {
 
         public ExerciseMonitor() {
             initTextToSpeech();
-            heartRateUpdateListener = new JCallback<Integer>() {
-                @Override
-                public void call(Integer integer) {
-                    if (speaking) return;
-                    boolean tooHigh = true;
-                    for (int i = getInstantHeartRateStore().n - 1;
-                         i >= getInstantHeartRateStore().n - 10; --i) {
-                        if (getInstantHeartRateStore().hrs[getInstantHeartRateStore().n - 1].getY() < EXERCISE_MAX_HR) {
-                            tooHigh = false;
-                            break;
-                        }
-                    }
-                    if (tooHigh && !speaking) {
-                        alert();
-                    }
-                }
-            };
         }
 
         private void initTextToSpeech() {
@@ -415,7 +400,25 @@ public class DashboardFragment extends Fragment {
                 }
             });
 
-            getInstantHeartRateStore().setUpdateListener(heartRateUpdateListener);
+            heartRateUpdateListener = new JCallback<Integer>() {
+                @Override
+                public void call(Integer integer) {
+                    if (speaking) return;
+                    boolean tooHigh = true;
+                    for (int i = getInstantHeartRateStore().n - 1;
+                         i >= getInstantHeartRateStore().n - 10; --i) {
+                        if (getInstantHeartRateStore().hrs[i].getY() < EXERCISE_MAX_HR) {
+                            tooHigh = false;
+                            break;
+                        }
+                    }
+                    if (tooHigh && !speaking) {
+                        alert();
+                    }
+                }
+            };
+
+            getInstantHeartRateStore().addUpdateListener(heartRateUpdateListener);
         }
 
         public void welcome() {
@@ -438,11 +441,45 @@ public class DashboardFragment extends Fragment {
                 tts.stop();
                 tts.shutdown();
             }
-
-
-            getInstantHeartRateStore().removeUpdateListener();
+            heartRateUpdateListener = null;
         }
 
         public JCallback<Integer> heartRateUpdateListener;
+    }
+
+    class EmergencyMonitor {
+        private int EMERGENT_MIN_HR = 70;
+        private int EMERGENT_MAX_HR = 170;
+
+        public JCallback<Integer> heartRateUpdateListener;
+
+        public EmergencyMonitor() {
+            heartRateUpdateListener = new JCallback<Integer>() {
+                @Override
+                public void call(Integer integer) {
+                    boolean tooHigh = true;
+                    for (int i = getInstantHeartRateStore().n - 1;
+                         i >= getInstantHeartRateStore().n - 10; --i) {
+                        if (getInstantHeartRateStore().hrs[i].getY() >= EMERGENT_MIN_HR
+                                || getInstantHeartRateStore().hrs[i].getY() <= EMERGENT_MAX_HR) {
+                            tooHigh = false;
+                            break;
+                        }
+                    }
+                    if (tooHigh) {
+                        callEmergency((new UserStore(getActivity())).emergencyTel);
+                    }
+                }
+            };
+
+            getInstantHeartRateStore().addUpdateListener(heartRateUpdateListener);
+        }
+
+        public void callEmergency(String number){
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.CALL");
+            intent.setData(Uri.parse("tel:" + number));
+            startActivity(intent);
+        }
     }
 }
