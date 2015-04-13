@@ -1,0 +1,32 @@
+\subsubsection{Architectural diagram}
+\begin{figure}[H]
+\centering
+\includegraphics[width=5.2in]{img/arch.eps}
+\caption{Into Heart Architectural Design}
+\end{figure}
+
+\subsubsection{Local Database Schema}
+\begin{figure}[H]
+\centering
+\includegraphics[width=5.3in]{img/local_schema.eps}
+\caption{Local database schema: SQLite}
+\end{figure}
+
+\subsubsection{Remote Database Schema}
+\begin{figure}[H]
+\centering
+\includegraphics[width=4in]{img/remote_schema.eps}
+\caption{Remote database schema: MongoDB}
+\end{figure}
+
+\subsubsection{Cliend/Server Application Interface}
+\paragraph{/login} POST, data format: \{"email": email, "password": password\}, return \{"success": 1/0, "message": username\}.
+\paragraph{/signup} POST, data format: \{"email": email, "password": password, "name": name\}, return \{ "success": 1/0\}.
+\paragraph{/search} POST, data format: \{"email": email\}, return \{ "success": 1/0, "message": username/error\}.
+\paragraph{/request} POST, data format: \{"email": email, "password": password, "t\_email": target email\}, return \{ "success": 1/0, "message": target name/error\}.
+\paragraph{/response} POST, data format: \{"email": email, "password": password, "t\_email": target email\}, return \{ "success": 1/0, "message": target name/error\}.
+\paragraph{/rank} POST, data format: \{"email": email, "password": password\}, return \{ "success": 1/0, "friends": [], "message": error\}.
+\paragraph{/get\_request} POST, data format: \{"email": email, "password": password\}, return \{ "success": 1/0, "from": [], "message": error\}.
+\paragraph{/update} POST, data format: \{"email": email, "password": password, "data": data object json\}, return \{ "success": 1/0, "message": error\}.
+\paragraph{/info} POST, data format: \{"email": email, "password": password\}, return \{ "success": 1/0, "info": user info object, "message": error\}.
+
