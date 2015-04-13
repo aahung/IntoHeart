@@ -21,7 +21,7 @@ public class MarkingManager {
 
     private int matchTableAge(int age) {
         int tableAge = (Integer) targetHRs.keySet().toArray()[0];
-        for (int key: targetHRs.keySet()) {
+        for (int key : targetHRs.keySet()) {
             if (age >= key) {
                 tableAge = key;
                 break;
@@ -37,8 +37,8 @@ public class MarkingManager {
                 mark[0] = targetHRs.get(tableAge)[2] / ave * targetHRs.get(tableAge)[1] * 100 / ave;
             else if (ave >= targetHRs.get(tableAge)[1])
                 mark[0] = targetHRs.get(tableAge)[1] * 100 / ave;
-        else
-            mark[0] = ave * 100 / targetHRs.get(tableAge)[0];
+            else
+                mark[0] = ave * 100 / targetHRs.get(tableAge)[0];
     }
 
     public void evaluateRest(int ave) {
@@ -49,11 +49,21 @@ public class MarkingManager {
 
     public void evaluateLifestyle(float[] lifestyle) {
         mark[2] = 4 * (25 -
-                (int)(lifestyle[0] + lifestyle[1] + lifestyle[2] + lifestyle[3] + lifestyle[4])
+                (int) (lifestyle[0] + lifestyle[1] + lifestyle[2] + lifestyle[3] + lifestyle[4])
         );
     }
 
     public int getFinalMark() {
-        return (int)(mark[0] * 0.3 + mark[1] * 0.5 + mark[2] * 0.2);
+        return (int) (mark[0] * 0.3 + mark[1] * 0.5 + mark[2] * 0.2);
+    }
+
+    public int getExerciseMark() {
+        return (int) mark[0];
+    }
+    public int getRestMark(){
+        return (int) mark[1];
+    }
+    public int getLifeStyleMark(){
+        return (int) mark[2];
     }
 }

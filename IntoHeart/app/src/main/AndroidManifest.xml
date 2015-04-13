@@ -33,7 +33,6 @@
         </activity>
 
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".MarkingActivity"></activity>
 
         <uses-permission  android:name="android.permission.CALL_PHONE" />
 
@@ -67,6 +66,10 @@
         <activity android:name=".SpeechActivity"
             android:label="@string/title_activity_speech">
         </activity>
+        <activity android:name=".MarkingActivity"
+            android:label="@string/title_activity_marking">
+
+            </activity>
     </application>
 
 </manifest>
