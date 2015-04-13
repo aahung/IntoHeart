@@ -47,6 +47,9 @@ public class HeartRateStoreController {
                 heartRateContract.insertHR("day",
                         unixTime - unixTime % MSEC_PER_10_MINS,
                         analysisResult.average, analysisResult.max, analysisResult.min, analysisResult.std_dev);
+                UserStore userStore = new UserStore(activity);
+                userStore.markingManager.evaluateRest((int)analysisResult.average);
+                userStore.save();
                 stagingHRs.clear();
                 addHR(hr);
             }

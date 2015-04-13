@@ -40,7 +40,7 @@ public class UserStore {
         fetch();
     }
 
-    private void fetch() {
+    public void fetch() {
         name = settings.getString(PREFS_NAME_NAME, null);
         email = settings.getString(PREFS_NAME_EMAIL, null);
         password = settings.getString(PREFS_NAME_PASSWORD, null);

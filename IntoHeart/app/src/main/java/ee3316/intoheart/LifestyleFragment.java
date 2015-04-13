@@ -138,6 +138,7 @@ public class LifestyleFragment extends Fragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        userStore.fetch();
                         userStore.lifestyles[index] = ratingbar.getRating();
                         userStore.syncLifestyle();
                         userStore.save();

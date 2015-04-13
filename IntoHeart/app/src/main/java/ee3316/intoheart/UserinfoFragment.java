@@ -186,6 +186,7 @@ public class UserinfoFragment extends Fragment {
             public void call(Outcome outcome) {
                 if (outcome.success) {
                     nameEdit.setText(outcome.getString());
+                    userStore.fetch();
                     userStore.name = outcome.getString();
                     userStore.email = email;
                     userStore.password = password;
@@ -240,6 +241,7 @@ public class UserinfoFragment extends Fragment {
             public void call(Outcome outcome) {
                 if (outcome.success) {
                     nameEdit.setText(name);
+                    userStore.fetch();
                     userStore.name = name;
                     userStore.email = email;
                     userStore.password = password;
@@ -259,6 +261,7 @@ public class UserinfoFragment extends Fragment {
     public void logout() {
         tmpEmail = null;
         tmpPassword = null;
+        userStore.fetch();
         userStore.email = null;
         userStore.password = null;
         userStore.save();
