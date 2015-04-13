@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".IHApplication"
@@ -34,7 +35,7 @@
 
         <activity android:name=".MainActivity"></activity>
 
-        <uses-permission  android:name="android.permission.CALL_PHONE" />
+
 
         <service
             android:name=".BLE.BluetoothLeService"

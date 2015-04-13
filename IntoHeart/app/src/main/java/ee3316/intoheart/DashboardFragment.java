@@ -447,39 +447,5 @@ public class DashboardFragment extends Fragment {
         public JCallback<Integer> heartRateUpdateListener;
     }
 
-    class EmergencyMonitor {
-        private int EMERGENT_MIN_HR = 70;
-        private int EMERGENT_MAX_HR = 170;
 
-        public JCallback<Integer> heartRateUpdateListener;
-
-        public EmergencyMonitor() {
-            heartRateUpdateListener = new JCallback<Integer>() {
-                @Override
-                public void call(Integer integer) {
-                    boolean tooHigh = true;
-                    for (int i = getInstantHeartRateStore().n - 1;
-                         i >= getInstantHeartRateStore().n - 10; --i) {
-                        if (getInstantHeartRateStore().hrs[i].getY() >= EMERGENT_MIN_HR
-                                || getInstantHeartRateStore().hrs[i].getY() <= EMERGENT_MAX_HR) {
-                            tooHigh = false;
-                            break;
-                        }
-                    }
-                    if (tooHigh) {
-                        callEmergency((new UserStore(getActivity())).emergencyTel);
-                    }
-                }
-            };
-
-            getInstantHeartRateStore().addUpdateListener(heartRateUpdateListener);
-        }
-
-        public void callEmergency(String number){
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.CALL");
-            intent.setData(Uri.parse("tel:" + number));
-            startActivity(intent);
-        }
-    }
 }

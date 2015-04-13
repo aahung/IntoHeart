@@ -2,6 +2,7 @@ package ee3316.intoheart;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,9 @@ import ee3316.intoheart.BLE.BluetoothLeService;
 import ee3316.intoheart.BLE.SensorConnectionManager;
 import ee3316.intoheart.Data.HeartRateContract;
 import ee3316.intoheart.Data.HeartRateStoreController;
+import ee3316.intoheart.Data.InstantHeartRateStore;
+import ee3316.intoheart.Data.UserStore;
+import ee3316.intoheart.HTTP.JCallback;
 
 
 public class MainActivity extends ActionBarActivity
@@ -87,6 +91,8 @@ public class MainActivity extends ActionBarActivity
         }
 
         ((IHApplication) getApplication()).mainActivity = this;
+
+        emergencyMonitor = new EmergencyMonitor();
     }
 
     @Override
@@ -186,6 +192,48 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    EmergencyMonitor emergencyMonitor;
+
+    class EmergencyMonitor {
+        private int EMERGENT_MIN_HR = 70;
+        private int EMERGENT_MAX_HR = 90;
+
+        public JCallback<Integer> heartRateUpdateListener;
+
+        public EmergencyMonitor() {
+            heartRateUpdateListener = new JCallback<Integer>() {
+                @Override
+                public void call(Integer integer) {
+                    boolean tooHigh = true;
+                    for (int i = getInstantHeartRateStore().n - 1;
+                         i >= getInstantHeartRateStore().n - 10; --i) {
+                        if (getInstantHeartRateStore().hrs[i].getY() >= EMERGENT_MIN_HR
+                                && getInstantHeartRateStore().hrs[i].getY() <= EMERGENT_MAX_HR) {
+                            tooHigh = false;
+                            break;
+                        }
+                    }
+                    if (tooHigh) {
+                        callEmergency((new UserStore(MainActivity.this)).emergencyTel);
+                    }
+                }
+            };
+
+            getInstantHeartRateStore().addUpdateListener(heartRateUpdateListener);
+        }
+
+        public void callEmergency(String number){
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.CALL");
+            intent.setData(Uri.parse("tel:" + number));
+            startActivity(intent);
+        }
+    }
+
+    private InstantHeartRateStore getInstantHeartRateStore() {
+        return ((IHApplication) getApplication()).instantHeartRateStore;
     }
 
 }
