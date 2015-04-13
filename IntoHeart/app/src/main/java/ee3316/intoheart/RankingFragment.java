@@ -85,6 +85,8 @@ public class RankingFragment extends Fragment {
         if (userStore.getLogin()) {
             getRank();
             getRequest();
+        } else {
+            emptyText.setVisibility(View.GONE);
         }
         return rootView;
     }
