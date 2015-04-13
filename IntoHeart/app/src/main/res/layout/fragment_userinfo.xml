@@ -270,7 +270,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="1"
-                android:layout_marginTop="30dp"
                 android:id="@+id/logout_block"
                 android:visibility="gone"
                 android:layout_gravity="center_horizontal">
