@@ -99,8 +99,8 @@ public class HeartRateStoreController {
         analysisResult.max = -1;
         for (Long[] d : ds) {//new Date(d[0])
             analysisResult.average += d[1];
-            analysisResult.min = Math.min(analysisResult.min, d[2].intValue());
-            analysisResult.max = Math.max(analysisResult.max, d[3].intValue());
+            analysisResult.min = Math.min(analysisResult.min, d[3].intValue());
+            analysisResult.max = Math.max(analysisResult.max, d[2].intValue());
         }
         analysisResult.average /= ds.size();
         return analysisResult;
