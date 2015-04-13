@@ -155,6 +155,7 @@ public class RankingFragment extends Fragment {
             @Override
             public void call(Outcome outcome) {
                 if (outcome.success) {
+                    if (getActivity() == null) return;
                     requestListAdapter = new RequestListAdapter();
                     JsonArray array = (JsonArray) outcome.object;
                     for (JsonElement ele : array) {
@@ -295,7 +296,8 @@ public class RankingFragment extends Fragment {
         public RequestListAdapter() {
             super();
             datas = new ArrayList<>();
-            mInflator = getActivity().getLayoutInflater();
+            if (getActivity() != null)
+                mInflator = getActivity().getLayoutInflater();
         }
 
         public void addData (String[] data) {

@@ -3,9 +3,12 @@ package ee3316.intoheart;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -15,7 +18,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,11 +28,14 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.Locale;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import ee3316.intoheart.Data.HeartRateStoreController;
 import ee3316.intoheart.Data.InstantHeartRateStore;
+import ee3316.intoheart.HTTP.JCallback;
 
 /**
  * Created by aahung on 3/7/15.
@@ -123,11 +128,13 @@ public class DashboardFragment extends Fragment {
             case R.id.menu_exercise:
                 // open the voice
                 exercising = true;
+                exerciseMonitor = new ExerciseMonitor();
                 getActivity().invalidateOptionsMenu();
                 reconstructChart();
                 break;
             case R.id.menu_normal:
                 exercising = false;
+                exerciseMonitor.end();
                 getActivity().invalidateOptionsMenu();
                 reconstructChart();
                 break;
@@ -146,8 +153,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     private int currentChart = HeartRateStoreController.CHART.INSTANT;
@@ -208,6 +213,7 @@ public class DashboardFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        if (exerciseMonitor != null) exerciseMonitor.end();
         super.onDestroy();
     }
 
@@ -320,5 +326,123 @@ public class DashboardFragment extends Fragment {
             currentOffset--;
             loadBatchData();
         }
+    }
+
+    ExerciseMonitor exerciseMonitor;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (exercising) {
+            if (requestCode == TTS_DATA_CHECK) {
+                if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                    exerciseMonitor.start();
+                } else {
+                    Intent installAllVoice = new Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                    startActivity(installAllVoice);
+                }
+            }
+        }
+    }
+
+    private static int TTS_DATA_CHECK = 1;
+
+    class ExerciseMonitor {
+        private final int EXERCISE_MAX_HR = 130;
+
+
+        private TextToSpeech tts = null;
+        private boolean speaking = false;
+
+        private boolean ttsIsInit = false;
+
+
+        public ExerciseMonitor() {
+            initTextToSpeech();
+            heartRateUpdateListener = new JCallback<Integer>() {
+                @Override
+                public void call(Integer integer) {
+                    if (speaking) return;
+                    boolean tooHigh = true;
+                    for (int i = getInstantHeartRateStore().n - 1;
+                         i >= getInstantHeartRateStore().n - 10; --i) {
+                        if (getInstantHeartRateStore().hrs[getInstantHeartRateStore().n - 1].getY() < EXERCISE_MAX_HR) {
+                            tooHigh = false;
+                            break;
+                        }
+                    }
+                    if (tooHigh && !speaking) {
+                        alert();
+                    }
+                }
+            };
+        }
+
+        private void initTextToSpeech() {
+            //Initialize speech
+            Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+            startActivityForResult(intent, TTS_DATA_CHECK);
+        }
+
+        public void start() {
+            tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS) {
+                        ttsIsInit = true;
+                        if (tts.isLanguageAvailable(Locale.UK) >= 0) {
+                            tts.setPitch(1.0f);
+                            tts.setSpeechRate(1.1f);
+                            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                                @Override
+                                public void onStart(String utteranceId) {
+                                    speaking = true;
+                                }
+
+                                @Override
+                                public void onDone(String utteranceId) {
+                                    speaking = false;
+                                }
+
+                                @Override
+                                public void onError(String utteranceId) {
+                                    speaking = false;
+                                }
+                            });
+                            exerciseMonitor.welcome();
+                        }
+                    }
+                }
+            });
+
+            getInstantHeartRateStore().setUpdateListener(heartRateUpdateListener);
+        }
+
+        public void welcome() {
+            if (tts != null && ttsIsInit) {
+                String text = String.format("Hey! You are now in exercise mode, "
+                        + "I will tell you when your heart rate is too high, "
+                        + "current threshold is %s beats per minute.", EXERCISE_MAX_HR);
+                tts.speak(text, TextToSpeech.QUEUE_ADD, null);
+            }
+        }
+
+        public void alert() {
+            if (tts != null && ttsIsInit) {
+                tts.speak("Please stop,your heart rate is too high", TextToSpeech.QUEUE_ADD, null);
+            }
+        }
+
+        public void end() {
+            if (tts != null) {
+                tts.stop();
+                tts.shutdown();
+            }
+
+
+            getInstantHeartRateStore().removeUpdateListener();
+        }
+
+        public JCallback<Integer> heartRateUpdateListener;
     }
 }

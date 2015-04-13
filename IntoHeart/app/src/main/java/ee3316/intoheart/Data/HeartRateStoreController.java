@@ -28,6 +28,7 @@ public class HeartRateStoreController {
     private long lastUnixTime = 0;
 
     public static final long SEC_PER_10_MINS = 600;
+    public static final long SEC_PER_HOUR = 3600;
     public static final long SEC_PER_DAY = 86400;
     public static final long SEC_PER_WEEK = 604800;
     public static final long SEC_PER_MONTH = 2592000;
@@ -64,26 +65,29 @@ public class HeartRateStoreController {
 
     public DataPoint[] getDayDataSet(int chart, int offset) {
         long start, end;
+        List<Long[]> ds;
         if (chart == CHART.DAY) {
             end = System.currentTimeMillis() / 1000L;
             end = end - end % SEC_PER_10_MINS;
             start = end - SEC_PER_DAY;
             end += offset * SEC_PER_DAY;
             start += offset * SEC_PER_DAY;
+            ds = heartRateContract.getHRs(chart, start, end);
         } else if (chart == CHART.WEEK) {
             end = System.currentTimeMillis() / 1000L;
             end = end - end % SEC_PER_DAY;
             start = end - SEC_PER_WEEK;
             end += offset * SEC_PER_WEEK;
             start += offset * SEC_PER_WEEK;
+            ds = heartRateContract.getHRs(chart, start, end);
         } else {
             end = System.currentTimeMillis() / 1000L;
             end = end - end % SEC_PER_DAY;
             start = end - SEC_PER_MONTH;
             end += offset * SEC_PER_MONTH;
             start += offset * SEC_PER_MONTH;
+            ds = heartRateContract.getHRs(chart, start, end);
         }
-        List<Long[]> ds = heartRateContract.getHRs(start, end);
         DataPoint[] dps = new DataPoint[ds.size()];
         int count = 0;
         for (Long[] d : ds) {//new Date(d[0])
@@ -98,7 +102,7 @@ public class HeartRateStoreController {
             end = System.currentTimeMillis() / 1000L;
             end = end - end % SEC_PER_10_MINS;
             start = end - SEC_PER_DAY;
-        List<Long[]> ds = heartRateContract.getHRs(start, end);
+        List<Long[]> ds = heartRateContract.getHRs(CHART.DAY, start, end);
         analysisResult.average = 0;
         analysisResult.min = 1000;
         analysisResult.max = -1;
@@ -159,18 +163,30 @@ public class HeartRateStoreController {
         public void generatorNormalHeartRates(int average, double sd, JCallback<Integer> callback) {
             long unixTime = System.currentTimeMillis() / 1000L;
             long current10MinsUnixTime = unixTime - unixTime % SEC_PER_10_MINS;
-            int J = 10 * 24 * 6;
+            long currentHourUnixTime = unixTime - unixTime % SEC_PER_HOUR;
+            long currentDayUnixTime = unixTime - unixTime % SEC_PER_DAY;
+            int J = 3 * 24 * 6;
             for (int j = 0; j < J; ++j) {
                 List<Integer> hrs = new ArrayList<>();
                 for (int i = 0; i < 60 * 10; ++i) {
                     int hr = average + (int)(sd * randomGenerator.nextGaussian());
+                    while (hr > 230) hr = average + (int)(7 * randomGenerator.nextGaussian());
+                    while (hr < 40) hr = average + (int)(7 * randomGenerator.nextGaussian());
                     hrs.add(hr);
                 }
                 AnalysisResult analysisResult = analyse(hrs);
                 heartRateContract.insertHR("day",
                         current10MinsUnixTime,
                         analysisResult.average, analysisResult.max, analysisResult.min, analysisResult.std_dev);
+                heartRateContract.insertHR("week",
+                        currentHourUnixTime,
+                        analysisResult.average, analysisResult.max, analysisResult.min, analysisResult.std_dev);
+                heartRateContract.insertHR("month",
+                        currentDayUnixTime,
+                        analysisResult.average, analysisResult.max, analysisResult.min, analysisResult.std_dev);
                 current10MinsUnixTime -= SEC_PER_10_MINS;
+                currentHourUnixTime -= SEC_PER_HOUR;
+                currentDayUnixTime -= SEC_PER_DAY;
                 callback.call(100 * j / J);
             }
         }

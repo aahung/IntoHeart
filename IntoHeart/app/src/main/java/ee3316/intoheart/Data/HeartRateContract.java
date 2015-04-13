@@ -128,10 +128,14 @@ public class HeartRateContract {
         return data;
     }
 
-    public List<Long[]> getHRs(long start, long end) {
+    public List<Long[]> getHRs(int chart, long start, long end) {
+        String table;
+        if (chart == HeartRateStoreController.CHART.DAY) table = "day";
+        else if (chart == HeartRateStoreController.CHART.WEEK) table = "week";
+        else table = "month";
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor cursor =
-                db.query("day", // a. table
+                db.query(table, // a. table
                         new String[]{"timestamp", "hr", "max", "min", "sd"}, // b. column names
                         " " + "timestamp" + " >= ? and timestamp <= ?", // c. selections
                         new String[]{String.valueOf(start), String.valueOf(end)}, // d. selections args
