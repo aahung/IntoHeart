@@ -228,14 +228,14 @@ router.post('/rank', function(req, res, next) {
             result.friends.push({
                 "name": friend.name,
                 "email": friend.email,
-                "score": friend.score,
+                "score": friend['info'].score,
                 "average": friend.average
             });
         }
         result.friends.push({
             "name": u.name,
             "email": u.email,
-            "score": u.score,
+            "score": u['info'].score,
             "average": u.average
         });
         res.end(JSON.stringify(result));
@@ -271,6 +271,52 @@ router.post('/get_request', function(req, res, next) {
                 });
         }
         res.end(JSON.stringify(result));
+    });
+});
+
+router.post('/update', function(req, res, next) {
+    var email = req.body.email;
+    var password = req.body.password;
+    var userData = JSON.parse(req.body.data);
+    auth(email, password, function(success, message, u) {
+        if (!success) {
+            var result = {};
+            result["success"] = 0;
+            result["message"] = message;
+            res.end(JSON.stringify(result));
+            return;
+        }
+        User.update({"email": email},
+            userData, function(err, numberAffected, rawResponse) {
+            if (numberAffected > 0) {
+                res.end(JSON.stringify({
+                    "success": 1
+                }));
+            } else {
+                res.end(JSON.stringify({
+                    "success": 0,
+                    "message": "Fail to update"
+                }));
+            }
+        });
+    });
+});
+
+router.post('/info', function(req, res, next) {
+    var email = req.body.email;
+    var password = req.body.password;
+    auth(email, password, function(success, message, u) {
+        if (!success) {
+            var result = {};
+            result["success"] = 0;
+            result["message"] = message;
+            res.end(JSON.stringify(result));
+            return;
+        }
+        res.end(JSON.stringify({
+            "success": 1,
+            "info": u.info
+        }));
     });
 });
 

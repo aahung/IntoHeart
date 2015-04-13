@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -70,31 +72,34 @@ public class UserinfoFragment extends Fragment {
         {
             userStore = new UserStore(getActivity());
             setVisibility();
-            nameEdit.setText(userStore.name);
-            nameEdit.addTextChangedListener(onchangeListener);
-            if (userStore.getAge() != null)
-                ageEdit.setText(userStore.getAge().toString());
-            ageEdit.addTextChangedListener(onchangeListener);
-            if (userStore.getHeight() != null)
-                heightEdit.setText(userStore.getHeight().toString());
-            heightEdit.addTextChangedListener(onchangeListener);
-            weightPicker.setMaxValue(9);weightPicker.setMinValue(0);
-            weightPicker2.setMaxValue(9);weightPicker2.setMinValue(0);
-            weightPicker3.setMaxValue(9);weightPicker3.setMinValue(0);
-            if (userStore.getWeight() != null) {
-                int weight = userStore.getWeight().intValue();
-                weightPicker.setValue(weight / 100);
-                weightPicker2.setValue(weight % 100 / 10);
-                weightPicker3.setValue(weight % 10);
-            }
-            weightPicker.setOnValueChangedListener(onValueChangeListener);
-            weightPicker2.setOnValueChangedListener(onValueChangeListener);
-            weightPicker3.setOnValueChangedListener(onValueChangeListener);
-            emergencyEdit.setText(userStore.emergencyTel);
-            emergencyEdit.addTextChangedListener(onchangeListener);
+            updateContent();
+            userStore.fetchFromOnline(new JCallback<Outcome>() {
+                @Override
+                public void call(Outcome outcome) {
+                    if (outcome.success) updateContent();
+                }
+            });
         }
         connector = new Connector();
         return rootView;
+    }
+
+    private void updateContent() {
+        nameEdit.setText(userStore.name);
+        if (userStore.getAge() != null)
+            ageEdit.setText(userStore.getAge().toString());
+        if (userStore.getHeight() != null)
+            heightEdit.setText(userStore.getHeight().toString());
+        weightPicker.setMaxValue(9);weightPicker.setMinValue(0);
+        weightPicker2.setMaxValue(9);weightPicker2.setMinValue(0);
+        weightPicker3.setMaxValue(9);weightPicker3.setMinValue(0);
+        if (userStore.getWeight() != null) {
+            int weight = userStore.getWeight().intValue();
+            weightPicker.setValue(weight / 100);
+            weightPicker2.setValue(weight % 100 / 10);
+            weightPicker3.setValue(weight % 10);
+        }
+        emergencyEdit.setText(userStore.emergencyTel);
     }
 
     @Override
@@ -104,39 +109,20 @@ public class UserinfoFragment extends Fragment {
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
-    public NumberPicker.OnValueChangeListener onValueChangeListener = new NumberPicker.OnValueChangeListener() {
-        @Override
-        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-            int weight = weightPicker.getValue() * 100 + weightPicker2.getValue() * 10 + weightPicker3.getValue();
-            userStore.weight = Integer.valueOf(weight);
-            userStore.save();
-        }
-    };
-
-    public TextWatcher onchangeListener = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            userStore.name = nameEdit.getText().toString().trim();
-            userStore.emergencyTel = emergencyEdit.getText().toString().trim();
-            try {
-                userStore.age = Integer.valueOf(ageEdit.getText().toString());
-            } catch (Exception ex) {}
-            try {
-                userStore.height = Integer.valueOf(heightEdit.getText().toString());
-            } catch (Exception ex) {}
-            userStore.save();
-        }
-    };
+    @OnClick(R.id.save_button)
+    public void save() {
+        userStore.name = nameEdit.getText().toString().trim();
+        userStore.emergencyTel = emergencyEdit.getText().toString().trim();
+        try {
+            userStore.age = Integer.valueOf(ageEdit.getText().toString());
+        } catch (Exception ex) {}
+        try {
+            userStore.height = Integer.valueOf(heightEdit.getText().toString());
+        } catch (Exception ex) {}
+        int weight = weightPicker.getValue() * 100 + weightPicker2.getValue() * 10 + weightPicker3.getValue();
+        userStore.weight = Integer.valueOf(weight);
+        userStore.save();
+    }
 
     @InjectView(R.id.name_edit) EditText nameEdit;
     @InjectView(R.id.age_edit) EditText ageEdit;
@@ -190,7 +176,14 @@ public class UserinfoFragment extends Fragment {
                     userStore.name = outcome.getString();
                     userStore.email = email;
                     userStore.password = password;
-                    userStore.save();
+                    userStore.saveUserLogin();
+                    userStore.fetchFromOnline(new JCallback<Outcome>() {
+                        @Override
+                        public void call(Outcome outcome) {
+                            userStore.save();
+                            updateContent();
+                        }
+                    });
                     SimpleAlertController.showSimpleMessage("Log in successfully!",
                             String.format("Welcome back, %s", outcome.getString()), getActivity());
                     setVisibility();

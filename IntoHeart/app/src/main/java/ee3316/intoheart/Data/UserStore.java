@@ -2,6 +2,17 @@ package ee3316.intoheart.Data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.internal.app.ToolbarActionBar;
+import android.widget.Toast;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import ee3316.intoheart.HTTP.Connector;
+import ee3316.intoheart.HTTP.JCallback;
+import ee3316.intoheart.HTTP.Outcome;
 
 /**
  * Created by aahung on 3/31/15.
@@ -24,7 +35,7 @@ public class UserStore {
     private final String PREFS_NAME_MARK_1 = "mark_1";
     private final String PREFS_NAME_MARK_2 = "mark_2";
 
-    SharedPreferences settings;
+    public SharedPreferences settings;
 
     private Context context;
     public String name, email, password;
@@ -57,7 +68,14 @@ public class UserStore {
         markingManager.mark[1] = settings.getInt(PREFS_NAME_MARK_1, 100);
         markingManager.mark[2] = settings.getInt(PREFS_NAME_MARK_2, 100);
         syncLifestyle();
+        fetchFromOnline(null);
+    }
 
+    public void saveUserLogin() {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(PREFS_NAME_EMAIL, email);
+        editor.putString(PREFS_NAME_PASSWORD, password);
+        editor.commit();
     }
 
     public void save() {
@@ -78,6 +96,53 @@ public class UserStore {
         editor.putInt(PREFS_NAME_MARK_1, markingManager.mark[1]);
         editor.putInt(PREFS_NAME_MARK_2, markingManager.mark[2]);
         editor.commit();
+        // update
+        Connector connector = new Connector();
+        connector.updateUserInfo(email, password, String.format("{\"password\":\"%s\", \"name\":\"%s\", "
+                + "\"info\":{\"age\":%d, \"height\":%d, \"weight\":%d, \"phone\":\"%s\", "
+                + "\"lifestyles\":[%f,%f,%f,%f,%f], \"score\":%d, \"scoreDetail\":[%d,%d,%d]}}",
+                password, name, age, height, weight, emergencyTel,
+                lifestyles[0], lifestyles[1], lifestyles[2], lifestyles[3], lifestyles[4],
+                markingManager.getFinalMark(), markingManager.mark[0],
+                markingManager.mark[1], markingManager.mark[2]), new JCallback<Outcome>() {
+            @Override
+            public void call(Outcome outcome) {
+                if (outcome.success) {
+                    Toast.makeText(context, "your info has been updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, outcome.getString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void fetchFromOnline(final JCallback<Outcome> callback) {
+        Connector connector = new Connector();
+        connector.getUserInfo(email, password, new JCallback<Outcome>() {
+            @Override
+            public void call(Outcome outcome) {
+                if (outcome.success) {
+                    JsonObject jsonObject = (JsonObject) outcome.object;
+                    if (jsonObject.get("age") != null)
+                        age = jsonObject.get("age").getAsInt();
+                    if (jsonObject.get("height") != null)
+                        height = jsonObject.get("height").getAsInt();
+                    if (jsonObject.get("weight") != null)
+                        weight = jsonObject.get("weight").getAsInt();
+                    if (jsonObject.get("phone") != null)
+                        emergencyTel = jsonObject.get("phone").getAsString();
+                    if (jsonObject.get("lifestyles") != null) {
+                        JsonArray lifestylesArray = jsonObject.get("lifestyles").getAsJsonArray();
+                        for (int i = 0; i < 5; ++i) {
+                            lifestyles[i] = lifestylesArray.get(i).getAsFloat();
+                        }
+                    }
+                    save();
+                    if (callback != null)
+                        callback.call(new Outcome(true, ""));
+                }
+            }
+        });
     }
 
     public Integer getAge() { return (age == -1)? null : Integer.valueOf(age); }

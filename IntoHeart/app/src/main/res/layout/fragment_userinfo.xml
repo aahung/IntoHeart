@@ -85,6 +85,7 @@
                         android:layout_height="fill_parent">
 
                         <EditText
+                            android:inputType="number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/age_edit"
@@ -120,6 +121,7 @@
                         android:layout_height="fill_parent" >
 
                         <EditText
+                            android:inputType="number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/height_edit"
@@ -198,6 +200,7 @@
                         android:layout_height="fill_parent" >
 
                         <EditText
+                            android:inputType="phone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/emergency_edit"
@@ -207,6 +210,17 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <Button
+                android:layout_margin="10dip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:id="@+id/save_button"
+                android:shadowColor="#00000000"
+                android:background="#f6db34"
+                android:textColor="#ffffff"
+                android:layout_marginRight="10dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -222,6 +236,7 @@
                     android:layout_height="match_parent">
 
                     <Button
+                        android:padding="10dip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CREAT AN ACCOUNT"
@@ -239,6 +254,7 @@
                     android:layout_height="match_parent">
 
                     <Button
+                        android:padding="10dip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="LOG IN"
@@ -269,6 +285,7 @@
                     android:background="#b6bc24"
                     android:textColor="#ffffff"
                     android:layout_weight="0.62"
+                    android:padding="10dip"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"

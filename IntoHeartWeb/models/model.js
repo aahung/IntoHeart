@@ -8,6 +8,16 @@ var User = mongoose.model('User', Schema({
     friends: [User],
     requests_sent: [User],
     requests_received: [User],
-    score: Number,
-    average: Number
+
+    // user data
+    info: {
+        score: Number,
+        scoreDetail: [Number],
+        average: Number,
+        age: Number,
+        height: Number,
+        weight: Number,
+        phone: String,
+        lifestyles: [Number]
+    }
 }));

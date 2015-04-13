@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializer;
 
 import org.json.JSONObject;
 
@@ -122,6 +123,39 @@ public class Connector {
                 callback.call(new Outcome(false, null));
             }
         });
+    }
+
+    public void getUserInfo(String email, String password, final JCallback<Outcome> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("email", email);
+        parameters.put("password", password);
+        api.makePostRequest("users/info", parameters, new Callback<JsonElement>() {
+            @Override
+            public void success(JsonElement jsonElement, Response response) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                boolean success = jsonObject.get("success").getAsInt() == 1;
+                Object object = "Network error";
+                try {
+                    object = jsonObject.get("info").getAsJsonObject();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                callback.call(new Outcome(success, object));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                callback.call(new Outcome(false, null));
+            }
+        });
+    }
+
+    public void updateUserInfo(String email, String password, String data, final JCallback<Outcome> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("email", email);
+        parameters.put("password", password);
+        parameters.put("data", data);
+        request("users/update", parameters, callback);
     }
 
     public void request(String url, Map<String, String> parameters, final JCallback<Outcome> callback) {
