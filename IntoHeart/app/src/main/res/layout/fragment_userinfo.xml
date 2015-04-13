@@ -242,7 +242,6 @@
                         android:text="CREAT AN ACCOUNT"
                         android:id="@+id/register_button"
                         android:textColor="#ffffff"
-                        android:shadowColor="#00000000"
                         android:background="#20ffffff"
                         android:layout_marginLeft="10dp"
                         android:textSize="10dp" />
@@ -281,7 +280,6 @@
                     android:layout_height="wrap_content"
                     android:text="LOG OUT"
                     android:id="@+id/logout_button"
-                    android:shadowColor="#00000000"
                     android:background="#b6bc24"
                     android:textColor="#ffffff"
                     android:layout_weight="0.62"

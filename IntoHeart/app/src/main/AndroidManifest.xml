@@ -64,6 +64,9 @@
             android:label="@string/title_activity_disease_list"
              >
         </activity>
+        <activity android:name=".SpeechActivity"
+            android:label="@string/title_activity_speech">
+        </activity>
     </application>
 
 </manifest>
