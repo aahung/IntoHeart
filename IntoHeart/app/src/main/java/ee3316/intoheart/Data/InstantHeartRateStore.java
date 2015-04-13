@@ -11,8 +11,8 @@ import ee3316.intoheart.R;
  */
 public class InstantHeartRateStore {
     public final static int n = 60;
-    public final static int MAX_HR = 130;
-    public final static int MIN_HR = 10;
+    public final static int MAX_HR = 140;
+    public final static int MIN_HR = 40;
     public DataPoint[] hrs = new DataPoint[n];
 
     public InstantHeartRateStore() {

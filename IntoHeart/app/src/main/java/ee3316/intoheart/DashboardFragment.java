@@ -124,10 +124,12 @@ public class DashboardFragment extends Fragment {
                 // open the voice
                 exercising = true;
                 getActivity().invalidateOptionsMenu();
+                reconstructChart();
                 break;
             case R.id.menu_normal:
                 exercising = false;
                 getActivity().invalidateOptionsMenu();
+                reconstructChart();
                 break;
         }
 
@@ -168,8 +170,13 @@ public class DashboardFragment extends Fragment {
             graph.getViewport().setMaxX(currentDataSet[currentDataSet.length - 1].getX());
         }
         graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(getInstantHeartRateStore().MIN_HR);
-        graph.getViewport().setMaxY(getInstantHeartRateStore().MAX_HR);
+        if (exercising) {
+            graph.getViewport().setMinY(50);
+            graph.getViewport().setMaxY(210);
+        } else {
+            graph.getViewport().setMinY(getInstantHeartRateStore().MIN_HR);
+            graph.getViewport().setMaxY(getInstantHeartRateStore().MAX_HR);
+        }
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         if (currentChart == HeartRateStoreController.CHART.INSTANT) {
             staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""});
