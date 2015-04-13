@@ -60,6 +60,8 @@ public class RankingFragment extends Fragment {
 
     }
 
+    @InjectView(R.id.final_score_view) TextView finalScoreView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class RankingFragment extends Fragment {
         });
 
         userStore = new UserStore(getActivity());
+        finalScoreView.setText(String.valueOf(userStore.markingManager.getFinalMark()));
         getRank();
         getRequest();
         return rootView;

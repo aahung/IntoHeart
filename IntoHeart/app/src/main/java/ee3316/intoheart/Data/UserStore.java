@@ -20,6 +20,9 @@ public class UserStore {
     private final String PREFS_NAME_RATE_OVERWORK = "user_ow_rate";
     private final String PREFS_NAME_RATE_DISORDER = "user_dis_rate";
     private final String PREFS_NAME_RATE_STAY_UP = "user_stay_rate";
+    private final String PREFS_NAME_MARK_0 = "mark_0";
+    private final String PREFS_NAME_MARK_1 = "mark_1";
+    private final String PREFS_NAME_MARK_2 = "mark_2";
 
     SharedPreferences settings;
 
@@ -28,6 +31,8 @@ public class UserStore {
     public int age, height, weight;
     public String emergencyTel;
     public float[] lifestyles = new float[5];
+
+    public MarkingManager markingManager = new MarkingManager();
 
     public UserStore(Context context) {
         this.context = context;
@@ -48,6 +53,10 @@ public class UserStore {
         lifestyles[2] = settings.getFloat(PREFS_NAME_RATE_OVERWORK, 0);
         lifestyles[3] = settings.getFloat(PREFS_NAME_RATE_DISORDER, 0);
         lifestyles[4] = settings.getFloat(PREFS_NAME_RATE_STAY_UP, 0);
+        markingManager.mark[0] = settings.getInt(PREFS_NAME_MARK_0, 100);
+        markingManager.mark[1] = settings.getInt(PREFS_NAME_MARK_1, 100);
+        markingManager.mark[2] = settings.getInt(PREFS_NAME_MARK_2, 100);
+        syncLifestyle();
     }
 
     public void save() {
@@ -64,6 +73,9 @@ public class UserStore {
         editor.putFloat(PREFS_NAME_RATE_OVERWORK, lifestyles[2]);
         editor.putFloat(PREFS_NAME_RATE_DISORDER, lifestyles[3]);
         editor.putFloat(PREFS_NAME_RATE_STAY_UP, lifestyles[4]);
+        editor.putInt(PREFS_NAME_MARK_0, markingManager.mark[0]);
+        editor.putInt(PREFS_NAME_MARK_1, markingManager.mark[1]);
+        editor.putInt(PREFS_NAME_MARK_2, markingManager.mark[2]);
         editor.commit();
     }
 
@@ -83,5 +95,10 @@ public class UserStore {
         if (password == null) return false;
         if (!email.isEmpty() && !password.isEmpty()) return true;
         return false;
+    }
+
+    public void syncLifestyle() {
+        markingManager.evaluateLifestyle(lifestyles);
+        save();
     }
 }
