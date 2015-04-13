@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Your heart is in good condition!"
-            android:id="@+id/textView12"
+            android:id="@+id/result_text"
             android:textColor="#ffffff"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp" />

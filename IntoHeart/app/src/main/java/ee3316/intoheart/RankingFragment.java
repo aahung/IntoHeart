@@ -86,8 +86,6 @@ public class RankingFragment extends Fragment {
         if (userStore.getLogin()) {
             getRank();
             getRequest();
-        } else {
-            emptyText.setVisibility(View.GONE);
         }
         return rootView;
     }
@@ -138,6 +136,10 @@ public class RankingFragment extends Fragment {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 break;
+            case R.id.action_add:
+                final Intent intent = new Intent(getActivity(), AddFriendActivity.class);
+                startActivity(intent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -145,9 +147,6 @@ public class RankingFragment extends Fragment {
 
     @InjectView(R.id.ranking_list_view)
     ListView listView;
-
-    @InjectView(R.id.empty_text_view)
-    TextView emptyText;
 
     RequestListAdapter requestListAdapter;
 
@@ -187,7 +186,7 @@ public class RankingFragment extends Fragment {
                         String email = obj.get("email").getAsString();
                         Integer score = 0;
                         if (obj.get("score") != null)
-                            obj.get("score").getAsInt();
+                            score = obj.get("score").getAsInt();
                         rankingListAdapter.addData(new String[]{name, email, score.toString()});
                     }
                     rankingListAdapter.sort();
@@ -200,13 +199,6 @@ public class RankingFragment extends Fragment {
             }
         });
     }
-
-    @OnClick(R.id.add_new_friends)
-    public void addFriend(View view) {
-        final Intent intent = new Intent(getActivity(), AddFriendActivity.class);
-        startActivity(intent);
-    }
-
 
 
     public class RankingListAdapter extends BaseAdapter {

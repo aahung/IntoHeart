@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -62,18 +65,18 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment() {
 
     }
-    @InjectView(R.id.normal_mode_block)
-    RelativeLayout normal_mode_block;
-    @InjectView(R.id.exercise_mode_block)
-    RelativeLayout exercise_mode_block;
+    @InjectView(R.id.sports_man)
+    ImageView sportsMan;
+    @InjectView(R.id.heart)
+    ImageView heart;
 
     private void setVisibility() {
         if (exercising) {
-            normal_mode_block.setVisibility(View.GONE);
-            exercise_mode_block.setVisibility(View.VISIBLE);
+            heart.setVisibility(View.GONE);
+            sportsMan.setVisibility(View.VISIBLE);
         } else {
-            normal_mode_block.setVisibility(View.VISIBLE);
-            exercise_mode_block.setVisibility(View.GONE);
+            heart.setVisibility(View.VISIBLE);
+            sportsMan.setVisibility(View.GONE);
         }
     }
     private InstantHeartRateStore getInstantHeartRateStore() {
@@ -110,14 +113,11 @@ public class DashboardFragment extends Fragment {
         if (exercising) {
             menu.findItem(R.id.menu_exercise).setVisible(false);
             menu.findItem(R.id.menu_normal).setVisible(true);
-            normal_mode_block.setVisibility(View.GONE);
-            exercise_mode_block.setVisibility(View.VISIBLE);
         } else {
             menu.findItem(R.id.menu_normal).setVisible(false);
             menu.findItem(R.id.menu_exercise).setVisible(true);
-            normal_mode_block.setVisibility(View.VISIBLE);
-            exercise_mode_block.setVisibility(View.GONE);
         }
+        setVisibility();
     }
 
 
@@ -350,7 +350,7 @@ public class DashboardFragment extends Fragment {
     private static int TTS_DATA_CHECK = 1;
 
     class ExerciseMonitor {
-        private final int EXERCISE_MAX_HR = 130;
+        private final int EXERCISE_MAX_HR = 110;
 
 
         private TextToSpeech tts = null;
@@ -378,22 +378,22 @@ public class DashboardFragment extends Fragment {
                         if (tts.isLanguageAvailable(Locale.UK) >= 0) {
                             tts.setPitch(1.0f);
                             tts.setSpeechRate(1.1f);
-                            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                                @Override
-                                public void onStart(String utteranceId) {
-                                    speaking = true;
-                                }
-
-                                @Override
-                                public void onDone(String utteranceId) {
-                                    speaking = false;
-                                }
-
-                                @Override
-                                public void onError(String utteranceId) {
-                                    speaking = false;
-                                }
-                            });
+//                            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+//                                @Override
+//                                public void onStart(String utteranceId) {
+//                                    speaking = true;
+//                                }
+//
+//                                @Override
+//                                public void onDone(String utteranceId) {
+//                                    speaking = false;
+//                                }
+//
+//                                @Override
+//                                public void onError(String utteranceId) {
+//                                    speaking = false;
+//                                }
+//                            });
                             exerciseMonitor.welcome();
                         }
                     }
@@ -403,6 +403,7 @@ public class DashboardFragment extends Fragment {
             heartRateUpdateListener = new JCallback<Integer>() {
                 @Override
                 public void call(Integer integer) {
+                    if (getActivity() == null) return; // in case fragment not attached
                     if (speaking) return;
                     boolean tooHigh = true;
                     for (int i = getInstantHeartRateStore().n - 1;
@@ -422,17 +423,28 @@ public class DashboardFragment extends Fragment {
         }
 
         public void welcome() {
-            if (tts != null && ttsIsInit) {
-                String text = String.format("Hey! You are now in exercise mode, "
-                        + "I will tell you when your heart rate is too high, "
-                        + "current threshold is %s beats per minute.", EXERCISE_MAX_HR);
-                tts.speak(text, TextToSpeech.QUEUE_ADD, null);
-            }
+            String text = String.format("Hey! You are now in exercise mode, "
+                    + "I will tell you when your heart rate is too high, "
+                    + "current threshold is %s beats per minute.", EXERCISE_MAX_HR);
+            speak(text);
         }
 
         public void alert() {
+            speak("Please stop,your heart rate is too high");
+        }
+
+        public void speak(String text) {
             if (tts != null && ttsIsInit) {
-                tts.speak("Please stop,your heart rate is too high", TextToSpeech.QUEUE_ADD, null);
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                speaking = true;
+                Timer timer = new Timer();
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        speaking = false;
+                    }
+                }, 10 * 1000);
             }
         }
 

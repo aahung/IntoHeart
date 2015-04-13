@@ -9,13 +9,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="149dp"
+        android:layout_height="wrap_content"
         android:background="#20ffffff">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dip">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,7 +43,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp">
@@ -51,7 +52,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Heart rate score:"
-                android:id="@+id/"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 android:paddingLeft="10dp" />
@@ -68,7 +68,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp">
 
@@ -93,8 +93,8 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp">
 
             <TextView
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/textView15"
+                android:id="@+id/life_style_score"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 android:paddingLeft="29dp" />
@@ -121,21 +121,14 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="58dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:padding="10dip"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/add_new_friends"
-                android:src="@drawable/add_new"
-                android:background="#00000000"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -149,55 +142,16 @@
         <ListView
             android:id="@+id/ranking_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#10ffffff"
-            android:layout_marginTop="15dp"></ListView>
+            android:layout_height="match_parent"></ListView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Log in to see ranking"
-            android:id="@+id/empty_text_view"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+            <!--android:text="Log in to see ranking"-->
+            <!--android:id="@+id/empty_text_view"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_centerHorizontal="true" />-->
     </RelativeLayout>
 
 </LinearLayout>
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:orientation="vertical" android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-    <!--android:text="Large Text"-->
-    <!--android:id="@+id/textAve"-->
-    <!--android:layout_gravity="center_horizontal"-->
-    <!--android:layout_marginTop="50dp"-->
-    <!--android:textSize="26dp" />-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-    <!--android:text="Medium Text"-->
-    <!--android:id="@+id/textStdDev"-->
-    <!--android:layout_gravity="center_horizontal" />-->
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-    <!--android:text="Medium Text"-->
-    <!--android:id="@+id/textMin"-->
-    <!--android:layout_gravity="center_horizontal" />-->
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-    <!--android:text="Medium Text"-->
-    <!--android:id="@+id/textMax"-->
-    <!--android:layout_gravity="center_horizontal" />-->
-    <!--</LinearLayout>-->

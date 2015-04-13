@@ -68,8 +68,6 @@ public class UserStore {
         markingManager.mark[1] = settings.getInt(PREFS_NAME_MARK_1, 100);
         markingManager.mark[2] = settings.getInt(PREFS_NAME_MARK_2, 100);
         syncLifestyle();
-        if (getLogin())
-            fetchFromOnline(null);
     }
 
     public void saveUserLogin() {
@@ -110,7 +108,7 @@ public class UserStore {
                 @Override
                 public void call(Outcome outcome) {
                     if (outcome.success) {
-                        Toast.makeText(context, "your info has been updated", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "your info has been updated", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, outcome.getString(), Toast.LENGTH_SHORT).show();
                     }

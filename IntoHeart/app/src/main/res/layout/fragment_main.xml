@@ -16,12 +16,19 @@
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="138dp"
-            android:id="@+id/normal_mode_block">
+            android:layout_height="138dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView"
+                android:id="@+id/sports_man"
+                android:src="@drawable/sports_person1"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/instantHRTextView"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/heart"
                 android:src="@drawable/small_heart"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/instantHRTextView" />
@@ -39,33 +46,6 @@
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="138dp"
-            android:id="@+id/exercise_mode_block">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sports_man"
-                android:src="@drawable/sports_person1"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/instantHRTextView2"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="HR"
-                android:id="@+id/instantHRTextView2"
-                android:layout_gravity="center_horizontal"
-                android:textSize="60sp"
-                android:textAlignment="center"
-                android:textColor="#ffffff"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"/>
-        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout

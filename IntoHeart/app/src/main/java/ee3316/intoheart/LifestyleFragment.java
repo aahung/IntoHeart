@@ -60,11 +60,12 @@ public class LifestyleFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_lifestyle, container, false);
         setHasOptionsMenu(true);
         ButterKnife.inject(this,rootView);
+        userStore = new UserStore(getActivity());
+        userStore.fetchFromOnline(null);
         return rootView;
     }
-
+    UserStore userStore;
     private void prompt(final int index) {
-        final UserStore userStore = new UserStore(getActivity());
         String[] titles = new String[]{
                 "Smoking",
                 "Alcohol",

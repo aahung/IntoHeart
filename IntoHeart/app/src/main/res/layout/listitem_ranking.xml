@@ -11,7 +11,7 @@
             android:id="@+id/rankingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="56sp"
+            android:textSize="40sp"
             android:layout_marginRight="10sp"
             android:textColor="#abcdef"
             android:text="1"/>
@@ -23,14 +23,14 @@
                 android:id="@+id/nameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="38sp"
+                android:textSize="28sp"
                 android:textColor="#ffffff"
                 android:text="Aahung"/>
             <TextView
                 android:id="@+id/emailText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textColor="#dddddd"
                 android:text="aahung@live.com"/>
         </LinearLayout>
@@ -39,7 +39,7 @@
         android:id="@+id/scoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="40sp"
+        android:textSize="36sp"
         android:textColor="#ffffff"
         android:text="100"
         android:layout_centerVertical="true"

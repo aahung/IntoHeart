@@ -2,6 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context="ee3316.intoheart.RankingActivity">
 
+    <item android:id="@+id/action_add" android:title="+"
+        android:orderInCategory="101" app:showAsAction="always" />
+
     <item android:id="@+id/action_inbox" android:title="Inbox (0)"
         android:orderInCategory="100" app:showAsAction="always" />
 </menu>
