@@ -73,12 +73,13 @@ public class UserinfoFragment extends Fragment {
             userStore = new UserStore(getActivity());
             setVisibility();
             updateContent();
-            userStore.fetchFromOnline(new JCallback<Outcome>() {
-                @Override
-                public void call(Outcome outcome) {
-                    if (outcome.success) updateContent();
-                }
-            });
+            if (userStore.getLogin())
+                userStore.fetchFromOnline(new JCallback<Outcome>() {
+                    @Override
+                    public void call(Outcome outcome) {
+                        if (outcome.success) updateContent();
+                    }
+                });
         }
         connector = new Connector();
         return rootView;
