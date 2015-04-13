@@ -40,7 +40,7 @@ public class RawDataActivity extends ListActivity {
                 List<Long[]> ds = heartRateContract.getHRs();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 for (Long[] d : ds) {
-                    Date time = new Date(d[0]);
+                    Date time = new Date(d[0] * 1000);
                     adapter.addData(simpleDateFormat.format(time), String.format("ave: %s, [%s, %s], dev: %s",
                             d[1], d[3], d[2], d[4]));
                 }

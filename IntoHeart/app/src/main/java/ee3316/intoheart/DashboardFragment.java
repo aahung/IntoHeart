@@ -1,8 +1,11 @@
 package ee3316.intoheart;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.jjoe64.graphview.GraphView;
@@ -20,14 +24,9 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 import ee3316.intoheart.Data.HeartRateStoreController;
 import ee3316.intoheart.Data.InstantHeartRateStore;
 
@@ -133,7 +132,7 @@ public class DashboardFragment extends Fragment {
     private int currentChart = HeartRateStoreController.CHART.INSTANT;
     private String currentTitle = "";
     private DataPoint[] currentDataSet; // only for non-instant usage
-    int currentOffset;
+    int currentOffset, preOffset;
 
 
     @InjectView(R.id.graph) GraphView graph;
@@ -158,13 +157,13 @@ public class DashboardFragment extends Fragment {
         } else if (currentDataSet.length > 0) {
             if (currentChart == HeartRateStoreController.CHART.DAY) {
                 staticLabelsFormatter.setHorizontalLabels(new String[]{
-                        String.format("%d hours ago", (int) ((System.currentTimeMillis() - currentDataSet[0].getX()) / 60 / 1000 / 60)),
-                        String.format("%d hours ago", (int) ((System.currentTimeMillis() - currentDataSet[currentDataSet.length - 1].getX()) / 60 / 1000 / 60))});
+                        String.format("%d hours ago", (int) ((System.currentTimeMillis() / 1000L - currentDataSet[0].getX()) / 60 / 60)),
+                        String.format("%d hours ago", (int) ((System.currentTimeMillis() / 1000L - currentDataSet[currentDataSet.length - 1].getX()) / 60 / 60))});
 
             } else {
                 staticLabelsFormatter.setHorizontalLabels(new String[]{
-                        String.format("%d days ago", (int) ((System.currentTimeMillis() - currentDataSet[0].getX()) / HeartRateStoreController.MSEC_PER_DAY)),
-                        String.format("%d days ago", (int) ((System.currentTimeMillis() - currentDataSet[currentDataSet.length - 1].getX()) / 6 / HeartRateStoreController.MSEC_PER_DAY))});
+                        String.format("%d days ago", (int) ((System.currentTimeMillis() / 1000L - currentDataSet[0].getX()) / HeartRateStoreController.SEC_PER_DAY)),
+                        String.format("%d days ago", (int) ((System.currentTimeMillis() / 1000L - currentDataSet[currentDataSet.length - 1].getX()) / 6 / HeartRateStoreController.SEC_PER_DAY))});
             }
         }
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
@@ -186,6 +185,30 @@ public class DashboardFragment extends Fragment {
         super.onDestroy();
     }
 
+    private void loadBatchData() {
+        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), null, "Loading data");
+        Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        if (currentDataSet.length > 0) {
+                            reconstructChart();
+                            series.resetData(currentDataSet);
+                        } else {
+                            currentOffset = preOffset;
+                            Toast.makeText(getActivity(), "No data seems found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        };
+        mThread.start();
+    }
+
     @OnClick(R.id.instant_hr_button)
     public void showInstantView(View view) {
         currentChart = HeartRateStoreController.CHART.INSTANT;
@@ -197,28 +220,21 @@ public class DashboardFragment extends Fragment {
     public void showDayView(View view) {
         currentChart = HeartRateStoreController.CHART.DAY;
         currentOffset = 0;
-        currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-        if (currentDataSet.length > 0) {
-            reconstructChart();
-            series.resetData(currentDataSet);
-        }
+        loadBatchData();
     }
 
     @OnClick(R.id.week_hr_button)
     public void showWeekView(View view) {
         currentChart = HeartRateStoreController.CHART.WEEK;
         currentOffset = 0;
-        currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-        if (currentDataSet.length > 0) {
-            reconstructChart();
-            series.resetData(currentDataSet);
-        }
+        loadBatchData();
     }
 
     @OnClick(R.id.month_hr_button)
     public void showMonthView(View view) {
         currentChart = HeartRateStoreController.CHART.MONTH;
-        reconstructChart();
+        currentOffset = 0;
+        loadBatchData();
     }
 
     public class OnSwipeTouchListener implements View.OnTouchListener {
@@ -268,26 +284,15 @@ public class DashboardFragment extends Fragment {
         }
 
         public void onSwipeLeft() {
+            preOffset = currentOffset;
             currentOffset++;
-            if (currentOffset > 0) currentOffset = 0;
-            currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-            if (currentDataSet.length > 0) {
-                reconstructChart();
-                series.resetData(currentDataSet);
-            } else {
-                currentOffset--;
-            }
+            loadBatchData();
         }
 
         public void onSwipeRight() {
+            preOffset = currentOffset;
             currentOffset--;
-            currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-            if (currentDataSet.length > 0) {
-                reconstructChart();
-                series.resetData(currentDataSet);
-            } else {
-                currentOffset++;
-            }
+            loadBatchData();
         }
     }
 }

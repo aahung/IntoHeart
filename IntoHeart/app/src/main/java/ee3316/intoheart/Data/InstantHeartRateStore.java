@@ -22,7 +22,6 @@ public class InstantHeartRateStore {
     }
 
     public void setHR(String hr) {
-        long unixTime = System.currentTimeMillis();
         for (int i = 0; i < n - 1; ++i) {
             hrs[i] = new DataPoint(i, hrs[i + 1].getY());
         }

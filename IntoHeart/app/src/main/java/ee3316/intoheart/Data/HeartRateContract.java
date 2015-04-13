@@ -111,7 +111,6 @@ public class HeartRateContract {
 
     public List<Long[]> getHRs() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        long unixTime = System.currentTimeMillis();
         Cursor cursor =
                 db.query("day", // a. table
                         new String[]{"timestamp", "hr", "max", "min", "sd"}, // b. column names
@@ -131,7 +130,6 @@ public class HeartRateContract {
 
     public List<Long[]> getHRs(long start, long end) {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        long unixTime = System.currentTimeMillis();
         Cursor cursor =
                 db.query("day", // a. table
                         new String[]{"timestamp", "hr", "max", "min", "sd"}, // b. column names
