@@ -60,7 +60,14 @@ public class RankingFragment extends Fragment {
 
     }
 
-    @InjectView(R.id.final_score_view) TextView finalScoreView;
+    @InjectView(R.id.final_score_view)
+    TextView finalScoreView;
+    @InjectView(R.id.heart_rate_score)
+    TextView heart_rate_score;
+    @InjectView(R.id.exercise_score)
+    TextView exercise_score;
+    @InjectView(R.id.life_style_score)
+    TextView life_style_score;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,18 +77,12 @@ public class RankingFragment extends Fragment {
         connector = new Connector();
 
         ButterKnife.inject(this,rootView);
-        Button btn=(Button)rootView.findViewById(R.id.see_detail);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.setClass(getActivity().getApplicationContext(),MarkingActivity.class);
-                getActivity().startActivity(intent);
-            }
-        });
 
         userStore = new UserStore(getActivity());
         finalScoreView.setText(String.valueOf(userStore.markingManager.getFinalMark()));
+        heart_rate_score.setText(String.valueOf(userStore.markingManager.getRestMark()));
+        exercise_score.setText(String.valueOf(userStore.markingManager.getExerciseMark()));
+        life_style_score.setText(String.valueOf(userStore.markingManager.getLifeStyleMark()));
         if (userStore.getLogin()) {
             getRank();
             getRequest();
@@ -155,7 +156,6 @@ public class RankingFragment extends Fragment {
             @Override
             public void call(Outcome outcome) {
                 if (outcome.success) {
-                    if (getActivity() == null) return;
                     requestListAdapter = new RequestListAdapter();
                     JsonArray array = (JsonArray) outcome.object;
                     for (JsonElement ele : array) {
@@ -296,8 +296,7 @@ public class RankingFragment extends Fragment {
         public RequestListAdapter() {
             super();
             datas = new ArrayList<>();
-            if (getActivity() != null)
-                mInflator = getActivity().getLayoutInflater();
+            mInflator = getActivity().getLayoutInflater();
         }
 
         public void addData (String[] data) {
