@@ -68,7 +68,8 @@ public class UserStore {
         markingManager.mark[1] = settings.getInt(PREFS_NAME_MARK_1, 100);
         markingManager.mark[2] = settings.getInt(PREFS_NAME_MARK_2, 100);
         syncLifestyle();
-        fetchFromOnline(null);
+        if (getLogin())
+            fetchFromOnline(null);
     }
 
     public void saveUserLogin() {
@@ -98,22 +99,23 @@ public class UserStore {
         editor.commit();
         // update
         Connector connector = new Connector();
-        connector.updateUserInfo(email, password, String.format("{\"password\":\"%s\", \"name\":\"%s\", "
-                + "\"info\":{\"age\":%d, \"height\":%d, \"weight\":%d, \"phone\":\"%s\", "
-                + "\"lifestyles\":[%f,%f,%f,%f,%f], \"score\":%d, \"scoreDetail\":[%d,%d,%d]}}",
-                password, name, age, height, weight, emergencyTel,
-                lifestyles[0], lifestyles[1], lifestyles[2], lifestyles[3], lifestyles[4],
-                markingManager.getFinalMark(), markingManager.mark[0],
-                markingManager.mark[1], markingManager.mark[2]), new JCallback<Outcome>() {
-            @Override
-            public void call(Outcome outcome) {
-                if (outcome.success) {
-                    Toast.makeText(context, "your info has been updated", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, outcome.getString(), Toast.LENGTH_SHORT).show();
+        if (getLogin())
+            connector.updateUserInfo(email, password, String.format("{\"password\":\"%s\", \"name\":\"%s\", "
+                    + "\"info\":{\"age\":%d, \"height\":%d, \"weight\":%d, \"phone\":\"%s\", "
+                    + "\"lifestyles\":[%f,%f,%f,%f,%f], \"score\":%d, \"scoreDetail\":[%d,%d,%d]}}",
+                    password, name, age, height, weight, emergencyTel,
+                    lifestyles[0], lifestyles[1], lifestyles[2], lifestyles[3], lifestyles[4],
+                    markingManager.getFinalMark(), markingManager.mark[0],
+                    markingManager.mark[1], markingManager.mark[2]), new JCallback<Outcome>() {
+                @Override
+                public void call(Outcome outcome) {
+                    if (outcome.success) {
+                        Toast.makeText(context, "your info has been updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, outcome.getString(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
     }
 
     public void fetchFromOnline(final JCallback<Outcome> callback) {

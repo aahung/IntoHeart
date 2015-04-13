@@ -79,18 +79,18 @@
             android:layout_height="72dp">
 
             <Button
-                android:padding="5dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Instant Heart Rate"
                 android:id="@+id/instant_hr_button"
-                android:background="#30ffffff"
+                android:background="#30000000"
                 android:shadowColor="#00000000"
                 android:singleLine="true"
                 android:textColorHighlight="#cccccc"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:padding="10dip"/>
         </LinearLayout>
 
         <LinearLayout
@@ -114,7 +114,7 @@
                         android:layout_height="fill_parent"
                         android:text="Day"
                         android:id="@+id/day_hr_button"
-                        android:background="#30ffffff"
+                        android:background="#30000000"
                         android:shadowColor="#00000000"
                         android:singleLine="true"
                         android:textColorHighlight="#cccccc"
@@ -132,7 +132,7 @@
                         android:layout_height="fill_parent"
                         android:text="Week"
                         android:id="@+id/week_hr_button"
-                        android:background="#30ffffff"
+                        android:background="#30000000"
                         android:shadowColor="#00000000"
                         android:textColor="#ffffff" />
                 </LinearLayout>
@@ -148,7 +148,7 @@
                         android:layout_height="fill_parent"
                         android:text="Month"
                         android:id="@+id/month_hr_button"
-                        android:background="#30ffffff"
+                        android:background="#30000000"
                         android:shadowColor="#00000000"
                         android:textColor="#ffffff" />
                 </LinearLayout>

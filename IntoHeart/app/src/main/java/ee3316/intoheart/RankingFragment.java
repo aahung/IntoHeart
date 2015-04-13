@@ -82,8 +82,10 @@ public class RankingFragment extends Fragment {
 
         userStore = new UserStore(getActivity());
         finalScoreView.setText(String.valueOf(userStore.markingManager.getFinalMark()));
-        getRank();
-        getRequest();
+        if (userStore.getLogin()) {
+            getRank();
+            getRequest();
+        }
         return rootView;
     }
 
@@ -141,6 +143,9 @@ public class RankingFragment extends Fragment {
     @InjectView(R.id.ranking_list_view)
     ListView listView;
 
+    @InjectView(R.id.empty_text_view)
+    TextView emptyText;
+
     RequestListAdapter requestListAdapter;
 
     public void getRequest() {
@@ -177,7 +182,9 @@ public class RankingFragment extends Fragment {
                         JsonObject obj = ele.getAsJsonObject();
                         String name = obj.get("name").getAsString();
                         String email = obj.get("email").getAsString();
-                        Integer score = obj.get("score").getAsInt();
+                        Integer score = 0;
+                        if (obj.get("score") != null)
+                            obj.get("score").getAsInt();
                         rankingListAdapter.addData(new String[]{name, email, score.toString()});
                     }
                     rankingListAdapter.sort();
