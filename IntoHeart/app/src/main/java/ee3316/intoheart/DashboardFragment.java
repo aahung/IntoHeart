@@ -145,7 +145,7 @@ public class DashboardFragment extends Fragment {
         if (currentChart == HeartRateStoreController.CHART.INSTANT) {
             graph.getViewport().setMinX(0);
             graph.getViewport().setMaxX(getInstantHeartRateStore().n - 1);
-        } else {
+        } else if (currentDataSet.length > 0) {
             graph.getViewport().setMinX(currentDataSet[0].getX());
             graph.getViewport().setMaxX(currentDataSet[currentDataSet.length - 1].getX());
         }
@@ -155,10 +155,17 @@ public class DashboardFragment extends Fragment {
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         if (currentChart == HeartRateStoreController.CHART.INSTANT) {
             staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""});
-        } else {
-            staticLabelsFormatter.setHorizontalLabels(new String[]{
-                    String.format("%d hours ago", (int)((System.currentTimeMillis() - currentDataSet[0].getX()) / 60 / 1000 / 60)),
-                    String.format("%d hours ago", (int)((System.currentTimeMillis() - currentDataSet[currentDataSet.length - 1].getX()) / 60 / 1000 / 60))});
+        } else if (currentDataSet.length > 0) {
+            if (currentChart == HeartRateStoreController.CHART.DAY) {
+                staticLabelsFormatter.setHorizontalLabels(new String[]{
+                        String.format("%d hours ago", (int) ((System.currentTimeMillis() - currentDataSet[0].getX()) / 60 / 1000 / 60)),
+                        String.format("%d hours ago", (int) ((System.currentTimeMillis() - currentDataSet[currentDataSet.length - 1].getX()) / 60 / 1000 / 60))});
+
+            } else {
+                staticLabelsFormatter.setHorizontalLabels(new String[]{
+                        String.format("%d days ago", (int) ((System.currentTimeMillis() - currentDataSet[0].getX()) / HeartRateStoreController.MSEC_PER_DAY)),
+                        String.format("%d days ago", (int) ((System.currentTimeMillis() - currentDataSet[currentDataSet.length - 1].getX()) / 6 / HeartRateStoreController.MSEC_PER_DAY))});
+            }
         }
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
     }
@@ -198,7 +205,10 @@ public class DashboardFragment extends Fragment {
     @OnClick(R.id.week_hr_button)
     public void showWeekView(View view) {
         currentChart = HeartRateStoreController.CHART.WEEK;
+        currentOffset = 0;
+        currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
         reconstructChart();
+        series.resetData(currentDataSet);
     }
 
     @OnClick(R.id.month_hr_button)

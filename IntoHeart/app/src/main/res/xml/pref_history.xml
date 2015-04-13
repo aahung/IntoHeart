@@ -7,7 +7,17 @@
 
     <Preference
         android:key="test_gaussian_75_5"
-        android:title="Generate test data gaussian with average 75 sd 5"
+        android:title="Generate test data gaussian  75 5"
+        ></Preference>
+
+    <Preference
+        android:key="test_gaussian_75_25"
+        android:title="Generate test data gaussian  75 25"
+        ></Preference>
+
+    <Preference
+        android:key="test_gaussian_75_100"
+        android:title="Generate test data gaussian  75 100"
         ></Preference>
 
 </PreferenceScreen>

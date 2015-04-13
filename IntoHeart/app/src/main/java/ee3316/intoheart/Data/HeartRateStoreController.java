@@ -30,8 +30,9 @@ public class HeartRateStoreController {
     private List<Integer> stagingHRs = new ArrayList<>();
     private long lastUnixTime = 0;
 
-    private final long MSEC_PER_10_MINS = 600000;
-    private final long MSEC_PER_DAY = 86400000;
+    public static final long MSEC_PER_10_MINS = 600000;
+    public static final long MSEC_PER_DAY = 86400000;
+    public static final long MSEC_PER_WEEK = 604800000;
 
     // save the hr and add timestamp
     public void addHR(int hr) {
@@ -71,6 +72,12 @@ public class HeartRateStoreController {
             start = end - MSEC_PER_DAY;
             end += offset * MSEC_PER_DAY;
             start += offset * MSEC_PER_DAY;
+        } else if (chart == CHART.WEEK) {
+            end = System.currentTimeMillis();
+            end = end - end % MSEC_PER_DAY;
+            start = end - MSEC_PER_WEEK;
+            end += offset * MSEC_PER_WEEK;
+            start += offset * MSEC_PER_WEEK;
         } else {
             end = System.currentTimeMillis();
             end = end - end % MSEC_PER_10_MINS;
@@ -154,7 +161,7 @@ public class HeartRateStoreController {
         public void generatorNormalHeartRates(int average, double sd, JCallback<Integer> callback) {
             long unixTime = System.currentTimeMillis();
             long current10MinsUnixTime = unixTime - unixTime % MSEC_PER_10_MINS;
-            int J = 70 * 24 * 6;
+            int J = 10 * 24 * 6;
             for (int j = 0; j < J; ++j) {
                 List<Integer> hrs = new ArrayList<>();
                 for (int i = 0; i < 60 * 10; ++i) {

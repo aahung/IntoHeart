@@ -76,6 +76,52 @@ public class SettingsActivity extends PreferenceActivity {
             };
             mThread.start();
             return true;
+        } else if (key.equals("test_gaussian_75_25")) {
+            final SettingsActivity settingsActivity = this;
+            final ProgressDialog progressDialog = ProgressDialog.show(SettingsActivity.this, null, "0%");
+            Thread mThread = new Thread() {
+                @Override
+                public void run() {
+                    HeartRateStoreController heartRateStoreController = new HeartRateStoreController(settingsActivity);
+                    heartRateStoreController.generateTestGaussian(75, 25.0, new JCallback<Integer>() {
+                        @Override
+                        public void call(final Integer integer) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressDialog.setMessage(String.format("Generating testing data :-), %d%%", integer));
+                                }
+                            });
+                        }
+                    });
+                    progressDialog.dismiss();
+                }
+            };
+            mThread.start();
+            return true;
+        } else if (key.equals("test_gaussian_75_100")) {
+            final SettingsActivity settingsActivity = this;
+            final ProgressDialog progressDialog = ProgressDialog.show(SettingsActivity.this, null, "0%");
+            Thread mThread = new Thread() {
+                @Override
+                public void run() {
+                    HeartRateStoreController heartRateStoreController = new HeartRateStoreController(settingsActivity);
+                    heartRateStoreController.generateTestGaussian(75, 100.0, new JCallback<Integer>() {
+                        @Override
+                        public void call(final Integer integer) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressDialog.setMessage(String.format("Generating testing data :-), %d%%", integer));
+                                }
+                            });
+                        }
+                    });
+                    progressDialog.dismiss();
+                }
+            };
+            mThread.start();
+            return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
