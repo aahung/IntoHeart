@@ -198,8 +198,10 @@ public class DashboardFragment extends Fragment {
         currentChart = HeartRateStoreController.CHART.DAY;
         currentOffset = 0;
         currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-        reconstructChart();
-        series.resetData(currentDataSet);
+        if (currentDataSet.length > 0) {
+            reconstructChart();
+            series.resetData(currentDataSet);
+        }
     }
 
     @OnClick(R.id.week_hr_button)
@@ -207,8 +209,10 @@ public class DashboardFragment extends Fragment {
         currentChart = HeartRateStoreController.CHART.WEEK;
         currentOffset = 0;
         currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-        reconstructChart();
-        series.resetData(currentDataSet);
+        if (currentDataSet.length > 0) {
+            reconstructChart();
+            series.resetData(currentDataSet);
+        }
     }
 
     @OnClick(R.id.month_hr_button)
@@ -267,15 +271,23 @@ public class DashboardFragment extends Fragment {
             currentOffset++;
             if (currentOffset > 0) currentOffset = 0;
             currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-            reconstructChart();
-            series.resetData(currentDataSet);
+            if (currentDataSet.length > 0) {
+                reconstructChart();
+                series.resetData(currentDataSet);
+            } else {
+                currentOffset--;
+            }
         }
 
         public void onSwipeRight() {
             currentOffset--;
             currentDataSet = getHeartRateStoreController().getDayDataSet(currentChart, currentOffset);
-            reconstructChart();
-            series.resetData(currentDataSet);
+            if (currentDataSet.length > 0) {
+                reconstructChart();
+                series.resetData(currentDataSet);
+            } else {
+                currentOffset++;
+            }
         }
     }
 }
