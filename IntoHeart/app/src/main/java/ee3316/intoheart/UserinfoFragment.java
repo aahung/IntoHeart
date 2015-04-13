@@ -235,11 +235,16 @@ public class UserinfoFragment extends Fragment {
             public void call(Outcome outcome) {
                 if (outcome.success) {
                     nameEdit.setText(name);
-                    userStore.fetch();
                     userStore.name = name;
                     userStore.email = email;
                     userStore.password = password;
-                    userStore.save();
+                    userStore.saveUserLogin();
+                    userStore.fetchFromOnline(new JCallback<Outcome>() {
+                        @Override
+                        public void call(Outcome outcome) {
+                            updateContent();
+                        }
+                    });
                     SimpleAlertController.showSimpleMessage("Register successfully!",
                             String.format("Welcome %s", name), getActivity());
                     setVisibility();

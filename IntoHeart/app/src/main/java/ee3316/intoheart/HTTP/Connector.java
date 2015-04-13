@@ -164,9 +164,10 @@ public class Connector {
             public void success(JsonElement jsonElement, Response response) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 boolean success = jsonObject.get("success").getAsInt() == 1;
-                Object object = "Network error";
+                String object = "Network error";
                 try {
-                    object = jsonObject.get("message").getAsString();
+                    if (jsonObject.get("message") != null)
+                        object = jsonObject.get("message").getAsString();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }

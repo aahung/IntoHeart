@@ -135,7 +135,7 @@ public class UserStore {
                         emergencyTel = jsonObject.get("phone").getAsString();
                     if (jsonObject.get("lifestyles") != null) {
                         JsonArray lifestylesArray = jsonObject.get("lifestyles").getAsJsonArray();
-                        for (int i = 0; i < 5; ++i) {
+                        for (int i = 0; i < lifestylesArray.size(); ++i) {
                             lifestyles[i] = lifestylesArray.get(i).getAsFloat();
                         }
                     }
