@@ -57,6 +57,7 @@ public class UserStore {
         markingManager.mark[1] = settings.getInt(PREFS_NAME_MARK_1, 100);
         markingManager.mark[2] = settings.getInt(PREFS_NAME_MARK_2, 100);
         syncLifestyle();
+
     }
 
     public void save() {

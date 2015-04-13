@@ -87,6 +87,25 @@ public class HeartRateStoreController {
         return dps;
     }
 
+    public AnalysisResult getDayAnalysis() {
+        AnalysisResult analysisResult = new AnalysisResult();
+        long start, end;
+            end = System.currentTimeMillis();
+            end = end - end % MSEC_PER_10_MINS;
+            start = end - MSEC_PER_DAY;
+        List<Long[]> ds = heartRateContract.getHRs(start, end);
+        analysisResult.average = 0;
+        analysisResult.min = 1000;
+        analysisResult.max = -1;
+        for (Long[] d : ds) {//new Date(d[0])
+            analysisResult.average += d[1];
+            analysisResult.min = Math.min(analysisResult.min, d[2].intValue());
+            analysisResult.max = Math.max(analysisResult.max, d[3].intValue());
+        }
+        analysisResult.average /= ds.size();
+        return analysisResult;
+    }
+
     private static AnalysisResult analyse(List<Integer> hrs) {
         long sum = 0;
         long sum2 = 0;

@@ -26,6 +26,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ee3316.intoheart.Data.HeartRateContract;
+import ee3316.intoheart.Data.HeartRateStoreController;
 
 /**
  * Created by aahung on 3/9/15.
@@ -46,12 +47,12 @@ public class AnalysisFragment extends Fragment {
     public AnalysisFragment() {
 
     }
-    @InjectView(R.id.disease_fast_block)
-    LinearLayout disease_fast_block;
-    @InjectView(R.id.disease_slow_block)
-    LinearLayout disease_slow_block;
-    @InjectView(R.id.healthy_block)
-    LinearLayout healthy_block;
+    @InjectView(R.id.textAve)
+    TextView aveText;
+    @InjectView(R.id.textMin)
+    TextView minText;
+    @InjectView(R.id.textMax)
+    TextView maxText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -151,11 +152,10 @@ public class AnalysisFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        analysisResult = (new HeartRateContract(getActivity())).getAnalysisResult();
-//        ((TextView)getActivity().findViewById(R.id.textAve)).setText("Recently HR average: " + round(analysisResult.average, 2));
-//        ((TextView)getActivity().findViewById(R.id.textStdDev)).setText("Standard Deviation: " + round(analysisResult.std_dev, 2));
-//        ((TextView)getActivity().findViewById(R.id.textMax)).setText("Max: " + analysisResult.max);
-//        ((TextView)getActivity().findViewById(R.id.textMin)).setText("Min: " + analysisResult.min);
+        HeartRateStoreController.AnalysisResult analysisResult = ((MainActivity) getActivity()).heartRateStoreController.getDayAnalysis();
+        aveText.setText(String.valueOf((int)analysisResult.average));
+        minText.setText(String.valueOf((int)analysisResult.min));
+        maxText.setText(String.valueOf((int)analysisResult.max));
     }
 
     @Override

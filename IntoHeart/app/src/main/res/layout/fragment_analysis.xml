@@ -4,47 +4,93 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_green">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="178dp">
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textAve"
-            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You recent heart rate analysis"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_alignTop="@+id/linearLayout"
+            android:layout_centerHorizontal="true" />
 
-            android:layout_gravity="center_horizontal"
-            android:textColor="#ffffff" />
-
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/textStdDev"
-        android:layout_gravity="center_horizontal"
-            android:textColor="#ffffff" />
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/textMin"
-        android:layout_gravity="center_horizontal"
-            android:textColor="#ffffff" />
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/textMax"
-        android:layout_gravity="center_horizontal"
-            android:textColor="#ffffff" />
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:id="@+id/linearLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="98"
+                android:id="@+id/textAve"
+                android:layout_marginTop="30dip"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#ffffff"
+                android:textSize="90sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="average"
+                android:textColor="#ffffff"/>
+            </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/linearLayout"
+            android:layout_toStartOf="@+id/linearLayout"
+            android:id="@+id/linearLayout2">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="68"
+                android:id="@+id/textMin"
+                android:layout_marginTop="30dip"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#ffffff"
+                android:textSize="40sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="min"
+                android:textColor="#ffffff"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/linearLayout"
+            android:layout_toEndOf="@+id/linearLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="168"
+                android:id="@+id/textMax"
+                android:layout_marginTop="30dip"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#ffffff"
+                android:textSize="40sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="max"
+                android:textColor="#ffffff"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
