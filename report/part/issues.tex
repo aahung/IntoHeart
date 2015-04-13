@@ -1,0 +1,9 @@
+\paragraph{Crash when switching fragment while networking work not finished.} 
+When networking is still on, quickly switch fragment cause fragment dettached, then "getActivity()" will return null which further cause crash of the app. Some optimization like null checking is added, the bug emerges less. 
+\paragraph{Old version of lifestyles or other settings takes place of right version when network condition is not well.}
+There exists a case where the fetching from server starts, user modifies the lifestyle rating, and the modified data is transferred to server, at this time or then, the previous fetching finished, the old lifestyles overwrite the local ones, and when user does changes based on this old version, it will misleads the e data is not synced. This bug is being fixed and emerges sometimes. 
+\paragraph{TTS fails to get the speaking status.}
+In exercise mode, the speaking status cannot be got which would be used for preventing voice from erupting at same time. Currently fallback is let TTS not receiving any request for 10 seconds after each request, or called "cool down period". 
+\paragraph{Not be able to keep exercise mode.}
+When in exercise mode, if user change to other pages by navigation menu, after coming back to "Dashboard", the mode turns back to normal mode, but not remains on the exercise mode. 
+\paragraph{Exercise mode backs to Normal mode when switch out the dashboard then back.} This is because the exercise mode is hosted in dashboard fragment, currently the best solution is to move the entire related code to the activity, while there is a lot work to do and no time for this.
