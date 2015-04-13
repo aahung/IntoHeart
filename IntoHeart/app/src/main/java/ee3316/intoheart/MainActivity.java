@@ -1,5 +1,6 @@
 package ee3316.intoheart;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -9,6 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -172,6 +175,13 @@ public class MainActivity extends ActionBarActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
+            if (emergencyMonitor.shouldCall) {
+                ((MenuItem) menu.findItem(R.id.action_emergency_off)).setVisible(true);
+                ((MenuItem) menu.findItem(R.id.action_emergency_on)).setVisible(false);
+            } else {
+                ((MenuItem) menu.findItem(R.id.action_emergency_off)).setVisible(false);
+                ((MenuItem) menu.findItem(R.id.action_emergency_on)).setVisible(true);
+            }
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -191,6 +201,16 @@ public class MainActivity extends ActionBarActivity
             return true;
         }
 
+        if (id == R.id.action_emergency_on) {
+            emergencyMonitor.shouldCall = true;
+            invalidateOptionsMenu();
+        }
+
+        if (id == R.id.action_emergency_off) {
+            emergencyMonitor.shouldCall = false;
+            invalidateOptionsMenu();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -199,6 +219,8 @@ public class MainActivity extends ActionBarActivity
     class EmergencyMonitor {
         private int EMERGENT_MIN_HR = 70;
         private int EMERGENT_MAX_HR = 90;
+
+        private boolean shouldCall = true;
 
         public JCallback<Integer> heartRateUpdateListener;
 
@@ -216,7 +238,10 @@ public class MainActivity extends ActionBarActivity
                         }
                     }
                     if (tooHigh) {
-                        callEmergency((new UserStore(MainActivity.this)).emergencyTel);
+                        if (shouldCall) {
+                            callEmergency((new UserStore(MainActivity.this)).emergencyTel);
+                            emergencyMonitor.shouldCall = false;
+                        }
                     }
                 }
             };
@@ -236,4 +261,8 @@ public class MainActivity extends ActionBarActivity
         return ((IHApplication) getApplication()).instantHeartRateStore;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
