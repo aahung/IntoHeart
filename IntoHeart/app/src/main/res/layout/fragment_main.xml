@@ -44,14 +44,15 @@
             android:layout_width="fill_parent"
             android:layout_height="138dp"
             android:id="@+id/exercise_mode_block">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sports_man"
                 android:src="@drawable/sports_person1"
-                android:layout_alignTop="@+id/instantHRTextView2"
-                android:layout_alignBottom="@+id/instantHRTextView2"
-                android:layout_marginRight="10dp" />
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/instantHRTextView2"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,8 +64,7 @@
                 android:textAlignment="center"
                 android:textColor="#ffffff"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:paddingLeft="10dp" />
+                android:layout_centerHorizontal="true"/>
         </RelativeLayout>
     </LinearLayout>
 
