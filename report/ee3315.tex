@@ -57,33 +57,33 @@ According to some researches, heart rate (HR) is an independent predictor of car
 \subsubsection{App}
 For Into Heart App, we use Android Studio project structure with Gradle project automation tool to do package management. The project bone structure is as followed.
 
-\paragraph{IHApplication} is the Application class and holds global variables.
-\paragraph{MainActivity} is the main activity with a navigation drawer to navigate between fragments, also the inner class EmergencyMonitor monitor heart rate and make emergency call when necessary.
-\subparagraph{NavigationDrawerFragment} is navigation drawer fragment, let user navigate between fragments.
-\subparagraph{DashboardFragment} is under MainActivity and let users view the instant heart rate and historical charts, as well as exercise mode.
-\subparagraph{AnalysisFragment} is under MainActivity and let users view their recent heart rate analysis result  and the diseases they might have.
-\subparagraph{SensorsFragment} is under MainActivity and let users search the sensors nearby and connect to them.
-\subparagraph{RankingFragment} is under MainActivity and let user view their score and the ranking among friends. Searching friends, sending friend requests and responding the requests are in this fragment.
-\subparagraph{UserInfoFragment} is under MainActivity and let user set their basic informations such as name, age, weight, height and emergency telephone.
-\subparagraph{LifestyleFragment} is under MainActivity and let user rate their lifestyle, including smoking, alcohol, eating disorder, stay up late and overwork.
-\paragraph{AddFriendActivity} can be entered from RankingFragment, letting user search and send friend request.
-\paragraph{RawDataActivity} let user view the raw data of data tale "day"
-\paragraph{SettingsActivity} responds the interaction when user clicks on the setting page.
+\paragraph{IHApplication.java} is the Application class and holds global variables.
+\paragraph{MainActivity.java} is the main activity with a navigation drawer to navigate between fragments, also the inner class EmergencyMonitor monitor heart rate and make emergency call when necessary.
+\subparagraph{NavigationDrawerFragment.java} is navigation drawer fragment, let user navigate between fragments.
+\subparagraph{DashboardFragment.java} is under MainActivity and let users view the instant heart rate and historical charts, as well as exercise mode.
+\subparagraph{AnalysisFragment.java} is under MainActivity and let users view their recent heart rate analysis result  and the diseases they might have.
+\subparagraph{SensorsFragment.java} is under MainActivity and let users search the sensors nearby and connect to them.
+\subparagraph{RankingFragment.java} is under MainActivity and let user view their score and the ranking among friends. Searching friends, sending friend requests and responding the requests are in this fragment.
+\subparagraph{UserInfoFragment.java} is under MainActivity and let user set their basic informations such as name, age, weight, height and emergency telephone.
+\subparagraph{LifestyleFragment.java} is under MainActivity and let user rate their lifestyle, including smoking, alcohol, eating disorder, stay up late and overwork.
+\paragraph{AddFriendActivity.java} can be entered from RankingFragment, letting user search and send friend request.
+\paragraph{RawDataActivity.java} let user view the raw data of data tale "day"
+\paragraph{SettingsActivity.java} responds the interaction when user clicks on the setting page.
 \paragraph{Splash} Splash page.
-\paragraph{DiseaseDetailActivity} shows the detail of a particular disease using a WebView.
-\paragraph{UIComponent/SimpleAlertController} is just a wrapper of AlertDialog, for easier usage.
-\paragraph{HTTP/API} defines the communication prototype between app and server.
-\paragraph{HTTP/Connector} defines the methods to use API to communicate with server.
-\paragraph{HTTP/JCallback} is just a wrapper for handler, for easier asynchronous programming especially in networking.
+\paragraph{DiseaseDetailActivity.java} shows the detail of a particular disease using a WebView.
+\paragraph{UIComponent/SimpleAlertController.java} is just a wrapper of AlertDialog, for easier usage.
+\paragraph{HTTP/API.java} defines the communication prototype between app and server.
+\paragraph{HTTP/Connector.java} defines the methods to use API to communicate with server.
+\paragraph{HTTP/JCallback.java} is just a wrapper for handler, for easier asynchronous programming especially in networking.
 \paragraph{HTTP/Outcome} is the Data model passing in JCallback.
-\paragraph{Data/HeartRateContract} defines the database model and some simple query/insert methods.
-\paragraph{Data/HeartRateStoreController} controls all data coming in/out the database.
-\paragraph{Data/InstantHeartRateStore} stores the recent 60 heart rate data from sensors.
-\paragraph{Data/MarkingManager} defines the rules of marking scores.
-\paragraph{Data/UserStore} is the controller to control the user's info and scores, sync the data with server using Connector and sync the data locally using {\bf SharedPreferences}.
-\paragraph{BLE/BluetoothLeService} is registered service to communicate with Bluetooth LE device.
-\paragraph{BLE/GattAttributes} stores some constants conforms to Generic Attribute Profile.
-\paragraph{BLE/SensorConnectionManager} manages the connections between sensor and app, also handle the data sent from sensor and pass to other objects.
+\paragraph{Data/HeartRateContract.java} defines the database model and some simple query/insert methods.
+\paragraph{Data/HeartRateStoreController.java} controls all data coming in/out the database.
+\paragraph{Data/InstantHeartRateStore.java} stores the recent 60 heart rate data from sensors.
+\paragraph{Data/MarkingManager.java} defines the rules of marking scores.
+\paragraph{Data/UserStore.java} is the controller to control the user's info and scores, sync the data with server using Connector and sync the data locally using {\bf SharedPreferences}.
+\paragraph{BLE/BluetoothLeService.java} is registered service to communicate with Bluetooth LE device.
+\paragraph{BLE/GattAttributes.java} stores some constants conforms to Generic Attribute Profile.
+\paragraph{BLE/SensorConnectionManager.java} manages the connections between sensor and app, also handle the data sent from sensor and pass to other objects.
 
 
 \paragraph{res/layout/*} are the layout files defines the static layouts used by activities, fragments, alert dialogs and lists.
@@ -97,5 +97,42 @@ For Into Heart App, we use Android Studio project structure with Gradle project 
 
 
 \subsubsection{Server}
+
+Since the stress is not on the server side, only the basic configurations are mentioned below.
+
+For rapidly development, our server-side choice is to use Ubuntu 14.04 server version as OS, with node.js server application, express framework and MongoDB database system. 
+
+\paragraph{routes/users.js} handles all requests with endpoints /users/*.
+\paragraph{models/models.js} defines the data models.
+\paragraph{app.js} initialize and starts the application, making connection with database.
+
+\subsection{Known Issues}
+
+\paragraph{Crash when switching fragment while networking work not finished.} 
+When networking is still on, quickly switch fragment cause fragment dettached, then "getActivity()" will return null which further cause crash of the app. Some optimization like null checking is added, the bug emerges less. 
+\paragraph{Old version of lifestyles or other settings takes place of right version when network condition is not well.}
+There exists a case where the fetching from server starts, user modifies the lifestyle rating, and the modified data is transferred to server, at this time or then, the previous fetching finished, the old lifestyles overwrite the local ones, and when user does changes based on this old version, it will misleads the e data is not synced. This bug is being fixed and emerges sometimes. 
+\paragraph{TTS fails to get the speaking status.}
+In exercise mode, the speaking status cannot be got which would be used for preventing voice from erupting at same time. Currently fallback is let TTS not receiving any request for 10 seconds after each request, or called "cool down period". 
+\paragraph{Not be able to keep exercise mode.}
+When in exercise mode, if user change to other pages by navigation menu, after coming back to "Dashboard", the mode turns back to normal mode, but not remains on the exercise mode. 
+\paragraph{Exercise mode backs to Normal mode when switch out the dashboard then back.} This is because the exercise mode is hosted in dashboard fragment, currently the best solution is to move the entire related code to the activity, while there is a lot work to do and no time for this.
+
+\subsection{User Manual}
+\begin{enumerate}
+\item Press "Into Heart" icon to launch the application 
+\item After the open page, you could see the menu and "Dashboard", choose "Sensor" in menu and wear the H7 sensor. If your are asked to turn on the Bluetooth, choose "Allow". Build the connection between your device and the sensor. 
+\item Go to "My info" page to create account if it is your first time to use this app, then log in by pressing the "Log in" button. You could modify your age, height, weight as well as emergency number, and save.  
+\item More functions: 
+\begin{itemize}
+\item Save your life: In the "Dashboard", your heart rate could be detected and shown in day, week, and month. On the right corner, you could change the mode between "Normal Mode" and "Exercise Mode". If your heart rate is irregular, the system would automatically call to your emergency number to save your life! Exercise mode would give you an artificial voice reminder. 
+\item Analysis: This page will show your average, maximum, minimum heart rate and give you an analytical result of your health condition. Press "View details", then you can see a WikiPedia list about different heart diseases.  
+\item Sharing with friends: If you has logged in, you could see your health score and ranking between your friends in "Ranking" page, press the add friend button you could also search for and add new friends. 
+\item Record: In the "Life Style" page, you can press on either icon to set your life habits. 
+\end{itemize}
+\end{enumerate}
+
+ 
+ 
 
 \end{document}
