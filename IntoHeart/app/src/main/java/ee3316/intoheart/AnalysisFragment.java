@@ -60,6 +60,7 @@ public class AnalysisFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         setHasOptionsMenu(true);
         ButterKnife.inject(this,rootView);
+
         Button btn_slow=(Button)rootView.findViewById(R.id.view_detail_slow_button);
         btn_slow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,11 +100,11 @@ public class AnalysisFragment extends Fragment {
         if (diseaseKind == DiseaseListActivity.DISEASE_KIND.SLOW) {
             diseaseNames = getResources().getStringArray(R.array.slowdiseasename_array);
             diseaseURLs = getResources().getStringArray(R.array.slowdiseaseurls_array);
-            title = "Slow diseases";
+            title = "Bradycardia diseases";
         } else {
             diseaseNames = getResources().getStringArray(R.array.fastdiseasename_array);
             diseaseURLs = getResources().getStringArray(R.array.fastdiseaseurls_array);
-            title = "Fast diseases";
+            title = "Tachycardia diseases";
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -156,6 +157,7 @@ public class AnalysisFragment extends Fragment {
         aveText.setText(String.valueOf((int)analysisResult.average));
         minText.setText(String.valueOf((int)analysisResult.min));
         maxText.setText(String.valueOf((int)analysisResult.max));
+
     }
 
     @Override

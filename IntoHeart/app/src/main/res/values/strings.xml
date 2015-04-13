@@ -27,7 +27,7 @@
     <string name="title_activity_disease_detail">SlowDiseaseMainActivity</string>
     <string name="title_activity_disease_list">FastDiseaseMainActivity</string>
     <string name="title_activity_speech">SpeechActivity</string>
-
+    <string name="title_activity_marking">MarkingActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="R">R</string>
 </resources>
