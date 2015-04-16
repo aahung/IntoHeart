@@ -5,3 +5,7 @@ There exists a case where the fetching from server starts, user modifies the lif
 \paragraph{TTS fails to get the speaking status.}
 In exercise mode, the speaking status cannot be got which would be used for preventing voice from erupting at same time. Currently fallback is let TTS not receiving any request for 10 seconds after each request, or called "cool down period". 
 \paragraph{Exercise mode backs to Normal mode when switch out the dashboard then back.} This is because the exercise mode is hosted in dashboard fragment, currently the best solution is to move the entire related code to the activity, while there is a lot work to do and no time for this.
+\paragraph{Not well handle Bluetooth connection on and loss}
+Currently connection on or loss cannot be handled user friendly, when connection is on, the data starts flowing, while not obvious UI changes made. Either is connection loss. 
+\paragraph{Not well handle Sensor loosing}
+The heart rate sent from sensor will become weird, so it needs to be filtered.
