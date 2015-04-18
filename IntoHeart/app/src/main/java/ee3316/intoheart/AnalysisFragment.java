@@ -161,7 +161,7 @@ public class AnalysisFragment extends Fragment {
         minText.setText(String.valueOf((int)analysisResult.min));
         maxText.setText(String.valueOf((int)analysisResult.max));
         if (analysisResult.average < 60) resultText.setText("Oh, your heart rate is too slow, check Bradycardia diseases");
-        else if (analysisResult.average > 100) resultText.setText("Oh, your heart rate is too fase, check Tachycardia diseases");
+        else if (analysisResult.average > 100) resultText.setText("Oh, your heart rate is too fast, check Tachycardia diseases");
         else resultText.setText("Your heart looks nice.");
     }
 

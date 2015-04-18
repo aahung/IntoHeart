@@ -27,7 +27,8 @@
                 android:textColor="#ffffff"
                 android:textSize="40dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10sp" />
+                android:layout_marginLeft="10sp"
+                style="@style/MyText"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,7 +39,8 @@
                 android:textColor="#ffffff"
                 android:textSize="40dp"
                 android:layout_marginLeft="20dp"
-                android:text="100" />
+                android:text="100"
+                style="@style/MyText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -54,7 +56,8 @@
                 android:text="Heart rate score:"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:paddingLeft="10dp" />
+                android:paddingLeft="10dp"
+                style="@style/MyText"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,7 +66,8 @@
                 android:id="@+id/heart_rate_score"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:paddingLeft="20dp" />
+                android:paddingLeft="20dp"
+                style="@style/MyText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -79,7 +83,8 @@
                 android:id="@+id/textView13"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:paddingLeft="10dp" />
+                android:paddingLeft="10dp"
+                style="@style/MyText"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -88,7 +93,8 @@
                 android:id="@+id/exercise_score"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:paddingLeft="33dp" />
+                android:paddingLeft="33dp"
+                style="@style/MyText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -104,7 +110,8 @@
                 android:id="@+id/textView14"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:paddingLeft="10dp" />
+                android:paddingLeft="10dp"
+                style="@style/MyText"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -113,7 +120,8 @@
                 android:id="@+id/life_style_score"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:paddingLeft="29dp" />
+                android:paddingLeft="29dp"
+                style="@style/MyText"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -142,7 +150,8 @@
         <ListView
             android:id="@+id/ranking_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+            android:layout_height="match_parent"
+            style="@style/MyText"></ListView>
 
         <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
