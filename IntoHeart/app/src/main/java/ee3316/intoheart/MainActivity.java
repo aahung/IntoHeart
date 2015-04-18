@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +17,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -43,6 +46,8 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
 
     public List<String> sectionTitles;
+
+    JCallback<Integer> onConnectionStateChanged;
 
 
     public SensorConnectionManager sensorConnectionManager;
@@ -98,6 +103,26 @@ public class MainActivity extends ActionBarActivity
         ((IHApplication) getApplication()).mainActivity = this;
 
         emergencyMonitor = new EmergencyMonitor();
+
+        onConnectionStateChanged = new JCallback<Integer>() {
+            @Override
+            public void call(final Integer integer) {
+                Thread mThread = new Thread() {
+                    @Override
+                    public void run() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (integer == BluetoothLeService.STATE_DISCONNECTED) {
+                                    SimpleAlertController.showSimpleMessage("Oops", "Sensor seems to be disconnected.", MainActivity.this);
+                                }
+                            }
+                        });
+                    }
+                };
+                mThread.start();
+            }
+        };
     }
 
     @Override
@@ -114,6 +139,7 @@ public class MainActivity extends ActionBarActivity
         editor.commit();
         unbindService(sensorConnectionManager.mServiceConnection);
         sensorConnectionManager.mBluetoothLeService = null;
+        onConnectionStateChanged = null;
         unregisterReceiver(sensorConnectionManager.mGattUpdateReceiver);
     }
 

@@ -127,12 +127,16 @@ public class SensorsFragment extends Fragment {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                            mLeDeviceListAdapter.state = integer;
                             if (getMainActivity() != null) {
+                                mLeDeviceListAdapter.state = integer;
                                 MainActivity mainActivity = getMainActivity();
                                 mLeDeviceListAdapter.address = mainActivity.sensorConnectionManager.mDeviceAddress;
+                                mLeDeviceListAdapter.notifyDataSetChanged();
+                                Toast.makeText(getActivity(),
+                                        String.format("%s: %s", mLeDeviceListAdapter.address,
+                                                BluetoothLeService.getStateString(mLeDeviceListAdapter.state)),
+                                        Toast.LENGTH_SHORT).show();
                             }
-                            mLeDeviceListAdapter.notifyDataSetChanged();
                             }
                         });
                     }
@@ -211,6 +215,8 @@ public class SensorsFragment extends Fragment {
                     MainActivity mainActivity = getMainActivity();
                     mainActivity.sensorConnectionManager.mBluetoothLeService.connect(deviceAddress);
                     mainActivity.sensorConnectionManager.mDeviceAddress = deviceAddress;
+                    mainActivity.sensorConnectionManager.mBluetoothLeService.
+                            addUpdateListener(mainActivity.onConnectionStateChanged);
                 }
             }});
         scanLeDevice(true);

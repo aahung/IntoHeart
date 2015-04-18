@@ -51,6 +51,9 @@ public class BluetoothLeService extends Service {
     private BluetoothGatt mBluetoothGatt;
     List<JCallback<Integer>> mConnectionStateUpdateListeners = new ArrayList<>();
     public void addUpdateListener(JCallback<Integer> updateListener) {
+        for (JCallback<Integer> mConnectionStatUpdateListener: mConnectionStateUpdateListeners) {
+            if (mConnectionStatUpdateListener == updateListener) return;
+        }
         this.mConnectionStateUpdateListeners.add(updateListener);
     }
     public int mConnectionState = STATE_DISCONNECTED;
@@ -62,9 +65,18 @@ public class BluetoothLeService extends Service {
         }
     }
 
+    public BluetoothLeService() {
+        super();
+    }
+
     public static final int STATE_DISCONNECTED = 0;
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;
+    public static String getStateString(int state) {
+        if (state == 0) return "Disconnected";
+        else if (state == 1) return "Connecting";
+        else return "Connected";
+    }
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
