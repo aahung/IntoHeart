@@ -5,10 +5,9 @@
     android:background="@drawable/bg_green"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="vertical"
@@ -19,79 +18,68 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="#20ffffff"
+
                 android:layout_margin="10dp">
 
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="120dp"
-                        android:layout_height="fill_parent">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="User Name"
+                        android:id="@+id/username"
+                        android:layout_margin="10dip"
+                        android:gravity="right"
+                        android:textColor="#ffffff"
+                        style="@style/MyTextBold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="User Name"
-                            android:id="@+id/textView2"
-                            android:layout_marginLeft="10dp"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName"
-                            android:text="John"
-                            android:ems="10"
-                            android:id="@+id/name_edit"
-                            android:layout_weight="1"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="John"
+                        android:id="@+id/name_edit"
+                        android:layout_margin="10dip"
+                        android:layout_weight="3"
+                        android:textColor="#ffffff"
+                        style="@style/MyText"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="120dp"
-                        android:layout_height="fill_parent">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Age"
-                            android:id="@+id/textView3"
-                            android:layout_marginLeft="10dp"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Age"
+                        android:id="@+id/textView3"
+                        android:layout_margin="10dip"
+                        android:gravity="right"
+                        android:textColor="#ffffff"
+                        style="@style/MyTextBold"/>
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
 
-                        <EditText
-                            android:inputType="number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/age_edit"
-                            android:layout_weight="1"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
+
+
+                    <EditText
+                        android:inputType="number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/age_edit"
+                        android:layout_margin="10dip"
+                        android:layout_weight="3"
+                        android:text="13"
+                        android:textColor="#ffffff"
+                        style="@style/MyText"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -99,35 +87,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="120dp"
-                        android:layout_height="fill_parent"
-                        >
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Height(cm)"
+                        android:id="@+id/textView4"
+                        android:layout_margin="10dip"
+                        android:gravity="right"
+                        android:textColor="#ffffff"
+                        style="@style/MyTextBold"/>
+                    <EditText
+                        android:inputType="number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/height_edit"
+                        android:layout_margin="10dip"
+                        android:layout_weight="1"
+                        android:text="100"
+                        android:textColor="#ffffff"
+                        style="@style/MyText"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Height(cm)"
-                            android:id="@+id/textView4"
-                            android:layout_marginLeft="10dp"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" >
-
-                        <EditText
-                            android:inputType="number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/height_edit"
-                            android:layout_weight="1"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -135,41 +116,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="120dp"
-                        android:layout_height="fill_parent" >
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Weight(kg)"
+                        android:id="@+id/textView5"
+                        android:layout_margin="10dp"
+                        android:gravity="right|center_vertical"
+                        android:textColor="#ffffff"
+                        style="@style/MyTextBold"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Weight(kg)"
-                            android:id="@+id/textView5"
-                            android:layout_marginLeft="10dp"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
+                    <NumberPicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:id="@+id/weightPicker" />
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" >
+                    <NumberPicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/weightPicker2" />
 
-                        <NumberPicker
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/weightPicker" />
+                    <NumberPicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/weightPicker3" />
+                </LinearLayout>
 
-                        <NumberPicker
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/weightPicker2" />
+                <LinearLayout
+                    android:layout_marginTop="20dip"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
 
-                        <NumberPicker
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/weightPicker3" />
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Emergency Number"
+                        android:id="@+id/textView6"
+                        android:layout_margin="2dp"
+                        android:textColor="#ffffff"
+                        style="@style/MyTextBold"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -177,50 +166,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="180dp"
-                        android:layout_height="fill_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Emergency Number"
-                            android:id="@+id/textView6"
-                            android:layout_marginLeft="2dp"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" >
-
-                        <EditText
-                            android:inputType="phone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/emergency_edit"
-                            android:layout_weight="1"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dip"
+                        style="@style/MyTextBold"/>
+                    <EditText
+                        android:inputType="phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/emergency_edit"
+                        android:layout_weight="1"
+                        android:layout_margin="10dip"
+                        android:textColor="#ffffff"
+                        style="@style/MyText"/>
                 </LinearLayout>
 
             </LinearLayout>
 
             <Button
-                android:layout_margin="10dip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Save"
                 android:id="@+id/save_button"
                 android:shadowColor="#00000000"
-                android:background="#f6db34"
+                android:background="@drawable/button_pressed_default"
                 android:textColor="#ffffff"
-                android:layout_marginRight="10dp" />
+                android:layout_margin="10dip"
+                style="@style/MyText"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -237,14 +210,15 @@
 
                     <Button
                         android:padding="10dip"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="CREAT AN ACCOUNT"
+                        android:text="Register"
                         android:id="@+id/register_button"
                         android:textColor="#ffffff"
-                        android:background="#20ffffff"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="10dp" />
+                        android:background="@drawable/button_pressed_fail"
+                        android:layout_margin="10dp"
+
+                        style="@style/MyText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -256,12 +230,13 @@
                         android:padding="10dip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="LOG IN"
+                        android:text="Log In"
                         android:id="@+id/login_button"
                         android:shadowColor="#00000000"
-                        android:background="#b6cb24"
+                        android:background="@drawable/button_pressed_destroy"
                         android:textColor="#ffffff"
-                        android:layout_marginRight="10dp" />
+                        android:layout_margin="10dp"
+                        style="@style/MyText"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -286,11 +261,13 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    />
 
             </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
