@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v7.internal.widget.AdapterViewCompat;
 import android.util.Log;
@@ -34,6 +35,7 @@ import java.util.List;
 
 import ee3316.intoheart.BLE.BluetoothLeService;
 import ee3316.intoheart.BLE.GattAttributes;
+import ee3316.intoheart.HTTP.JCallback;
 
 /**
  * Created by aahung on 3/7/15.
@@ -50,7 +52,6 @@ public class SensorsFragment extends Fragment {
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
-
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -117,6 +118,34 @@ public class SensorsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sensors, container, false);
+        onConnectionStateChange = new JCallback<Integer>() {
+            @Override
+            public void call(final Integer integer) {
+                Thread mThread = new Thread() {
+                    @Override
+                    public void run() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                            mLeDeviceListAdapter.state = integer;
+                            if (getMainActivity() != null) {
+                                MainActivity mainActivity = getMainActivity();
+                                mLeDeviceListAdapter.address = mainActivity.sensorConnectionManager.mDeviceAddress;
+                            }
+                            mLeDeviceListAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                };
+                mThread.start();
+            }
+        };
+        if (getMainActivity() != null) {
+            MainActivity mainActivity = getMainActivity();
+            mainActivity.sensorConnectionManager.mBluetoothLeService
+                    .addUpdateListener(onConnectionStateChange);
+
+        }
         return rootView;
     }
 
@@ -159,6 +188,11 @@ public class SensorsFragment extends Fragment {
 
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter();
+        if (getMainActivity() != null) {
+            MainActivity mainActivity = getMainActivity();
+            mLeDeviceListAdapter.address = mainActivity.sensorConnectionManager.mBluetoothLeService.mBluetoothDeviceAddress;
+            mLeDeviceListAdapter.state = mainActivity.sensorConnectionManager.mBluetoothLeService.mConnectionState;
+        }
         listView = (ListView)getActivity().findViewById(R.id.sensor_list);
         listView.setAdapter(mLeDeviceListAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -193,7 +227,10 @@ public class SensorsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        onConnectionStateChange = null;
     }
+
+    JCallback<Integer> onConnectionStateChange;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -249,6 +286,8 @@ public class SensorsFragment extends Fragment {
 
     // Adapter for holding devices found through scanning.
     public class LeDeviceListAdapter extends BaseAdapter {
+        public int state = BluetoothLeService.STATE_DISCONNECTED;
+        public String address = null;
         private ArrayList<BluetoothDevice> mLeDevices;
         private LayoutInflater mInflator;
 
@@ -309,6 +348,15 @@ public class SensorsFragment extends Fragment {
             else
                 viewHolder.deviceName.setText(R.string.unknown_device);
             viewHolder.deviceStatus.setText("Tap to connect");
+            String deviceAddress = device.getAddress();
+            if (deviceAddress.equals(address)) {
+                String stateString = "Disconnected";
+                if (state == BluetoothLeService.STATE_CONNECTED)
+                    stateString = "Connected";
+                else if (state == BluetoothLeService.STATE_CONNECTING)
+                    stateString = "Connecting";
+                viewHolder.deviceStatus.setText(stateString);
+            }
             viewHolder.deviceAddress.setText(device.getAddress());
 
             return view;

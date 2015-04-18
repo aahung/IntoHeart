@@ -32,8 +32,11 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import ee3316.intoheart.HTTP.JCallback;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -44,13 +47,24 @@ public class BluetoothLeService extends Service {
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
-    private String mBluetoothDeviceAddress;
+    public String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
-    private int mConnectionState = STATE_DISCONNECTED;
+    List<JCallback<Integer>> mConnectionStateUpdateListeners = new ArrayList<>();
+    public void addUpdateListener(JCallback<Integer> updateListener) {
+        this.mConnectionStateUpdateListeners.add(updateListener);
+    }
+    public int mConnectionState = STATE_DISCONNECTED;
+    private void setMConnectionState(int state) {
+        mConnectionState = state;
+        for (JCallback<Integer> mConnectionStateUpdateListener : mConnectionStateUpdateListeners) {
+            if (mConnectionStateUpdateListener != null)
+                mConnectionStateUpdateListener.call(mConnectionState);
+        }
+    }
 
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
+    public static final int STATE_DISCONNECTED = 0;
+    public static final int STATE_CONNECTING = 1;
+    public static final int STATE_CONNECTED = 2;
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
@@ -74,7 +88,7 @@ public class BluetoothLeService extends Service {
             String intentAction;
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 intentAction = ACTION_GATT_CONNECTED;
-                mConnectionState = STATE_CONNECTED;
+                setMConnectionState(STATE_CONNECTED);
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
@@ -83,7 +97,7 @@ public class BluetoothLeService extends Service {
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
-                mConnectionState = STATE_DISCONNECTED;
+                setMConnectionState(STATE_DISCONNECTED);
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -221,7 +235,7 @@ public class BluetoothLeService extends Service {
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
-                mConnectionState = STATE_CONNECTING;
+                setMConnectionState(STATE_CONNECTING);
                 return true;
             } else {
                 return false;
@@ -238,7 +252,7 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         Log.d(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
-        mConnectionState = STATE_CONNECTING;
+        setMConnectionState(STATE_CONNECTING);
         return true;
     }
 
