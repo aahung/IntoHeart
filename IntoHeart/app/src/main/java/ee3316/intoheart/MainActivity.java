@@ -1,6 +1,7 @@
 package ee3316.intoheart;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import ee3316.intoheart.Data.HeartRateStoreController;
 import ee3316.intoheart.Data.InstantHeartRateStore;
 import ee3316.intoheart.Data.UserStore;
 import ee3316.intoheart.HTTP.JCallback;
+import ee3316.intoheart.UIComponent.SimpleAlertController;
 
 
 public class MainActivity extends ActionBarActivity
@@ -264,5 +266,16 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // confirm before close the app
+    @Override
+    public void onBackPressed() {
+        SimpleAlertController.showDestructiveMessageWithHandler("Exit", "Are you sure to exit?", "Exit", this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MainActivity.super.onBackPressed();
+            }
+        });
     }
 }
