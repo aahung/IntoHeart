@@ -229,6 +229,7 @@ router.post('/rank', function(req, res, next) {
                 "name": friend.name,
                 "email": friend.email,
                 "score": friend['info'].score,
+                "score_detail": friend['info'].scoreDetail,
                 "average": friend.average
             });
         }
@@ -236,6 +237,7 @@ router.post('/rank', function(req, res, next) {
             "name": u.name,
             "email": u.email,
             "score": u['info'].score,
+            "score_detail": u['info'].scoreDetail,
             "average": u.average
         });
         res.end(JSON.stringify(result));

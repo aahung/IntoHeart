@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,6 +89,24 @@ public class RankingFragment extends Fragment {
             getRank();
             getRequest();
         }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String[] data = (String[])view.getTag();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.alertdialog_ranking_detail, null);
+                ((TextView) dialogView.findViewById(R.id.final_score_view)).setText(data[2]);
+                ((TextView) dialogView.findViewById(R.id.exercise_score)).setText(data[3]);
+                ((TextView) dialogView.findViewById(R.id.heart_rate_score)).setText(data[4]);
+                ((TextView) dialogView.findViewById(R.id.life_style_score)).setText(data[5]);
+                builder.setView(dialogView)
+                        .setTitle(data[0])
+                        .setNeutralButton("Ok", null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
         return rootView;
     }
 
@@ -194,9 +213,15 @@ public class RankingFragment extends Fragment {
                         String name = obj.get("name").getAsString();
                         String email = obj.get("email").getAsString();
                         Integer score = 0;
+                        JsonArray score_detail = new JsonArray();
                         if (obj.get("score") != null)
                             score = obj.get("score").getAsInt();
-                        rankingListAdapter.addData(new String[]{name, email, score.toString()});
+                        if (obj.get("score_detail") != null) {
+                            score_detail = obj.get("score_detail").getAsJsonArray();
+                        }
+                        rankingListAdapter.addData(new String[]{name, email, score.toString(),
+                            score_detail.get(0).getAsString(), score_detail.get(1).getAsString(),
+                            score_detail.get(2).getAsString()});
                     }
                     rankingListAdapter.sort();
                     listView.setAdapter(rankingListAdapter);
@@ -260,19 +285,16 @@ public class RankingFragment extends Fragment {
         public View getView(int i, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
             // General ListView optimization code.
-            if (view == null) {
-                view = mInflator.inflate(R.layout.listitem_ranking, null);
-                viewHolder = new ViewHolder();
-                viewHolder.ranking = (TextView) view.findViewById(R.id.rankingText);
-                viewHolder.name = (TextView) view.findViewById(R.id.nameText);
-                viewHolder.email = (TextView) view.findViewById(R.id.emailText);
-                viewHolder.score = (TextView) view.findViewById(R.id.scoreText);
-                view.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) view.getTag();
-            }
+            view = mInflator.inflate(R.layout.listitem_ranking, null);
+            viewHolder = new ViewHolder();
+            viewHolder.ranking = (TextView) view.findViewById(R.id.rankingText);
+            viewHolder.name = (TextView) view.findViewById(R.id.nameText);
+            viewHolder.email = (TextView) view.findViewById(R.id.emailText);
+            viewHolder.score = (TextView) view.findViewById(R.id.scoreText);
+            view.setTag(viewHolder);
 
             String[] data = datas.get(i);
+            view.setTag(data);
             viewHolder.ranking.setText(String.valueOf(i + 1));
             viewHolder.name.setText(data[0]);
             viewHolder.email.setText(data[1]);
