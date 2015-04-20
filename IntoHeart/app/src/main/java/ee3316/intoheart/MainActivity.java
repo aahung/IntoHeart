@@ -248,7 +248,7 @@ public class MainActivity extends ActionBarActivity
         private int EMERGENT_MIN_HR = 70;
         private int EMERGENT_MAX_HR = 90;
 
-        private boolean shouldCall = true;
+        private boolean shouldCall = false;
 
         public JCallback<Integer> heartRateUpdateListener;
 
