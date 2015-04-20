@@ -258,6 +258,7 @@ public class MainActivity extends ActionBarActivity
     class EmergencyMonitor {
         private int EMERGENT_MIN_HR = 70;
         private int EMERGENT_MAX_HR = 90;
+        private int EMERGENT_MAX_HR_EXERCISING = 200;
 
         private boolean shouldCall = false;
 
@@ -270,8 +271,9 @@ public class MainActivity extends ActionBarActivity
                     boolean tooHigh = true;
                     for (int i = getInstantHeartRateStore().n - 1;
                          i >= getInstantHeartRateStore().n - 10; --i) {
+                        int max = (exercising)? EMERGENT_MAX_HR_EXERCISING : EMERGENT_MAX_HR;
                         if (getInstantHeartRateStore().hrs[i].getY() >= EMERGENT_MIN_HR
-                                && getInstantHeartRateStore().hrs[i].getY() <= EMERGENT_MAX_HR) {
+                                && getInstantHeartRateStore().hrs[i].getY() <= max) {
                             tooHigh = false;
                             break;
                         }
