@@ -49,112 +49,69 @@
 
     </LinearLayout>
 
+    <Button
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Instant Heart Rate"
+        android:id="@+id/instant_hr_button"
+        android:background="@drawable/button_default"
+        android:singleLine="true"
+        android:textColorHighlight="#cccccc"
+        android:textColor="#ffffff"
+        style="@style/MyText"
+        android:layout_margin="10dip"
+        android:padding="10dip"/>
+
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="72dp">
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+                <Button
+                    android:layout_width="0dip"
+                    android:layout_weight="0.33"
+                    android:layout_height="wrap_content"
+                    android:text="Day"
+                    android:id="@+id/day_hr_button"
+                    android:background="@drawable/button_default"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    style="@style/MyText"/>
 
-            <Button
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Instant Heart Rate"
-                android:id="@+id/instant_hr_button"
-                android:background="@drawable/button_default"
+                <Button
+                    android:layout_width="0dip"
+                    android:layout_weight="0.33"
+                    android:layout_height="wrap_content"
+                    android:text="Week"
+                    android:id="@+id/week_hr_button"
+                    android:background="@drawable/button_default"
+                    android:textColor="#ffffff"
+                    style="@style/MyText"/>
 
-                android:singleLine="true"
-                android:textColorHighlight="#cccccc"
-                android:textColor="#ffffff"
-                style="@style/MyText"
-                android:padding="10dip"/>
+                <Button
+                    android:layout_width="0dip"
+                    android:layout_weight="0.33"
+                    android:layout_height="wrap_content"
+                    android:text="Month"
+                    android:id="@+id/month_hr_button"
+                    android:background="@drawable/button_default"
+                    android:textColor="#ffffff"
+                    style="@style/MyText"/>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="345dp">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="0dip"
-                    android:layout_weight="0.333"
-                    android:layout_height="fill_parent">
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:text="Day"
-                        android:id="@+id/day_hr_button"
-                        android:background="@drawable/button_default"
-
-                        android:singleLine="true"
-                        android:textColorHighlight="#cccccc"
-                        android:textColor="#ffffff"
-                        style="@style/MyText"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="0dip"
-                    android:layout_weight="0.333"
-                    android:layout_height="fill_parent">
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:text="Week"
-                        android:id="@+id/week_hr_button"
-                        android:background="@drawable/button_default"
-
-                        android:textColor="#ffffff"
-                        style="@style/MyText"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="0dip"
-                    android:layout_weight="0.333"
-                    android:layout_height="fill_parent">
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:text="Month"
-                        android:id="@+id/month_hr_button"
-                        android:background="@drawable/button_default"
-
-                        android:textColor="#ffffff"
-                        style="@style/MyText"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#40ffffff">
-
-                <com.jjoe64.graphview.GraphView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/graph" />
-
-                </LinearLayout>
-        </LinearLayout>
-
-
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#40ffffff"
+            android:id="@+id/graph" />
     </LinearLayout>
 
 
