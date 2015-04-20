@@ -29,14 +29,15 @@
                 android:textSize="25sp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:textColor="#ffffff" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#aaffffff">
+            android:background="#20ffffff">
 
             <SearchView
                 android:id="@+id/search_view"
@@ -45,7 +46,7 @@
                 android:layout_weight="1"
                 android:iconifiedByDefault="false"
                 android:inputType="textEmailAddress"
-                android:searchIcon="@drawable/search_icon"/>
+                android:searchIcon="@drawable/search_icon" />
                 <!--android:baselineColor="#ffffff"-->
 
         </LinearLayout>
@@ -82,16 +83,19 @@
                     android:text="Aahung"
                     android:textSize="30dp"
                     style="@style/MyText"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:textColor="#ffffff" />
                 <TextView
                     android:id="@+id/user_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="aahung@live.com"
                     android:textSize="20dp"
-                    style="@style/MyText"/>
+                    style="@style/MyText"
+                    android:textColor="#ffffff" />
                 </LinearLayout>
 
+            
             </LinearLayout>
         <ImageView
             android:id="@+id/add_new_friends"
