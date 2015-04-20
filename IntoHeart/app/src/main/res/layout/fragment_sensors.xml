@@ -12,6 +12,7 @@
         android:id="@+id/sensor_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#10ffffff"></ListView>
+        android:background="#10ffffff"
+        style="@style/MyText"></ListView>
 
 </LinearLayout>

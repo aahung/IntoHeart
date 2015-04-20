@@ -15,7 +15,8 @@
             android:textColor="#ffffff"
             android:textSize="20sp"
             android:layout_alignTop="@+id/linearLayout"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            style="@style/MyText"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -34,12 +35,14 @@
                 android:layout_marginTop="30dip"
                 android:layout_gravity="center_horizontal"
                 android:textColor="#ffffff"
-                android:textSize="40sp" />
+                android:textSize="40sp"
+                style="@style/MyText"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="min"
-                android:textColor="#ffffff"/>
+                android:textColor="#ffffff"
+                style="@style/MyText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -61,12 +64,14 @@
                 android:layout_marginTop="30dip"
                 android:layout_gravity="center_horizontal"
                 android:textColor="#ffffff"
-                android:textSize="90sp"/>
+                android:textSize="90sp"
+                style="@style/MyText" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="average"
-                android:textColor="#ffffff"/>
+                android:textColor="#ffffff"
+                style="@style/MyText"/>
             </LinearLayout>
 
         <LinearLayout
@@ -85,12 +90,14 @@
                 android:layout_marginTop="30dip"
                 android:layout_gravity="center_horizontal"
                 android:textColor="#ffffff"
-                android:textSize="40sp"/>
+                android:textSize="40sp"
+                style="@style/MyText"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="max"
-                android:textColor="#ffffff"/>
+                android:textColor="#ffffff"
+                style="@style/MyText"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -110,7 +117,8 @@
             android:id="@+id/result_text"
             android:textColor="#ffffff"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            style="@style/MyText"/>
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -118,10 +126,12 @@
             android:id="@+id/view_detail_fast_button2"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:background="#b6bc24"
+            android:background="@drawable/button_pressed_default"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            style="@style/MyText"
+             />
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -129,10 +139,12 @@
             android:id="@+id/view_detail_slow_button2"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:background="#b6bc24"
+            android:background="@drawable/button_pressed_default"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            style="@style/MyText"
+           />
 
 
     </LinearLayout>
@@ -153,7 +165,8 @@
             android:id="@+id/textView10"
             android:textColor="#ffffff"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            style="@style/MyText"/>
 
         <Button
             android:layout_width="fill_parent"
@@ -165,7 +178,8 @@
             android:background="#b6bc24"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            style="@style/MyText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -184,7 +198,8 @@
             android:id="@+id/textView11"
             android:textColor="#ffffff"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            style="@style/MyText"/>
 
         <Button
             android:layout_width="fill_parent"
@@ -196,7 +211,8 @@
             android:background="#b6bc24"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            style="@style/MyText"/>
     </LinearLayout>
 
 

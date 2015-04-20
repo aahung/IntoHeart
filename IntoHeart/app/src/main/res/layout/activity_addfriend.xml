@@ -25,7 +25,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Search for new friends:"
                 android:id="@+id/textView12"
-                android:textColor="#ffffff"
+                style="@style/MyText"
                 android:textSize="25sp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:text="Aahung"
                     android:textSize="30dp"
-                    android:textColor="#ffffff"
+                    style="@style/MyText"
                     android:layout_marginBottom="10dp"/>
                 <TextView
                     android:id="@+id/user_email"
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:text="aahung@live.com"
                     android:textSize="20dp"
-                    android:textColor="#ffffff"/>
+                    style="@style/MyText"/>
                 </LinearLayout>
 
             </LinearLayout>
