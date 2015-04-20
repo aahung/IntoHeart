@@ -28,12 +28,14 @@ public class InstantHeartRateStore {
     }
 
     public void setHR(String hr) {
+        int value = Integer.valueOf(hr);
+        if (value == 0 || value > 230) return;
         for (int i = 0; i < n - 1; ++i) {
             hrs[i] = new DataPoint(i, hrs[i + 1].getY());
         }
-        hrs[n - 1] = new DataPoint(n - 1, Integer.valueOf(hr));
+        hrs[n - 1] = new DataPoint(n - 1, value);
         for (JCallback<Integer> updateListener : updateListeners)
-            if (updateListener != null) updateListener.call(Integer.valueOf(hr));
+            if (updateListener != null) updateListener.call(value);
     }
 
     public void addUpdateListener(JCallback<Integer> updateListener) {
