@@ -107,7 +107,7 @@ router.post('/request', function(req, res, next) {
                 }
                 var isFriend = false;
                 for (var i = 0; i < user.friends.length; ++i) {
-                    if (t_user.email == user.friends[i].email) isFriend = true;
+                    if (t_user.email == user.friends[i]) isFriend = true;
                 }
                 if (isFriend) {
                     result["success"] = 0;
@@ -184,12 +184,12 @@ router.post('/response', function(req, res, next) {
             }
             User.update({"email": email}, {
                 $pull: {"requests_received": t_user},
-                $push: {"friends": t_user}
+                $push: {"friends": t_user.email}
             }, function(err, numberAffected, rawResponse) {
                 if (numberAffected == 1) {
                     User.update({"email": target_email}, {
                         $pull: {"requests_sent": user},
-                        $push: {"friends": user}
+                        $push: {"friends": user.email}
                     }, function(err, numberAffected, rawResponse) {
                         if (numberAffected == 1) {
                             result["success"] = 1;
