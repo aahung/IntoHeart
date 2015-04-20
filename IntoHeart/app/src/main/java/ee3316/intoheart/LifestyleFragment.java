@@ -89,18 +89,6 @@ public class LifestyleFragment extends Fragment {
         });
     }
 
-
-    @InjectView(R.id.alcohol_block)
-    LinearLayout alcohol_block;
-    @InjectView(R.id.smoking_block)
-    LinearLayout smoking_block;
-    @InjectView(R.id.stay_up_late_block)
-    LinearLayout stay_up_late_block;
-    @InjectView(R.id.overwork_block)
-    LinearLayout overwork_block;
-    @InjectView(R.id.eating_disorder_block)
-    LinearLayout eating_disorder_block;
-
     @InjectViews({
             R.id.ratingBarSmoking,
             R.id.ratingBarAlcohol,
