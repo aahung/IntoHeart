@@ -67,7 +67,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Instant Heart Rate"
                 android:id="@+id/instant_hr_button"
-                android:background="@drawable/button_pressed_default"
+                android:background="@drawable/button_default"
 
                 android:singleLine="true"
                 android:textColorHighlight="#cccccc"
@@ -97,7 +97,7 @@
                         android:layout_height="fill_parent"
                         android:text="Day"
                         android:id="@+id/day_hr_button"
-                        android:background="#20ffffff"
+                        android:background="@drawable/button_default"
 
                         android:singleLine="true"
                         android:textColorHighlight="#cccccc"
@@ -116,7 +116,7 @@
                         android:layout_height="fill_parent"
                         android:text="Week"
                         android:id="@+id/week_hr_button"
-                        android:background="#20ffffff"
+                        android:background="@drawable/button_default"
 
                         android:textColor="#ffffff"
                         style="@style/MyText"/>
@@ -133,7 +133,7 @@
                         android:layout_height="fill_parent"
                         android:text="Month"
                         android:id="@+id/month_hr_button"
-                        android:background="#20ffffff"
+                        android:background="@drawable/button_default"
 
                         android:textColor="#ffffff"
                         style="@style/MyText"/>
