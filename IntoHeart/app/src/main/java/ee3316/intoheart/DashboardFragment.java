@@ -49,8 +49,6 @@ public class DashboardFragment extends Fragment {
 
     LineGraphSeries<DataPoint> series;
 
-    boolean exercising = false;
-
     private static final String ARG_SECTION_NUMBER = "section_number";
 
 
@@ -70,8 +68,19 @@ public class DashboardFragment extends Fragment {
     @InjectView(R.id.heart)
     ImageView heart;
 
+    private boolean getExercising() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity == null) return false;
+        return mainActivity.exercising;
+    }
+
+    private void setExercising(boolean exercising) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null) mainActivity.exercising = exercising;
+    }
+
     private void setVisibility() {
-        if (exercising) {
+        if (getExercising()) {
             heart.setVisibility(View.GONE);
             sportsMan.setVisibility(View.VISIBLE);
         } else {
@@ -110,7 +119,7 @@ public class DashboardFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         getActivity().getMenuInflater().inflate(R.menu.dashboard, menu);
-        if (exercising) {
+        if (getExercising()) {
             menu.findItem(R.id.menu_exercise).setVisible(false);
             menu.findItem(R.id.menu_normal).setVisible(true);
         } else {
@@ -129,14 +138,14 @@ public class DashboardFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_exercise:
                 // open the voice
-                exercising = true;
-                exerciseMonitor = new ExerciseMonitor();
+                setExercising(true);
+                ((MainActivity) getActivity()).createExerciseMonitor();
                 getActivity().invalidateOptionsMenu();
                 reconstructChart();
                 break;
             case R.id.menu_normal:
-                exercising = false;
-                exerciseMonitor.end();
+                setExercising(false);
+                ((MainActivity) getActivity()).destroyExerciseMonitor();
                 getActivity().invalidateOptionsMenu();
                 reconstructChart();
                 break;
@@ -177,7 +186,7 @@ public class DashboardFragment extends Fragment {
             graph.getViewport().setMaxX(currentDataSet[currentDataSet.length - 1].getX());
         }
         graph.getViewport().setYAxisBoundsManual(true);
-        if (exercising) {
+        if (getExercising()) {
             graph.getViewport().setMinY(50);
             graph.getViewport().setMaxY(210);
         } else {
@@ -211,12 +220,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        if (exerciseMonitor != null) exerciseMonitor.end();
-        super.onDestroy();
     }
 
     private void loadBatchData() {
@@ -329,135 +332,5 @@ public class DashboardFragment extends Fragment {
             loadBatchData();
         }
     }
-
-    ExerciseMonitor exerciseMonitor;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (exercising) {
-            if (requestCode == TTS_DATA_CHECK) {
-                if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                    exerciseMonitor.start();
-                } else {
-                    Intent installAllVoice = new Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                    startActivity(installAllVoice);
-                }
-            }
-        }
-    }
-
-    private static int TTS_DATA_CHECK = 1;
-
-    class ExerciseMonitor {
-        private final int EXERCISE_MAX_HR = 110;
-
-
-        private TextToSpeech tts = null;
-        private boolean speaking = false;
-
-        private boolean ttsIsInit = false;
-
-
-        public ExerciseMonitor() {
-            initTextToSpeech();
-        }
-
-        private void initTextToSpeech() {
-            //Initialize speech
-            Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-            startActivityForResult(intent, TTS_DATA_CHECK);
-        }
-
-        public void start() {
-            tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
-                @Override
-                public void onInit(int status) {
-                    if (status == TextToSpeech.SUCCESS) {
-                        ttsIsInit = true;
-                        if (tts.isLanguageAvailable(Locale.UK) >= 0) {
-                            tts.setPitch(1.0f);
-                            tts.setSpeechRate(1.1f);
-//                            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-//                                @Override
-//                                public void onStart(String utteranceId) {
-//                                    speaking = true;
-//                                }
-//
-//                                @Override
-//                                public void onDone(String utteranceId) {
-//                                    speaking = false;
-//                                }
-//
-//                                @Override
-//                                public void onError(String utteranceId) {
-//                                    speaking = false;
-//                                }
-//                            });
-                            exerciseMonitor.welcome();
-                        }
-                    }
-                }
-            });
-
-            heartRateUpdateListener = new JCallback<Integer>() {
-                @Override
-                public void call(Integer integer) {
-                    if (getActivity() == null) return; // in case fragment not attached
-                    if (speaking) return;
-                    boolean tooHigh = true;
-                    for (int i = getInstantHeartRateStore().n - 1;
-                         i >= getInstantHeartRateStore().n - 10; --i) {
-                        if (getInstantHeartRateStore().hrs[i].getY() < EXERCISE_MAX_HR) {
-                            tooHigh = false;
-                            break;
-                        }
-                    }
-                    if (tooHigh && !speaking) {
-                        alert();
-                    }
-                }
-            };
-
-            getInstantHeartRateStore().addUpdateListener(heartRateUpdateListener);
-        }
-
-        public void welcome() {
-            String text = String.format("Hey! You are now in exercise mode, "
-                    + "I will tell you when your heart rate is too high, "
-                    + "current threshold is %s beats per minute.", EXERCISE_MAX_HR);
-            speak(text);
-        }
-
-        public void alert() {
-            speak("Please stop,your heart rate is too high");
-        }
-
-        public void speak(String text) {
-            if (tts != null && ttsIsInit) {
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-                speaking = true;
-                Timer timer = new Timer();
-
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        speaking = false;
-                    }
-                }, 10 * 1000);
-            }
-        }
-
-        public void end() {
-            if (tts != null) {
-                tts.stop();
-                tts.shutdown();
-            }
-            heartRateUpdateListener = null;
-        }
-
-        public JCallback<Integer> heartRateUpdateListener;
-    }
-
 
 }

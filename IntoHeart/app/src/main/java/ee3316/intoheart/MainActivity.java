@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ee3316.intoheart.BLE.BluetoothLeService;
 import ee3316.intoheart.BLE.SensorConnectionManager;
@@ -141,6 +145,12 @@ public class MainActivity extends ActionBarActivity
         sensorConnectionManager.mBluetoothLeService = null;
         onConnectionStateChanged = null;
         unregisterReceiver(sensorConnectionManager.mGattUpdateReceiver);
+
+        // remove the exercise monitor
+        if (exerciseMonitor != null) {
+            exerciseMonitor.end();
+            exerciseMonitor = null;
+        }
     }
 
     @Override
@@ -243,6 +253,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     EmergencyMonitor emergencyMonitor;
+    public boolean exercising = false;
 
     class EmergencyMonitor {
         private int EMERGENT_MIN_HR = 70;
@@ -289,9 +300,143 @@ public class MainActivity extends ActionBarActivity
         return ((IHApplication) getApplication()).instantHeartRateStore;
     }
 
+    ExerciseMonitor exerciseMonitor;
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (exercising) {
+            if (requestCode == TTS_DATA_CHECK) {
+                if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                    exerciseMonitor.start();
+                } else {
+                    Intent installAllVoice = new Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                    startActivity(installAllVoice);
+                }
+            }
+        }
+    }
+
+    private static int TTS_DATA_CHECK = 1;
+
+    public void createExerciseMonitor() {
+        exerciseMonitor = new ExerciseMonitor();
+    }
+
+    public void destroyExerciseMonitor() {
+        if (exerciseMonitor != null) {
+            exerciseMonitor.end();
+            exerciseMonitor = null;
+        }
+    }
+
+    class ExerciseMonitor {
+        private final int EXERCISE_MAX_HR = 110;
+
+
+        private TextToSpeech tts = null;
+        private boolean speaking = false;
+
+        private boolean ttsIsInit = false;
+
+
+        public ExerciseMonitor() {
+            initTextToSpeech();
+        }
+
+        private void initTextToSpeech() {
+            //Initialize speech
+            Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+            startActivityForResult(intent, TTS_DATA_CHECK);
+        }
+
+        public void start() {
+            tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS) {
+                        ttsIsInit = true;
+                        if (tts.isLanguageAvailable(Locale.UK) >= 0) {
+                            tts.setPitch(1.0f);
+                            tts.setSpeechRate(1.1f);
+//                            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+//                                @Override
+//                                public void onStart(String utteranceId) {
+//                                    speaking = true;
+//                                }
+//
+//                                @Override
+//                                public void onDone(String utteranceId) {
+//                                    speaking = false;
+//                                }
+//
+//                                @Override
+//                                public void onError(String utteranceId) {
+//                                    speaking = false;
+//                                }
+//                            });
+                            exerciseMonitor.welcome();
+                        }
+                    }
+                }
+            });
+
+            heartRateUpdateListener = new JCallback<Integer>() {
+                @Override
+                public void call(Integer integer) {
+                    if (speaking) return;
+                    boolean tooHigh = true;
+                    for (int i = getInstantHeartRateStore().n - 1;
+                         i >= getInstantHeartRateStore().n - 10; --i) {
+                        if (getInstantHeartRateStore().hrs[i].getY() < EXERCISE_MAX_HR) {
+                            tooHigh = false;
+                            break;
+                        }
+                    }
+                    if (tooHigh && !speaking) {
+                        alert();
+                    }
+                }
+            };
+
+            getInstantHeartRateStore().addUpdateListener(heartRateUpdateListener);
+        }
+
+        public void welcome() {
+            String text = String.format("Hey! You are now in exercise mode, "
+                    + "I will tell you when your heart rate is too high, "
+                    + "current threshold is %s beats per minute.", EXERCISE_MAX_HR);
+            speak(text);
+        }
+
+        public void alert() {
+            speak("Please stop,your heart rate is too high");
+        }
+
+        public void speak(String text) {
+            if (tts != null && ttsIsInit) {
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                speaking = true;
+                Timer timer = new Timer();
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        speaking = false;
+                    }
+                }, 10 * 1000);
+            }
+        }
+
+        public void end() {
+            if (tts != null) {
+                tts.stop();
+                tts.shutdown();
+            }
+            heartRateUpdateListener = null;
+        }
+
+        public JCallback<Integer> heartRateUpdateListener;
     }
 
     // confirm before close the app
