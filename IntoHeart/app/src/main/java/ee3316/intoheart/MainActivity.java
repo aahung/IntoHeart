@@ -341,6 +341,8 @@ public class MainActivity extends ActionBarActivity
 
         private boolean ttsIsInit = false;
 
+        private List<Integer> hrs;
+
 
         public ExerciseMonitor() {
             initTextToSpeech();
@@ -353,6 +355,7 @@ public class MainActivity extends ActionBarActivity
         }
 
         public void start() {
+            hrs = new ArrayList<>();
             tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
                 @Override
                 public void onInit(int status) {
@@ -386,6 +389,7 @@ public class MainActivity extends ActionBarActivity
             heartRateUpdateListener = new JCallback<Integer>() {
                 @Override
                 public void call(Integer integer) {
+                    hrs.add(integer);
                     if (speaking) return;
                     boolean tooHigh = true;
                     for (int i = getInstantHeartRateStore().n - 1;
@@ -436,6 +440,17 @@ public class MainActivity extends ActionBarActivity
                 tts.shutdown();
             }
             heartRateUpdateListener = null;
+            if (hrs == null) return;
+            int ave = 0;
+            for (int i = 0; i < hrs.size(); ++i) {
+                ave += hrs.get(i);
+            }
+            ave /= hrs.size();
+            UserStore userStore = new UserStore(MainActivity.this);
+            userStore.fetch();
+            userStore.markingManager.evaluateExercise(userStore.age, ave);
+            userStore.save();
+            Toast.makeText(MainActivity.this, String.format("Saving exercise score: %d", userStore.markingManager.mark[0]), Toast.LENGTH_SHORT).show();
         }
 
         public JCallback<Integer> heartRateUpdateListener;
