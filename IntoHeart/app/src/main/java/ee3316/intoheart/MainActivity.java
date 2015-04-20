@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,15 +19,20 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ee3316.intoheart.BLE.BluetoothLeService;
 import ee3316.intoheart.BLE.SensorConnectionManager;
 import ee3316.intoheart.Data.HeartRateContract;
@@ -71,10 +77,16 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    @InjectView(R.id.skullImage)
+    ImageView skullImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.inject(this);
+        skullImageView.setVisibility(View.GONE);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -363,7 +375,7 @@ public class MainActivity extends ActionBarActivity
                         ttsIsInit = true;
                         if (tts.isLanguageAvailable(Locale.UK) >= 0) {
                             tts.setPitch(1.0f);
-                            tts.setSpeechRate(1.1f);
+                            tts.setSpeechRate(1.0f);
 //                            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
 //                                @Override
 //                                public void onStart(String utteranceId) {
@@ -416,11 +428,33 @@ public class MainActivity extends ActionBarActivity
         }
 
         public void alert() {
+            skullImageView.setVisibility(View.VISIBLE);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            skullImageView.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }, 3 * 1000);
             speak("Please stop,your heart rate is too high");
+        }
+
+        public void conclude(int ave, int score, int fake) {
+            speak(String.format("Exercise mode ends, your average heart rate is %d, and the score you got is %d out of 100",
+                    ave, score));
         }
 
         public void speak(String text) {
             if (tts != null && ttsIsInit) {
+                // for demo, force the speaker on
+                AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                audioManager.setMode(AudioManager.MODE_NORMAL);
+                audioManager.setSpeakerphoneOn(true);
                 tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
                 speaking = true;
                 Timer timer = new Timer();
@@ -435,12 +469,8 @@ public class MainActivity extends ActionBarActivity
         }
 
         public void end() {
-            if (tts != null) {
-                tts.stop();
-                tts.shutdown();
-            }
             heartRateUpdateListener = null;
-            if (hrs == null) return;
+            if (hrs == null || hrs.size() == 0) return;
             int ave = 0;
             for (int i = 0; i < hrs.size(); ++i) {
                 ave += hrs.get(i);
@@ -451,6 +481,23 @@ public class MainActivity extends ActionBarActivity
             userStore.markingManager.evaluateExercise(userStore.age, ave);
             userStore.save();
             Toast.makeText(MainActivity.this, String.format("Saving exercise score: %d", userStore.markingManager.mark[0]), Toast.LENGTH_SHORT).show();
+
+            // for demo
+            Random rand = new Random();
+            int randomNum = rand.nextInt((100 - 50) + 1) + 50;
+            conclude(ave, userStore.markingManager.mark[0], randomNum);
+            Timer timer = new Timer();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (tts != null) {
+                        tts.stop();
+                        tts.shutdown();
+                    }
+                }
+            }, 10 * 1000);
+
         }
 
         public JCallback<Integer> heartRateUpdateListener;

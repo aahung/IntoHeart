@@ -40,9 +40,6 @@ public class MarkingManager {
                 mark[0] = targetHRs.get(tableAge)[1] * 100 / ave;
             else
                 mark[0] = ave * 100 / targetHRs.get(tableAge)[0];
-        Random rand = new Random();
-        int randomNum = rand.nextInt((100 - 50) + 1) + 50;
-        mark[0] = randomNum;
     }
 
     public void evaluateRest(int ave) {
