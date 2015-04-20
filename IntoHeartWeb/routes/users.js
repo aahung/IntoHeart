@@ -223,24 +223,28 @@ router.post('/rank', function(req, res, next) {
             return;
         }
         var result = {"success": 1, "friends": []};
-        for (var i = 0; i < u.friends.length; ++i) {
-            var friend = u.friends[i];
+        User.find({
+            'email': {$in: u.friends}
+        }, function(err, friends) {
+            for (var i = 0; i < friends.length; ++i) {
+                var friend = friends[i];
+                result.friends.push({
+                    "name": friend.name,
+                    "email": friend.email,
+                    "score": friend['info'].score,
+                    "score_detail": friend['info'].scoreDetail,
+                    "average": friend.average
+                });
+            }
             result.friends.push({
-                "name": friend.name,
-                "email": friend.email,
-                "score": friend['info'].score,
-                "score_detail": friend['info'].scoreDetail,
-                "average": friend.average
+                "name": u.name,
+                "email": u.email,
+                "score": u['info'].score,
+                "score_detail": u['info'].scoreDetail,
+                "average": u.average
             });
-        }
-        result.friends.push({
-            "name": u.name,
-            "email": u.email,
-            "score": u['info'].score,
-            "score_detail": u['info'].scoreDetail,
-            "average": u.average
+            res.end(JSON.stringify(result));
         });
-        res.end(JSON.stringify(result));
     });
 });
 
