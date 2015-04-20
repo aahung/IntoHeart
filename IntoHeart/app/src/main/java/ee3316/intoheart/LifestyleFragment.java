@@ -105,8 +105,8 @@ public class LifestyleFragment extends Fragment {
             R.id.ratingBarSmoking,
             R.id.ratingBarAlcohol,
             R.id.ratingBarOverwork,
-            R.id.ratingBarEatig,
-            R.id.ratingBarStayup}) RatingBar[] ratingBars;
+            R.id.ratingBarEatingDisOrder,
+            R.id.ratingBarStayUpLate}) RatingBar[] ratingBars;
 
     @InjectViews({R.id.rateNote2, R.id.rateNote1, R.id.rateNote3, R.id.rateNote4, R.id.rateNote5})
     TextView[] rateNotes;
