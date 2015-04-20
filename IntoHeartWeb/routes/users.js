@@ -265,7 +265,7 @@ router.post('/get_request', function(req, res, next) {
             var isFriend = false;
             for (var j = 0; j < u.friends.length; ++j) {
                 var friend = u.friends[j];
-                if (friend.email == from.email) {
+                if (friend == from.email) {
                     isFriend = true;
                     break;
                 }
