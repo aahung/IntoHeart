@@ -115,7 +115,7 @@ public class Connector {
                 Object object = "Network error";
                 try {
                     if (jsonObject.get("from") != null)
-                        object = jsonObject.get("from").getAsJsonObject();
+                        object = jsonObject.get("from").getAsJsonArray();
                     else if (jsonObject.get("message") != null)
                         object = jsonObject.get("message").getAsString();
                 } catch (Exception ex) {

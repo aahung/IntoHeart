@@ -182,15 +182,20 @@ public class RankingFragment extends Fragment {
             public void call(Outcome outcome) {
                 if (outcome.success) {
                     requestListAdapter = new RequestListAdapter();
-                    JsonArray array = (JsonArray) outcome.object;
-                    for (JsonElement ele : array) {
-                        JsonObject obj = ele.getAsJsonObject();
-                        String name = obj.get("name").getAsString();
-                        String email = obj.get("email").getAsString();
-                        requestListAdapter.addData(new String[]{name, email});
-                        requestListAdapter.notifyDataSetChanged();
+                    if (outcome.success) {
+                        JsonArray array = (JsonArray) outcome.object;
+                        for (JsonElement ele : array) {
+                            JsonObject obj = ele.getAsJsonObject();
+                            String name = obj.get("name").getAsString();
+                            String email = obj.get("email").getAsString();
+                            requestListAdapter.addData(new String[]{name, email});
+                            requestListAdapter.notifyDataSetChanged();
+                        }
+                        inboxMenuItem.setTitle(String.format("Inbox (%s)", requestListAdapter.datas.size()));
+                    } else {
+                        String message = (String) outcome.object;
+                        SimpleAlertController.showSimpleMessage("Oops", message, getActivity());
                     }
-                    inboxMenuItem.setTitle(String.format("Inbox (%s)", requestListAdapter.datas.size()));
                 } else {
                     SimpleAlertController.showSimpleMessage("Sorry",
                             outcome.getString(), getActivity());
