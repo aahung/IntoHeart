@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -21,8 +20,10 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
+import butterknife.InjectViews;
 import ee3316.intoheart.Data.UserStore;
+import ee3316.intoheart.HTTP.JCallback;
+import ee3316.intoheart.HTTP.Outcome;
 
 /**
  * Created by aahung on 3/7/15.
@@ -40,41 +41,10 @@ public class LifestyleFragment extends Fragment {
         return fragment;
     }
 
+    Map<Integer, RateNotes> rateNotesMap;
+
     public LifestyleFragment() {
-
-    }
-    @InjectView(R.id.alcohol_block)
-    LinearLayout alcohol_block;
-    @InjectView(R.id.smoking_block)
-    LinearLayout smoking_block;
-    @InjectView(R.id.stay_up_late_block)
-    LinearLayout stay_up_late_block;
-    @InjectView(R.id.overwork_block)
-    LinearLayout overwork_block;
-    @InjectView(R.id.eating_disorder_block)
-    LinearLayout eating_disorder_block;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_lifestyle, container, false);
-        setHasOptionsMenu(true);
-        ButterKnife.inject(this,rootView);
-        userStore = new UserStore(getActivity());
-        userStore.fetchFromOnline(null);
-        return rootView;
-    }
-    UserStore userStore;
-    private void prompt(final int index) {
-        String[] titles = new String[]{
-                "Smoking",
-                "Alcohol",
-                "Overwork",
-                "Eating disorder",
-                "Stay up late"
-        };
-
-        final Map<Integer, RateNotes> rateNotesMap = new HashMap<>();
+        rateNotesMap = new HashMap<>();
         rateNotesMap.put(0, new RateNotes() {
             @Override
             public String get(float rate) {
@@ -117,59 +87,79 @@ public class LifestyleFragment extends Fragment {
                     return "more then 5 hours";
             }
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.popup, null);
-        final RatingBar ratingbar = (RatingBar)dialogView.findViewById(R.id.ratingBar);
-        final TextView rateNoteText = (TextView)dialogView.findViewById(R.id.rate_note_text);
-        ratingbar.setRating(userStore.lifestyles[index]);
-        RatingBar.OnRatingBarChangeListener onRatingBarChangeListener = new RatingBar.OnRatingBarChangeListener() {
+    }
+
+
+    @InjectView(R.id.alcohol_block)
+    LinearLayout alcohol_block;
+    @InjectView(R.id.smoking_block)
+    LinearLayout smoking_block;
+    @InjectView(R.id.stay_up_late_block)
+    LinearLayout stay_up_late_block;
+    @InjectView(R.id.overwork_block)
+    LinearLayout overwork_block;
+    @InjectView(R.id.eating_disorder_block)
+    LinearLayout eating_disorder_block;
+
+    @InjectViews({
+            R.id.ratingBarSmoking,
+            R.id.ratingBarAlcohol,
+            R.id.ratingBarOverwork,
+            R.id.ratingBarEatig,
+            R.id.ratingBarStayup}) RatingBar[] ratingBars;
+
+    @InjectViews({R.id.rateNote2, R.id.rateNote1, R.id.rateNote3, R.id.rateNote4, R.id.rateNote5})
+    TextView[] rateNotes;
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_lifestyle, container, false);
+        setHasOptionsMenu(true);
+        ButterKnife.inject(this, rootView);
+        fetchLifestyle = new JCallback<Outcome>() {
             @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                String rateNote = rateNotesMap.get(index).get(rating);
-                rateNoteText.setText(rateNote);
+            public void call(Outcome outcome) {
+                userStore.fetch();
+                for (int i = 0; i < 5; ++i)
+                    ratingBars[i].setRating(userStore.lifestyles[i]);
+                updateRateNotes();
             }
         };
-        ratingbar.setOnRatingBarChangeListener(onRatingBarChangeListener);
-        onRatingBarChangeListener.onRatingChanged(null, userStore.lifestyles[index], false);
-
-        builder.setView(dialogView)
-                .setTitle(titles[index])
-                .setNeutralButton("Cancel", null)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        userStore.fetch();
-                        userStore.lifestyles[index] = ratingbar.getRating();
-                        userStore.syncLifestyle();
-                        userStore.save();
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        updateLifestyle = new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                updateRateNotes();
+                userStore.fetch();
+                for (int i = 0; i < 5; ++i) {
+                    float value = ratingBars[i].getRating();
+                    userStore.lifestyles[i] = value;
+                }
+                userStore.save();
+            }
+        };
+        userStore = new UserStore(getActivity());
+        fetchLifestyle.call(null);
+        if (userStore.getLogin())
+            userStore.fetchFromOnline(fetchLifestyle);
+        for (int i = 0; i < 5; ++i)
+            ratingBars[i].setOnRatingBarChangeListener(updateLifestyle);
+        return rootView;
     }
 
-    @OnClick(R.id.alcohol)
-    public void alcoholPrompt(View view) {
-        prompt(1);
+    UserStore userStore;
+
+    public JCallback<Outcome> fetchLifestyle;
+    public RatingBar.OnRatingBarChangeListener updateLifestyle;
+    public void updateRateNotes() {
+        for (int i = 0; i < 5; ++i) {
+            float value = ratingBars[i].getRating();
+            String note = rateNotesMap.get(i).get(value);
+            rateNotes[i].setText(note);
+        }
     }
-    @OnClick(R.id.smoking)
-    public void smokingPrompt(View view) {
-        prompt(0);
-    }
-    @OnClick(R.id.stay_up_late)
-    public void stayuplatePrompt(View view) {
-        prompt(4);
-    }
-    @OnClick(R.id.overwork)
-    public void overworkPrompt(View view) {
-        prompt(2);
-    }
-    @OnClick(R.id.eating_disorder)
-    public void eatingPrompt(View view) {
-        prompt(3);
-    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
