@@ -86,7 +86,10 @@ public class Connector {
                 boolean success = jsonObject.get("success").getAsInt() == 1;
                 Object object = "Network error";
                 try {
-                    object = jsonObject.get("friends").getAsJsonArray();
+                    if (jsonObject.get("friends") != null)
+                        object = jsonObject.get("friends").getAsJsonArray();
+                    else if (jsonObject.get("message") != null)
+                        object = jsonObject.get("message").getAsString();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -111,7 +114,10 @@ public class Connector {
                 boolean success = jsonObject.get("success").getAsInt() == 1;
                 Object object = "Network error";
                 try {
-                    object = jsonObject.get("from").getAsJsonArray();
+                    if (jsonObject.get("from") != null)
+                        object = jsonObject.get("from").getAsJsonObject();
+                    else if (jsonObject.get("message") != null)
+                        object = jsonObject.get("message").getAsString();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -136,7 +142,10 @@ public class Connector {
                 boolean success = jsonObject.get("success").getAsInt() == 1;
                 Object object = "Network error";
                 try {
-                    object = jsonObject.get("info").getAsJsonObject();
+                    if (jsonObject.get("info") != null)
+                        object = jsonObject.get("info").getAsJsonObject();
+                    else if (jsonObject.get("message") != null)
+                        object = jsonObject.get("message").getAsString();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
