@@ -2,9 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context="ee3316.intoheart.RankingActivity">
 
-    <item android:id="@+id/action_add" android:title="+"
+    <item android:id="@+id/action_add" android:title="add friend" android:icon="@drawable/add_friend"
         android:orderInCategory="101" app:showAsAction="always" />
 
     <item android:id="@+id/action_inbox" android:title="Inbox (0)"
-        android:orderInCategory="100" app:showAsAction="always" />
+        android:orderInCategory="99" app:showAsAction="always" />
+
+    <item android:id="@+id/action_refresh" android:icon="@drawable/reload"
+        android:orderInCategory="100" app:showAsAction="always"
+        android:title="refresh" />
 </menu>

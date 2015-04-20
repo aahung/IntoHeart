@@ -2,6 +2,7 @@ package ee3316.intoheart;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -140,6 +141,12 @@ public class RankingFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(), AddFriendActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.action_refresh:
+                if (userStore.getLogin()) {
+                    getRank();
+                    getRequest();
+                }
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -174,9 +181,11 @@ public class RankingFragment extends Fragment {
     }
 
     public void getRank() {
+        final ProgressDialog progressDialog = ProgressDialog.show(getActivity(), "", "Getting ranking");
         connector.rank(userStore.email, userStore.password, new JCallback<Outcome>() {
             @Override
             public void call(Outcome outcome) {
+                progressDialog.dismiss();
                 if (outcome.success) {
                     RankingListAdapter rankingListAdapter = new RankingListAdapter();
                     JsonArray array = (JsonArray) outcome.object;
